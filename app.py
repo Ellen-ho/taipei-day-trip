@@ -1,5 +1,6 @@
 from fastapi import *
 from fastapi.responses import FileResponse
+
 app=FastAPI()
 
 # Static Pages (Never Modify Code in this Block)
