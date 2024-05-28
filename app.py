@@ -5,7 +5,7 @@ from typing import Optional
 import os
 from dotenv import load_dotenv
 from models import ResponseData, Attraction
-from db_operations import get_attractions
+from db_operations import get_attractions, get_attraction_by_id
 from fastapi.responses import JSONResponse
 
 app=FastAPI()
@@ -41,6 +41,23 @@ def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None
 		finally:
 			if conn:
 				conn.close()
+	except Exception as e:
+		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+
+@app.get("/api/attraction/{attractionId}", response_model=Attraction)
+def search_single_attraction(attractionId: int = Path(...)):
+	try:
+		conn = get_db_connection()
+		try:
+			attraction = get_attraction_by_id(conn, attractionId)
+			if not attraction:
+				return JSONResponse(status_code=400, content={"error": True, "message": "景點id不正確"})
+			return attraction
+		except Exception as e:
+			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+		finally:
+				if conn:
+					conn.close()
 	except Exception as e:
 		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 

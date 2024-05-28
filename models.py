@@ -4,13 +4,13 @@ from typing import List, Optional
 class Attraction(BaseModel):
     id: int
     name: str
-    category: str
-    description: str
-    address: str
-    transport: str
-    mrt: str
-    latitude: float
-    longitude: float
+    category: Optional[str]
+    description: Optional[str]
+    address: Optional[str]
+    transport: Optional[str]
+    mrt: Optional[str]
+    latitude: Optional[float]
+    longitude: Optional[float]
     images: List[HttpUrl]
 
 class ResponseData(BaseModel):

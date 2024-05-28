@@ -26,3 +26,26 @@ def get_attractions(conn, keyword, page, limit=12):
             result['images'] = []
     cursor.close()
     return results
+
+def get_attraction_by_id(conn, attraction_id):
+    cursor = conn.cursor(dictionary=True)
+    sql_query = """
+        SELECT 
+            id, name, category, description, address, transport, mrt, 
+            latitude, longitude, images 
+        FROM attractions
+        WHERE id = %s
+    """
+    cursor.execute(sql_query, (attraction_id,))
+    result = cursor.fetchone()
+    if result:
+        for key in result:
+            if isinstance(result[key], str):
+                result[key] = clean_string(result[key])
+        if result['images']:
+            result['images'] = json.loads(result['images'])
+        else:
+            result['images'] = []
+    cursor.close()
+    return result
+
