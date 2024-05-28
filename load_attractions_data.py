@@ -27,20 +27,23 @@ def create_tables(cursor):
             longitude FLOAT,
             mrt VARCHAR(255),
             date DATE,
-            transport TEXT
+            transport TEXT,
+            images JSON
         );
     """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS images (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            attraction_id INT,
-            url VARCHAR(255) NOT NULL,
-            FOREIGN KEY (attraction_id) REFERENCES attractions(id)
-        );
-    """)
+    
 
 def convert_date(date_str):
     return datetime.strptime(date_str, '%Y/%m/%d').date()
+
+def filter_images(file_str):
+    images = file_str.split('https://')
+    valid_images = []
+    for image in images:
+        if image and (image.lower().endswith('jpg') or image.lower().endswith('png')):
+            url = 'https://' + image
+            valid_images.append(url)
+    return valid_images
 
 def load_data():
     db = None
@@ -62,25 +65,20 @@ def load_data():
 
             for attraction in attractions:
                 date_converted = convert_date(attraction['date']) if 'date' in attraction and attraction['date'] else None
+                images = filter_images(attraction['file'])
+                images_json = json.dumps(images)
 
                 cursor.execute("""
                 INSERT INTO attractions (
                     name, category, rate, description, memo_time, address,
-                    latitude, longitude, mrt, date, transport
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    latitude, longitude, mrt, date, transport, images
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     attraction['name'], attraction['CAT'], attraction['rate'],
                     attraction['description'], attraction['MEMO_TIME'], attraction['address'],
                     float(attraction['latitude']), float(attraction['longitude']),
-                    attraction['MRT'], date_converted, attraction['direction']
+                    attraction['MRT'], date_converted, attraction['direction'], images_json
                 ))
-                attraction_id = cursor.lastrowid
-
-                images = attraction['file'].split('https://')
-                for image in images:
-                    if image and (image.lower().endswith('jpg') or image.lower().endswith('png')):
-                        url = 'https://' + image
-                        cursor.execute("INSERT INTO images (attraction_id, url) VALUES (%s, %s)", (attraction_id, url))
 
             db.commit()
 
