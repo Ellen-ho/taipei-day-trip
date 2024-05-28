@@ -49,3 +49,16 @@ def get_attraction_by_id(conn, attraction_id):
     cursor.close()
     return result
 
+def get_mrts(conn):
+    cursor = conn.cursor(dictionary=True)
+    sql_query = """
+        SELECT mrt, COUNT(*) as attraction_count
+        FROM attractions
+        WHERE mrt IS NOT NULL
+        GROUP BY mrt
+        ORDER BY attraction_count DESC
+    """
+    cursor.execute(sql_query)
+    results = cursor.fetchall()
+    cursor.close()
+    return [result['mrt'] for result in results]

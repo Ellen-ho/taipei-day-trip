@@ -13,6 +13,12 @@ class Attraction(BaseModel):
     longitude: Optional[float]
     images: List[HttpUrl]
 
+class AttractionResponse(BaseModel):
+    data: Attraction
+
 class ResponseData(BaseModel):
     nextPage: Optional[int]
     data: List[Attraction]
+
+class MRTListResponse(BaseModel):
+    data: List[str]
