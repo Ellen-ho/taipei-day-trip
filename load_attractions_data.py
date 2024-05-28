@@ -13,8 +13,33 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 
+def create_tables(cursor):
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS attractions (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            category VARCHAR(255),
+            rate VARCHAR(50),
+            description TEXT,
+            memo_time TEXT,
+            address VARCHAR(255) NOT NULL,
+            latitude FLOAT,
+            longitude FLOAT,
+            mrt VARCHAR(255),
+            date DATE,
+            transport TEXT
+        );
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS images (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            attraction_id INT,
+            url VARCHAR(255) NOT NULL,
+            FOREIGN KEY (attraction_id) REFERENCES attractions(id)
+        );
+    """)
+
 def convert_date(date_str):
-    """Convert date from 'YYYY/MM/DD' format to 'YYYY-MM-DD'."""
     return datetime.strptime(date_str, '%Y/%m/%d').date()
 
 def load_data():
@@ -28,6 +53,7 @@ def load_data():
             database=DB_NAME
         )
         cursor = db.cursor()
+        create_tables(cursor)
         file_path = os.path.join('data', 'taipei-attractions.json')
 
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -40,7 +66,7 @@ def load_data():
                 cursor.execute("""
                 INSERT INTO attractions (
                     name, category, rate, description, memo_time, address,
-                    latitude, longitude, mrt, date, direction
+                    latitude, longitude, mrt, date, transport
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     attraction['name'], attraction['CAT'], attraction['rate'],
