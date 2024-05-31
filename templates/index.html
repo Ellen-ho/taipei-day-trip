@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>taipei day trip</title>
+    <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="fixed-top-navbar">
+      <div class="nav-container">
+        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="menu-items">
+            <a href="#" >預留行程</a>
+            <a href="#" >登入/註冊</a>
+        </div>
+      </div>
+    </nav>
+    <div class="banner">
+      <div class="banner-container">
+        <div class="banner-title">輕鬆享受台北一日悠閒</div>
+        <div class="banner-subtitle">探索台北的各種魅力景點並規劃你的完美旅程</div>
+        <form action="/search" method="get" class="search-form">
+          <input type="text" name="query" placeholder="輸入景點名稱查詢">
+          <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+      </div>
+    </div>
+    <div id="content">
+      <div class="wrapper">
+        <div class="mrt-list">
+          <button class="arrow left"><img src="/static/images/left-arrow.png" alt="Left"></button>
+          <div class="mrt-items"></div>
+          <button class="arrow right"><img src="/static/images/right-arrow.png" alt="Right"></button>
+        </div>
+        <div class="attraction-list">
+
+        </div>
+      </div>
+    </div>
+    <footer>
+      COPYRIGHT © 2021 台北一日遊
+  </footer>
+  </body>
+</html>
