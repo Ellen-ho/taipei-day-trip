@@ -4,6 +4,10 @@ def clean_string(s):
     return s.replace(' ', '')
 
 def get_attractions(conn, keyword, page, limit=12):
+    extra_item = 1  
+    offset = page * limit
+    fetch_limit = limit + extra_item 
+
     cursor = conn.cursor(dictionary=True)
     sql_query = """
         SELECT 
@@ -14,8 +18,10 @@ def get_attractions(conn, keyword, page, limit=12):
         LIMIT %s, %s
     """
     keyword_like = f'%{keyword}%' if keyword else None
-    cursor.execute(sql_query, (keyword, keyword_like, keyword, page * limit, limit))
+    cursor.execute(sql_query, (keyword, keyword_like, keyword, offset, fetch_limit))
     results = cursor.fetchall()
+    cursor.close()
+
     for result in results:
         for key in result:
             if isinstance(result[key], str):
@@ -24,8 +30,17 @@ def get_attractions(conn, keyword, page, limit=12):
             result['images'] = json.loads(result['images'])
         else:
             result['images'] = []
-    cursor.close()
-    return results
+
+    has_next_page = len(results) > limit
+    if has_next_page:
+        results = results[:-1] 
+
+    next_page = page + 1 if has_next_page else None
+
+    return {
+        "nextPage": next_page,
+        "data": results
+    }
 
 def get_attraction_by_id(conn, attraction_id):
     cursor = conn.cursor(dictionary=True)

@@ -38,9 +38,8 @@ def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None
 	try:
 		conn = get_db_connection()
 		try:
-			results = get_attractions(conn, keyword, page, limit)
-			next_page = page + 1 if len(results) == limit else None
-			return {"nextPage": next_page, "data": results}
+			result = get_attractions(conn, keyword, page, limit)
+			return result
 		except Exception as e:
 			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 		finally:
