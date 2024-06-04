@@ -45,7 +45,7 @@ function handleSearchInput(keyword) {
 function setupInfiniteScroll() {
     function handleScroll() {
        const distanceToBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-       const nearBottom = distanceToBottom < 180;
+       const nearBottom = distanceToBottom < 250;
 
         if (nearBottom && !isLoading && nextPage !== null) {
             fetchAttractions(currentKeyword);
