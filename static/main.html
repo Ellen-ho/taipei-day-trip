@@ -4,19 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>taipei day trip</title>
-    <link href="{{ url_for('static', path='/css/styles.css') }}" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="fixed-top-navbar">
-      <div class="nav-container">
-        <div id="logo"><a href="/">台北一日遊</a></div>
-        <div id="menu-items">
-            <a href="#" >預留行程</a>
-            <a href="#" >登入/註冊</a>
-        </div>
-      </div>
-    </nav>
     <div id="login-modal" class="modal">
         <div class="modal-content">
           <span class="close-button">X</span>
@@ -46,8 +37,5 @@
           </form>
         </div>
       </div>
-      <footer>
-        COPYRIGHT © 2021 台北一日遊
-    </footer>
 </body>
 </html>

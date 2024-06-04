@@ -6,16 +6,14 @@ import os
 from dotenv import load_dotenv
 from models import ResponseData, Attraction, AttractionResponse, MRTListResponse
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 app=FastAPI()
 
 load_dotenv()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 db_config = {
     'host': os.getenv('DB_HOST'),
@@ -60,8 +58,8 @@ def search_single_attraction(attractionId: int = Path(...)):
 		except Exception as e:
 			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 		finally:
-				if conn:
-					conn.close()
+			if conn:
+				conn.close()
 	except Exception as e:
 		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 
@@ -80,14 +78,10 @@ def get_mrt_list():
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 
-@app.get("/", response_class=HTMLResponse)
-async def read_item(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
-
 # Static Pages (Never Modify Code in this Block)
-# @app.get("/", include_in_schema=False)
-# async def index(request: Request):
-# 	return FileResponse("./static/index.html", media_type="text/html")
+@app.get("/", include_in_schema=False)
+async def index(request: Request):
+	return FileResponse("./static/index.html", media_type="text/html")
 @app.get("/attraction/{id}", include_in_schema=False)
 async def attraction(request: Request, id: int):
 	return FileResponse("./static/attraction.html", media_type="text/html")

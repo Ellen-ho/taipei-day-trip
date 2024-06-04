@@ -1,4 +1,3 @@
-let currentPage = 0;
 let nextPage = 0;
 let isLoading = false;
 let currentKeyword = ""; 
@@ -9,7 +8,7 @@ async function fetchAttractions(keyword = "") {
 
     try {
         const url = new URL('/api/attractions', window.location.origin);
-        url.searchParams.append('page', currentPage);
+        url.searchParams.append('page', nextPage);
         if (keyword) {
             url.searchParams.append('keyword', keyword);
         }
@@ -25,12 +24,11 @@ async function fetchAttractions(keyword = "") {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const result = await response.json();
-        if (currentPage === 0) { 
-            document.querySelector('.attraction-list').innerHTML = '';
+        if (nextPage === 0) { 
+            document.getElementById('attraction-list').innerHTML = '';
         }
         displayAttractions(result.data);
         nextPage = result.nextPage; 
-        currentPage += 1; 
         isLoading = false;
     } catch (error) {
         console.error('Fetch error:', error);
@@ -40,7 +38,6 @@ async function fetchAttractions(keyword = "") {
 
 function handleSearchInput(keyword) {
     currentKeyword = keyword; 
-    currentPage = 0; 
     nextPage = 0; 
     fetchAttractions(currentKeyword); 
 }
@@ -48,7 +45,7 @@ function handleSearchInput(keyword) {
 function setupInfiniteScroll() {
     function handleScroll() {
        const distanceToBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-       const nearBottom = distanceToBottom < 10;
+       const nearBottom = distanceToBottom < 100;
 
         if (nearBottom && !isLoading && nextPage !== null) {
             fetchAttractions(currentKeyword);
@@ -56,16 +53,14 @@ function setupInfiniteScroll() {
     }
 
     window.addEventListener('scroll', handleScroll);
-    fetchAttractions(currentKeyword); // 初始加载（无关键词）
+    fetchAttractions(currentKeyword); 
 }
 
 
 function addLoadMrtsEventListener() {
-    const mrtListContainer = document.querySelector('.mrt-items');
+    const mrtItemsContainer = document.querySelector('.mrt-items');
     const arrowLeft = document.querySelector('.arrow.left'); 
     const arrowRight = document.querySelector('.arrow.right'); 
-    let currentIndex = 0;
-    let data = [];
 
     async function fetchMRTData() {
         try {
@@ -79,60 +74,65 @@ function addLoadMrtsEventListener() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const result = await response.json();
-            data = result.data;
-            displayMRTs();
+            displayMRTs(result.data);
         } catch (error) {
             console.error('Fetch error:', error);
         }
     }
 
-    function displayMRTs() {
-        mrtListContainer.innerHTML = '';
-        const items = data.slice(currentIndex, currentIndex + 12);
-        items.forEach((mrt) => {
+    function displayMRTs(data) {
+        mrtItemsContainer.innerHTML = '';
+        data.forEach((mrt) => {
             const link = document.createElement('a');
             link.href = "#";
             link.textContent = mrt;
             link.className = 'mrt-link';
             link.addEventListener('click', (event) => {
                 event.preventDefault();
-                fetchAttractions(mrt); 
+                const input = document.getElementById('search-input');
+                input.value = mrt;
+                handleSearchInput(mrt);
             });
-            mrtListContainer.appendChild(link);
+            mrtItemsContainer.appendChild(link);
         });
     }
 
     arrowLeft.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex -= 12;
-            displayMRTs();
-        }
+        mrtItemsContainer.scrollBy({
+            left: -mrtItemsContainer.offsetWidth * 0.8,
+            behavior: 'smooth'
+        });
     });
 
     arrowRight.addEventListener('click', () => {
-        if (currentIndex + 12 < data.length) {
-            currentIndex += 12;
-            displayMRTs();
-        }
+        mrtItemsContainer.scrollBy({
+            left: mrtItemsContainer.offsetWidth * 0.8,
+            behavior: 'smooth'
+        });
     });
 
     fetchMRTData();
 }
 
-// function setupMRTEventListeners() {
-//     const mrtListContainer = document.querySelector('.mrt-items');
-    
-//     mrtListContainer.addEventListener('click', (event) => {
-//         if (event.target.className === 'mrt-link') {
-//             event.preventDefault();
-//             const mrtName = event.target.textContent;  
-//             setupInfiniteScroll(); 
-//         }
-//     })
-// }
+function addSearchInputListener() {
+    const button = document.getElementById('search-button'); 
+    const input = document.getElementById('search-input'); 
+
+    button.addEventListener('click', function() {
+        const keyword = input.value.trim(); 
+        handleSearchInput(keyword);
+    });
+}
 
 function displayAttractions(attractions) {
-    const attractionsList = document.querySelector('.attraction-list');
+    const attractionsList = document.getElementById('attraction-list');
+
+    if (attractions.length === 0) {
+        const noDataDiv = document.createElement('div');
+        noDataDiv.textContent = '找不到相符合資料!';
+        noDataDiv.className = 'no-data';  
+        attractionsList.appendChild(noDataDiv);
+    } else {
     attractions.forEach(attraction => {
         const card = document.createElement('div');
         card.className = 'attraction-card';
@@ -159,13 +159,14 @@ function displayAttractions(attractions) {
 
         attractionsList.appendChild(card);
     });
+  }
 }
 
 
 function init() {
+    setupInfiniteScroll(),
     addLoadMrtsEventListener(),
-    // setupMRTEventListeners(),
-    setupInfiniteScroll()
+    addSearchInputListener()
 }
 
 window.onload = init;
