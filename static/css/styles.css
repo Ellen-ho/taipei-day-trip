@@ -229,6 +229,12 @@ footer {
 
 #mrt-list .arrow img {
   width: 100%; 
+  opacity: 0.5; 
+  transition: opacity 0.3s;  
+}
+
+#mrt-list .arrow img:hover {
+  opacity: 1; 
 }
 
 #mrt-list .mrt-items {
