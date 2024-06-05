@@ -1,11 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>taipei day trip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  
-</body>
+    <nav id="fixed-top-navbar">
+      <div class="nav-container common-wrapper">
+        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="menu-items">
+            <a href="#" >預留行程</a>
+            <a href="#" >登入/註冊</a>
+        </div>
+      </div>
+    </nav>
+    <div id="banner">
+      <div class="banner-container common-wrapper">
+        <div class="banner-title">輕鬆享受台北一日悠閒</div>
+        <div class="banner-subtitle">探索台北的各種魅力景點並規劃你的完美旅程</div>
+        <div class="search-form">
+          <input type="text" id="search-input" name="keyword" placeholder="輸入景點名稱查詢">
+          <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+      </div>
+    </div>
+    <div id="content">
+      <div class="wrapper common-wrapper">
+        <div id="mrt-list">
+          <button class="arrow left"><img src="/static/images/left-arrow.png" alt="Left"></button>
+          <div class="mrt-items"></div>
+          <button class="arrow right"><img src="/static/images/right-arrow.png" alt="Right"></button>
+        </div>
+        <div id="attraction-list">
+        </div>
+      </div>
+    </div>
+    <footer>
+      COPYRIGHT © 2021 台北一日遊
+  </footer>
+
+  <script src="/static/js/home.js"></script>
+  </body>
 </html>

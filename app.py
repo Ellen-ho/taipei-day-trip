@@ -7,10 +7,13 @@ from dotenv import load_dotenv
 from models import ResponseData, Attraction, AttractionResponse, MRTListResponse
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 app=FastAPI()
 
 load_dotenv()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 db_config = {
     'host': os.getenv('DB_HOST'),
@@ -33,9 +36,8 @@ def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None
 	try:
 		conn = get_db_connection()
 		try:
-			results = get_attractions(conn, keyword, page, limit)
-			next_page = page + 1 if len(results) == limit else None
-			return {"nextPage": next_page, "data": results}
+			result = get_attractions(conn, keyword, page, limit)
+			return result
 		except Exception as e:
 			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 		finally:
@@ -56,8 +58,8 @@ def search_single_attraction(attractionId: int = Path(...)):
 		except Exception as e:
 			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 		finally:
-				if conn:
-					conn.close()
+			if conn:
+				conn.close()
 	except Exception as e:
 		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 

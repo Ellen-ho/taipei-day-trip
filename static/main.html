@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>taipei day trip</title>
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-button">X</span>
+          <h2>登入會員帳號</h2>
+          <form id="signin-form">
+            <input type="email" id="email" placeholder="輸入電子信箱" required>
+            <input type="password" id="password" placeholder="輸入密碼" required>
+            <button type="submit">登入帳戶</button>
+            <div class="signup-prompt">
+                還沒有帳戶？<a href="#">點此註冊</a>
+              </div>
+          </form>
+        </div>
+      </div>
+      <div id="signup-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-button">X</span>
+          <h2>註冊會員帳號</h2>
+          <form id="signin-form">
+            <input type="text" id="name" placeholder="輸入姓名" required>
+            <input type="email" id="email" placeholder="輸入電子信箱" required>
+            <input type="password" id="password" placeholder="輸入密碼" required>
+            <button type="submit">註冊新帳戶</button>
+            <div class="signin-prompt">
+                已經有帳戶了？<a href="#">點此登入</a>
+              </div>
+          </form>
+        </div>
+      </div>
+</body>
+</html>
