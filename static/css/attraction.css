@@ -1,0 +1,301 @@
+* {
+  box-sizing: border-box;
+}
+  
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  height: 100vh;
+  padding-top:54px;
+}
+
+#content {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0px;
+  min-height: 786px;
+}
+  
+.common-wrapper {
+  width: 1200px;
+}
+
+#fixed-top-navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  z-index: 10;
+  border-bottom: 1px solid #E8E8E8;
+}
+  
+.nav-container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+  
+#logo a {
+  color: #448899;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+#menu-items a {
+  color: #666666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 10px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #757575;
+  color: #f2f2f2;
+  text-align: center;
+  height: 104px;
+  width: 100%;
+}
+
+/* #book{
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center; 
+} */
+
+#book-container {
+  display: flex;
+  padding: 0 15px;
+  justify-content: space-between;
+  gap:30px
+}
+
+#book-container .book-images {
+  position: relative;
+  width:540px;
+  height:400px;
+  overflow: hidden;
+}
+
+#book-container .book-images img {
+  width:100%;
+  height:100%
+}
+
+#book-container .book-images .arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); 
+  cursor: pointer;
+  background: none; 
+  border: none; 
+} 
+
+#book-container .book-images .arrow img {
+  width:36px;
+  height:36px;
+  opacity: 0.75;
+}
+
+#book-container .book-images .left {
+  left: 0; 
+}
+
+#book-container .book-images .right {
+  right: 0; 
+}
+
+#book-container .book-info {
+  width:600px;
+  height:400px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  gap:15px;
+  color:#666666
+}
+
+.book-info .book-attraction-title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.book-info .book-attraction-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#book-tour-card {
+  display: flex;
+  flex-direction: column;
+  height: 302px;
+  padding: 15px 20px;
+  gap: 15px;
+  font-size: 16px;
+  background-color: #E8E8E8;
+}
+
+#book-tour-card .card-bold-content {
+  font-weight: 700;
+}
+
+#book-tour-card .attraction-subtitle {
+  font-weight: 400;
+}
+
+#book-button{
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  width: 154px;
+  height: 36px;
+  background-color: #448899;
+  color:#FFFFFF;
+  font-size: 19px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 16px;
+}
+
+.book-date-input-container {
+  position: relative;
+  display: inline-block;
+}
+
+#date-input {
+  width: 193px;
+  height: 35px;
+  font-size: 16px;     
+  font-weight: 400;    
+  color: #000000;      
+  background-color: #FFFFFF;
+  padding: 5px 10px;
+}
+
+
+#date-input::placeholder {
+  font-size: 16px;
+  font-weight: 400;
+  color: #000000;
+}
+
+#calendar-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.calendar {
+  position: absolute; 
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  width: 200px; 
+  z-index: 1000; 
+}
+
+.calendar div {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.calendar div:hover {
+  background-color: #f9f9f9;
+}
+
+.calendar div:last-child {
+  border-bottom: none;
+}
+
+.book-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  padding: 0px 4.5px;
+  position: relative;
+}
+
+.radio-option span {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 13.3px;
+}
+
+.radio-option input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  transition: width 0.2s ease, height 0.2s ease; 
+  position: relative; 
+  overflow: hidden;  
+}
+
+.radio-option input[type="radio"]:checked {
+  width: 18px;
+  height: 18px;
+  border: none; 
+}
+
+.radio-option input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14.5px;
+  height: 14.5px;
+  background-color: #448899;
+  border-radius: 50%;
+  display: block;
+}
+
+.separator {
+  height: 1px;  
+  background-color: #E8E8E8;  
+  margin-top: 40px;  
+  margin-bottom: 40px;  
+}
+
+#attraction-text-detail {
+  display: flex;
+  flex-direction: column;
+  height:362px;
+  padding: 10px;
+  font-size: 16px;
+  color:#666666;
+  gap:25px
+}
+
+.text-title {
+  height:32px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.attraction-description{
+  font-weight: 400;
+} 
