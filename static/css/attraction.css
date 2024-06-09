@@ -1,76 +1,3 @@
-* {
-  box-sizing: border-box;
-}
-  
-body {
-  font-family: 'Noto Sans TC', sans-serif;
-  height: 100vh;
-  padding-top:54px;
-}
-
-#content {
-  display: flex;
-  justify-content: center;
-  padding: 40px 0px;
-  min-height: 786px;
-}
-  
-.common-wrapper {
-  width: 1200px;
-}
-
-#fixed-top-navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 54px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  z-index: 10;
-  border-bottom: 1px solid #E8E8E8;
-}
-  
-.nav-container {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-}
-  
-#logo a {
-  color: #448899;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 30px;
-}
-
-#menu-items a {
-  color: #666666;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 16px;
-  padding: 10px;
-}
-
-footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #757575;
-  color: #f2f2f2;
-  text-align: center;
-  height: 104px;
-  width: 100%;
-}
-
-/* #book{
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: center; 
-} */
-
 #book-container {
   display: flex;
   padding: 0 15px;
@@ -80,14 +7,36 @@ justify-content: center;
 
 #book-container .book-images {
   position: relative;
-  width:540px;
-  height:400px;
+  width: 540px;
+  height: 400px;
   overflow: hidden;
 }
 
-#book-container .book-images img {
+#book-container .book-images .slideshow-container {
+  width: 100%;
+  height: 100%;
+}
+
+#book-container .book-images .slideshow-container .attraction-slide {
+  width: 100%;
+  height:400px;
+}
+
+#book-container .book-images .slideshow-container .number-text{
+  position: absolute;
+  top: 10px;
+  left: 10px; 
+  /* color: white;  */
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px; 
+  background: hsla(0, 0%, 0%, 0.3);
+  padding: 8px
+}
+
+#book-container .book-images .slideshow-container .attraction-slide img {
   width:100%;
-  height:100%
+  height:100%;
+  object-fit: cover
 }
 
 #book-container .book-images .arrow {
@@ -111,6 +60,32 @@ justify-content: center;
 
 #book-container .book-images .right {
   right: 0; 
+}
+
+#book-container .book-images .circle-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%; 
+  height: 12px;
+  position: absolute;
+  bottom: 10px; 
+  left: 0; 
+  justify-content: center;
+  opacity: 75%;
+  gap:6px
+}
+
+#book-container .book-images .circle-group .circle {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  background: url('/static/images/white-circle.png') no-repeat center;
+}
+
+#book-container .book-images .circle-group .circle.active {
+  background-image: url('/static/images/black-circle.png');
 }
 
 #book-container .book-info {
@@ -165,26 +140,42 @@ justify-content: center;
   line-height: 16px;
 }
 
-.book-date-input-container {
-  position: relative;
-  display: inline-block;
+.book-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-#date-input {
+#book-date {
   width: 193px;
-  height: 35px;
-  font-size: 16px;     
-  font-weight: 400;    
-  color: #000000;      
-  background-color: #FFFFFF;
-  padding: 5px 10px;
-}
-
-
-#date-input::placeholder {
+  height:35px;
+  border:none;
   font-size: 16px;
   font-weight: 400;
-  color: #000000;
+  padding: 5px 10px;
+  color:#000000;
+}
+
+input[type="date"] {
+  appearance: none;         
+  -moz-appearance: none;    
+  -webkit-appearance: none; 
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  display: none;
+}
+
+input[type="date"]::-ms-clear,
+input[type="date"]::-ms-reveal {
+  display: none;
+}
+
+.date-picker {
+  position: relative;
+  display: inline-block;
 }
 
 #calendar-icon {
@@ -195,35 +186,11 @@ justify-content: center;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1000;
 }
 
-.calendar {
-  position: absolute; 
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
-  width: 200px; 
-  z-index: 1000; 
-}
-
-.calendar div {
-  cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-.calendar div:hover {
-  background-color: #f9f9f9;
-}
-
-.calendar div:last-child {
-  border-bottom: none;
-}
-
-.book-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.book-row.time-row {
+  height: 22px;
 }
 
 .radio-option {
@@ -274,10 +241,12 @@ justify-content: center;
 }
 
 .separator {
-  height: 1px;  
-  background-color: #E8E8E8;  
   margin-top: 40px;  
   margin-bottom: 40px;  
+}
+
+.separator hr {
+  border: 1px solid #E8E8E8;
 }
 
 #attraction-text-detail {
@@ -299,3 +268,47 @@ justify-content: center;
 .attraction-description{
   font-weight: 400;
 } 
+
+@media (max-width: 600px){
+
+  #logo a {
+    padding: 0 0 0 10px;
+  }
+
+  #book-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    min-width: 360px;
+    padding: 0;
+    gap:20px
+  }
+
+  #book-container .book-images {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #book-container .book-images .slideshow-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden; 
+  }
+
+  #book-container .book-info {
+    width:100%;
+    padding: 10px 10px 0 10px;
+  }
+
+  .separator {
+    width: 100%;
+    padding: 0 10px; 
+  }
+
+  #attraction-text-detail {
+    height:auto;
+  }
+}
