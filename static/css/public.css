@@ -1,0 +1,89 @@
+* {
+    box-sizing: border-box;
+  }
+    
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    height: 100vh;
+    padding-top:54px;
+  }
+  
+  #content {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0px;
+    min-height: 786px;
+  }
+    
+  .common-wrapper {
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  #fixed-top-navbar {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    z-index: 10;
+    border-bottom: 1px solid #E8E8E8;
+  }
+    
+  .nav-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+  }
+    
+  #logo a {
+    color: #448899;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 30px;
+  }
+  
+  #menu-items a {
+    color: #666666;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px;
+  }
+  
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #757575;
+    color: #f2f2f2;
+    text-align: center;
+    height: 104px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px){
+    #menu-items a {
+      color: #666666;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 10px;
+    }
+  
+    #banner {
+      background-position: initial;
+      background-size: cover;
+    }
+  
+    .banner-container .search-form {
+      width: 290px;
+    }
+  
+    .banner-container .search-form input[type="text"] {
+      width: 225px;
+    }
+}
