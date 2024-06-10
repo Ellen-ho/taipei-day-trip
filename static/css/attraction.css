@@ -21,7 +21,8 @@
 #book-container .book-images .slides-group .attraction-slide {
   position: absolute;
   width: 100%;
-  height:400px;
+  height: 100%;
+  object-fit: cover;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
@@ -39,12 +40,6 @@
   font-size: 16px; 
   background: hsla(0, 0%, 0%, 0.3);
   padding: 8px
-}
-
-#book-container .book-images .slides-group .attraction-slide img {
-  width:100%;
-  height:100%;
-  object-fit: cover
 }
 
 #book-container .book-images .arrow {
