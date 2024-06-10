@@ -24,13 +24,12 @@
     <div class="wrapper common-wrapper">
       <div id="book-container">
         <div class="book-images">
-          <div class="slideshow-container">
-            <div class="number-text"></div>
+          <div class="slides-group">
           </div>
+          <div class="number-text"></div>
           <button class="arrow left"><img src="/static/images/left-arrow.png" alt="Left"></button>
           <button class="arrow right"><img src="/static/images/right-arrow.png" alt="Right"></button>
-          <div class="circle-group">
-          </div>
+          <div class="circle-group"></div>
         </div>
           <div class="book-info">
             <div class="book-attraction-title"></div>
@@ -41,23 +40,21 @@
               <div class="book-row">
                 <span class="card-bold-content">選擇日期：</span>
                 <div class="date-picker">
-                  <input type="date" id="book-date" name="book-date" placeholder="yyyy/mm/dd">
-                  <img src="/static/images/calendar-icon.png" alt="Calendar Icon" id="calendar-icon">
+                  <input type="date" id="book-date" name="book-date">
                 </div>
               </div>
-                <!-- <div class="book-date-input-container">
-                    <input type="text" id="date-input" placeholder="yyyy/mm/dd" readonly>
-                    <img src="/static/images/icon-calendar.png" alt="Calendar" id="calendar-icon">
-                </div>
-            <div class="calendar" id="calendar" style="display: none;"></div> -->
         <div class="book-row time-row">
           <span class="card-bold-content">選擇時間：</span>
           <div class="radio-option">
+            <div class="radio-input-container">
             <input type="radio" id="morning" name="time" value="morning">
+          </div>
             <span>上半天</span>
           </div>
           <div class="radio-option">
+            <div class="radio-input-container">
             <input type="radio" id="afternoon" name="time" value="afternoon">
+          </div>
             <span>下半天</span>
           </div>
         </div>
@@ -71,11 +68,11 @@
       <div class="attraction-description"></div>
       <div class="attraction-address">
         <div class="text-title">景點地址：</div>
-        <div class="address-content"></div>
+        <div class="address-content text-content"></div>
       </div>
       <div class="attraction-transport">
         <div class="text-title">交通方式：</div>
-        <div class="transport-content"></div>
+        <div class="transport-content text-content"></div>
       </div>
     </div>
   </div>

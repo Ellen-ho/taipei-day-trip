@@ -185,7 +185,7 @@
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1000;
+  z-index: 5;
 }
 
 .book-row.time-row {
@@ -205,12 +205,20 @@
   line-height: 13.3px;
 }
 
-.radio-option input[type="radio"] {
+.radio-option .radio-input-container {
+  display: flex;
+  width: 22px;
+  height: 22px;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-option .radio-input-container input[type="radio"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 100%;
+  height: 100%;
   border: 2px solid #ddd;
   border-radius: 50%;
   background: white;
@@ -220,13 +228,13 @@
   overflow: hidden;  
 }
 
-.radio-option input[type="radio"]:checked {
+.radio-option .radio-input-container input[type="radio"]:checked {
   width: 18px;
   height: 18px;
   border: none; 
 }
 
-.radio-option input[type="radio"]:checked::before {
+.radio-option .radio-input-container input[type="radio"]:checked::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -251,7 +259,6 @@
 #attraction-text-detail {
   display: flex;
   flex-direction: column;
-  height:362px;
   padding: 10px;
   font-size: 16px;
   color:#666666;
