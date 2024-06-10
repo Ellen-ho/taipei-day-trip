@@ -3,7 +3,6 @@ let isLoading = false;
 let currentKeyword = ""; 
 
 async function fetchAttractions(keyword = "") {
-    if (isLoading || nextPage === null) return;
     isLoading = true;
 
     try {
@@ -36,94 +35,6 @@ async function fetchAttractions(keyword = "") {
     }
 }
 
-function handleSearchInput(keyword) {
-    currentKeyword = keyword; 
-    nextPage = 0; 
-    fetchAttractions(currentKeyword); 
-}
-
-function setupInfiniteScroll() {
-    function handleScroll() {
-       const distanceToBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-       const nearBottom = distanceToBottom < 250;
-
-        if (nearBottom && !isLoading && nextPage !== null) {
-            fetchAttractions(currentKeyword);
-        }
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    fetchAttractions(currentKeyword); 
-}
-
-
-function addLoadMrtsEventListener() {
-    const mrtItemsContainer = document.querySelector('.mrt-items');
-    const arrowLeft = document.querySelector('.arrow.left'); 
-    const arrowRight = document.querySelector('.arrow.right'); 
-
-    async function fetchMRTData() {
-        try {
-            const response = await fetch('/api/mrts', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const result = await response.json();
-            displayMRTs(result.data);
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
-    }
-
-    function displayMRTs(data) {
-        mrtItemsContainer.innerHTML = '';
-        data.forEach((mrt) => {
-            const link = document.createElement('a');
-            link.href = "#";
-            link.textContent = mrt;
-            link.className = 'mrt-link';
-            link.addEventListener('click', (event) => {
-                event.preventDefault();
-                const input = document.getElementById('search-input');
-                input.value = mrt;
-                handleSearchInput(mrt);
-            });
-            mrtItemsContainer.appendChild(link);
-        });
-    }
-
-    arrowLeft.addEventListener('click', () => {
-        mrtItemsContainer.scrollBy({
-            left: -mrtItemsContainer.offsetWidth * 0.8,
-            behavior: 'smooth'
-        });
-    });
-
-    arrowRight.addEventListener('click', () => {
-        mrtItemsContainer.scrollBy({
-            left: mrtItemsContainer.offsetWidth * 0.8,
-            behavior: 'smooth'
-        });
-    });
-
-    fetchMRTData();
-}
-
-function addSearchInputListener() {
-    const button = document.getElementById('search-button'); 
-    const input = document.getElementById('search-input'); 
-
-    button.addEventListener('click', function() {
-        const keyword = input.value.trim(); 
-        handleSearchInput(keyword);
-    });
-}
-
 function displayAttractions(attractions) {
     const attractionsList = document.getElementById('attraction-list');
 
@@ -136,6 +47,9 @@ function displayAttractions(attractions) {
     attractions.forEach(attraction => {
         const card = document.createElement('div');
         card.className = 'attraction-card';
+
+        card.dataset.id = attraction.id;  
+        card.onclick = handleCardClick;   
 
         const nameContainer = document.createElement('div');
         nameContainer.className = 'name-container';
@@ -162,11 +76,176 @@ function displayAttractions(attractions) {
   }
 }
 
+function handleSearchInput(keyword) {
+    currentKeyword = keyword; 
+    nextPage = 0; 
+    fetchAttractions(currentKeyword); 
+}
+
+function addSearchInputListener() {
+    const button = document.getElementById('search-button'); 
+    const input = document.getElementById('search-input'); 
+
+    button.addEventListener('click', function() {
+        const keyword = input.value.trim(); 
+        handleSearchInput(keyword);
+    });
+}
+
+function setupInfiniteScroll() {
+    function handleScroll() {
+       const distanceToBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+       const nearBottom = distanceToBottom < 250;
+
+        if (nearBottom && !isLoading && nextPage !== null) {
+            fetchAttractions(currentKeyword);
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    fetchAttractions(currentKeyword); 
+}
+
+async function fetchMRTData() {
+    try {
+        const response = await fetch('/api/mrts', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        displayMRTs(result.data);
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+}
+
+function handleCardClick() {
+    const attractionId = this.dataset.id; 
+    window.location.href = `/attraction/${attractionId}`; 
+}
+
+function displayMRTs(data) {
+    const mrtItemsContainer = document.querySelector('.mrt-items');
+    mrtItemsContainer.innerHTML = '';
+    data.forEach((mrt) => {
+        const link = document.createElement('a');
+        link.href = "#";
+        link.textContent = mrt;
+        link.className = 'mrt-link';
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const input = document.getElementById('search-input');
+            input.value = mrt;
+            handleSearchInput(mrt);
+        });
+        mrtItemsContainer.appendChild(link);
+    });
+}
+
+function addLoadMrtsEventListener() {
+    const mrtItemsContainer = document.querySelector('.mrt-items');
+    const arrowLeft = document.querySelector('.arrow.left'); 
+    const arrowRight = document.querySelector('.arrow.right'); 
+
+    arrowLeft.addEventListener('click', () => {
+        mrtItemsContainer.scrollBy({
+            left: -mrtItemsContainer.offsetWidth * 0.8,
+            behavior: 'smooth'
+        });
+    });
+
+    arrowRight.addEventListener('click', () => {
+        mrtItemsContainer.scrollBy({
+            left: mrtItemsContainer.offsetWidth * 0.8,
+            behavior: 'smooth'
+        });
+    });
+
+    fetchMRTData();
+}
+
+function addModalEventListener() {
+    var overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    document.body.appendChild(overlay);
+
+    function toggleModal(modalId) {
+        var modal = document.getElementById(modalId);
+        console.log(modalId)
+        if (!modal.classList.contains('show')) {
+            adjustModalPosition(modalId); 
+        }
+        modal.classList.toggle('show');
+        modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
+        overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
+        console.log(overlay.style.display)
+    }
+
+    function switchModals(currentModalId, newModalId) {
+        toggleModal(currentModalId); 
+        toggleModal(newModalId); 
+        adjustModalPosition(newModalId); 
+    }
+
+    document.getElementById('menu-items').addEventListener('click', function(event) {
+        event.preventDefault();
+        var action = event.target.getAttribute('data-action');
+        if (action === 'signin') {
+            toggleModal('signin-modal');
+        }
+    });
+        
+    document.querySelectorAll('.close-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var modal = button.closest('.modal');
+            if (modal) {
+                toggleModal(modal.id);
+            }
+        });
+    });
+
+    document.getElementById('switch-to-signup').addEventListener('click', function(event) {
+        event.preventDefault();
+        switchModals('signin-modal', 'signup-modal');
+    });
+
+    overlay.addEventListener('click', function() {
+        document.querySelectorAll('.modal.show').forEach(function(modal) {
+            toggleModal(modal.id);
+        });
+    });
+}
+
+function adjustModalPosition(modalId) {
+    const modal = document.getElementById(modalId);
+    const banner = document.getElementById('banner');
+    const nav = document.getElementById('fixed-top-navbar');
+
+    modal.style.display = 'block';
+
+    const modalTopPosition = (banner.offsetHeight / 2) + nav.offsetHeight - (modal.offsetHeight / 2);
+
+    modal.style.top = `${modalTopPosition}px`;
+    console.log(modal.style.top);
+
+    console.log(modal.classList.contains('show'))
+
+    if (!modal.classList.contains('show')) {
+        modal.style.display = 'none';
+    }
+}
+
 
 function init() {
     setupInfiniteScroll(),
     addLoadMrtsEventListener(),
-    addSearchInputListener()
+    addSearchInputListener(),
+    addModalEventListener()
 }
 
 window.onload = init;
