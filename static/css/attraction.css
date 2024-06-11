@@ -133,7 +133,7 @@
 }
 
 #book-button{
-  padding: 5px 10px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   width: 154px;
@@ -159,6 +159,7 @@
   font-size: 16px;
   font-weight: 400;
   padding: 5px 10px;
+  margin-left: 5px;
   color:#000000;
 }
 
@@ -177,7 +178,7 @@
 .radio-option {
   display: flex;
   align-items: center;
-  padding: 0px 4.5px;
+  padding: 0px 5px;
   position: relative;
 }
 
@@ -237,6 +238,12 @@
 
 .separator hr {
   border: 1px solid #E8E8E8;
+}
+
+#tour-cost {
+  font-weight: 400;
+  line-height: 13.3px;
+  margin-left: 5px;
 }
 
 #attraction-text-detail {
