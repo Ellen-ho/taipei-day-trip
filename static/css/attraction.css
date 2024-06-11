@@ -107,11 +107,14 @@
 .book-info .book-attraction-title {
   font-size: 24px;
   font-weight: 700;
+  height: 33px;
 }
 
 .book-info .book-attraction-subtitle {
   font-size: 16px;
   font-weight: 400;
+  line-height: 13.3px;
+  height: 22px
 }
 
 #book-tour-card {
@@ -126,10 +129,17 @@
 
 #book-tour-card .card-bold-content {
   font-weight: 700;
+  line-height: 13.3px;
+}
+
+#book-tour-card .attraction-title {
+  height: 22px
 }
 
 #book-tour-card .attraction-subtitle {
   font-weight: 400;
+  height: 24px;
+  line-height: 13.3px;
 }
 
 #book-button{
@@ -144,6 +154,7 @@
   font-weight: 400;
   text-align: center;
   line-height: 16px;
+  margin-top: 10px;
 }
 
 .book-row {
@@ -172,6 +183,10 @@
 }
 
 .book-row.time-row {
+  height: 22px;
+}
+
+.book-row.cost-row {
   height: 22px;
 }
 
