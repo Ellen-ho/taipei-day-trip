@@ -124,10 +124,39 @@ function timeOptionsChangeListener() {
   });
 }
 
+function checkBookingButtonListener(){
+  const bookButton = document.getElementById('book-button');
+  const bookDate = document.getElementById('book-date');
+
+  bookButton.addEventListener('click', function(event) {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const currentDateString = currentDate.toISOString().split('T')[0];
+
+    if (!bookDate.value) {
+      alert('尚未選擇日期！');
+      event.preventDefault(); 
+      return; 
+    }else if (bookDate.value <= currentDateString) {
+      alert('選擇日期有誤！請選擇未來的日期。');
+      event.preventDefault();
+      return;
+    }
+
+    const timeOptions = document.querySelectorAll('input[name="book-time"]');
+    const isSelected = Array.from(timeOptions).some(option => option.checked);
+
+    if (!isSelected) {
+      alert('尚未選擇時間!');
+      event.preventDefault();
+    }
+  });
+}
 
 function init() {
   changePageEventListener(),
-  timeOptionsChangeListener()
+  timeOptionsChangeListener(),
+  checkBookingButtonListener()
 }
 
 window.onload = init;
