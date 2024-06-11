@@ -295,7 +295,6 @@
 @media (min-width: 600px) and (max-width: 1200px){
   .common-wrapper {
     width: 90%; 
-    max-width: 780px; 
   }
 
   .banner-container .search-form {

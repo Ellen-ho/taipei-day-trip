@@ -271,6 +271,7 @@
 }
 
 @media (min-width: 600px) and (max-width: 1200px) {
+
   #book-container .book-images {
     width: 50vw;
   }
