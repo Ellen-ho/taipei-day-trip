@@ -155,6 +155,21 @@
   text-align: center;
   line-height: 16px;
   margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+#book-button:hover {
+  background-color: #3c7785;
+  transform: translateY(-2px) scale(1.02); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+}
+
+#book-button:active {
+  background-color: #326670;
+  transform: translateY(0) scale(0.98); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
 }
 
 .book-row {
@@ -180,6 +195,12 @@
   object-fit: cover;
   width: 24px; 
   height: 24px; 
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#book-date::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.2);
 }
 
 .book-row.time-row {
