@@ -58,6 +58,11 @@
   width:36px;
   height:36px;
   opacity: 0.75;
+  transition: opacity 0.3s ease; 
+}
+
+#book-container .book-images .arrow:hover img {
+  opacity: 1; 
 }
 
 #book-container .book-images .left {
