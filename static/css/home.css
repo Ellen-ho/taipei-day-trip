@@ -118,18 +118,15 @@
 #mrt-list .arrow {
   cursor: pointer;
   background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: none
 }
 
 #mrt-list .arrow.left{
-  padding: 9px 0 0 15px;
+  padding: 5px 0 0 15px;
 }
 
 #mrt-list .arrow.right{
-  padding: 9px 15px 0 0;
+  padding: 5px 15px 0 0;
 }
 
 #mrt-list .arrow img {
