@@ -110,15 +110,24 @@ function currentSlide(n) {
   showSlides(slideIndex = n);
 }
 
-document.querySelectorAll('.toggle-switch input[type="radio"]').forEach(radio => {
-  radio.addEventListener('change', function() {
-    console.log(this.value); 
+function timeOptionsChangeListener() {
+  const timeOptions = document.querySelectorAll('input[name="book-time"]');
+  timeOptions.forEach(option => {
+    option.addEventListener('change', function() {
+      const tourCostElement = document.getElementById('tour-cost'); 
+      if (this.value === 'morning') {
+        tourCostElement.textContent = '新台幣 2000 元'; 
+      } else if (this.value === 'afternoon') {
+        tourCostElement.textContent = '新台幣 2500 元'; 
+      }
+    });
   });
-});
+}
 
 
 function init() {
-  changePageEventListener()
+  changePageEventListener(),
+  timeOptionsChangeListener()
 }
 
 window.onload = init;
