@@ -40,40 +40,52 @@ function displayAttractions(attractions) {
 
     if (attractions.length === 0) {
         const noDataDiv = document.createElement('div');
-        noDataDiv.textContent = '找不到相符合資料!';
-        noDataDiv.className = 'no-data';  
+        noDataDiv.className = 'no-data';
+      
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = '找不到相符合資料!';
+        noDataDiv.appendChild(messageSpan);
+      
+        const linkSpan = document.createElement('span');
+        linkSpan.className = 'no-data-link';
+        linkSpan.textContent = '點擊 👉 到首頁繼續探索吧！';
+        linkSpan.onclick = () => {
+          window.location.href = '/';
+        };
+        noDataDiv.appendChild(linkSpan);
+      
         attractionsList.appendChild(noDataDiv);
     } else {
-    attractions.forEach(attraction => {
-        const card = document.createElement('div');
-        card.className = 'attraction-card';
+        attractions.forEach(attraction => {
+            const card = document.createElement('div');
+            card.className = 'attraction-card';
 
-        card.dataset.id = attraction.id;  
-        card.onclick = handleCardClick;   
+            card.dataset.id = attraction.id;  
+            card.onclick = handleCardClick;   
 
-        const nameContainer = document.createElement('div');
-        nameContainer.className = 'name-container';
-        const attractionName = document.createElement('span');
-        attractionName.textContent = attraction.name;
-        nameContainer.appendChild(attractionName);
+            const nameContainer = document.createElement('div');
+            nameContainer.className = 'name-container';
+            const attractionName = document.createElement('span');
+            attractionName.textContent = attraction.name;
+            nameContainer.appendChild(attractionName);
 
-        const infoContainer = document.createElement('div');
-        infoContainer.className = 'info-container';
-        const attractionCategory = document.createElement('span');
-        attractionCategory.textContent = attraction.category;
-        const attractionMRT = document.createElement('span');
-        attractionMRT.textContent = attraction.mrt;
-        infoContainer.appendChild(attractionMRT);
-        infoContainer.appendChild(attractionCategory);
+            const infoContainer = document.createElement('div');
+            infoContainer.className = 'info-container';
+            const attractionCategory = document.createElement('span');
+            attractionCategory.textContent = attraction.category;
+            const attractionMRT = document.createElement('span');
+            attractionMRT.textContent = attraction.mrt;
+            infoContainer.appendChild(attractionMRT);
+            infoContainer.appendChild(attractionCategory);
 
 
-        card.innerHTML = `<img src="${attraction.images[0]}" alt="${attraction.name}">`;
-        card.appendChild(nameContainer);
-        card.appendChild(infoContainer);
+            card.innerHTML = `<img src="${attraction.images[0]}" alt="${attraction.name}">`;
+            card.appendChild(nameContainer);
+            card.appendChild(infoContainer);
 
-        attractionsList.appendChild(card);
-    });
-  }
+            attractionsList.appendChild(card);
+        });
+    }
 }
 
 function handleSearchInput(keyword) {
