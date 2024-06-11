@@ -39,13 +39,13 @@ function displayBasicInfo(data) {
   subtitleElement.textContent = `${data.category} at ${data.mrt}`;
 
   const descriptionElement = document.querySelector('.attraction-description');
-  descriptionElement.textContent = data.description;
+  descriptionElement.textContent = data.description.replace(/\s+/g, ' ').trim();
 
   const addressElement = document.querySelector(".address-content");
-  addressElement.textContent = data.address;
+  addressElement.textContent = data.address.replace(/\s+/g, ' ').trim();
 
   const transportElement = document.querySelector(".transport-content");
-  transportElement.textContent = data.transport;
+  transportElement.textContent = data.transport.replace(/\s+/g, ' ').trim();
 }
 
 function setupSlideshow(images) {
