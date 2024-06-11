@@ -9,13 +9,14 @@
   position: relative;
   width: 540px;
   height: 400px;
-  overflow: hidden;
+  overflow: hidden
 }
 
 #book-container .book-images .slides-group {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 #book-container .book-images .slides-group .attraction-slide {
@@ -24,12 +25,14 @@
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transform: scale(1.1); 
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 #book-container .book-images .slides-group .attraction-slide.active {
-  opacity: 1; 
-  transition: opacity 0.5s ease-in-out; 
+  opacity: 1;
+  transform: scale(1); 
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 #book-container .book-images .number-text{
@@ -167,22 +170,6 @@
   height: 24px; 
 }
 
-.date-picker {
-  position: relative;
-  display: inline-block;
-}
-
-#calendar-icon {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 5;
-}
-
 .book-row.time-row {
   height: 22px;
 }
@@ -244,7 +231,8 @@
 
 .separator {
   margin-top: 40px;  
-  margin-bottom: 40px;  
+  margin-bottom: 40px; 
+  text-align: center;  
 }
 
 .separator hr {
@@ -275,18 +263,32 @@
   line-height: 23.17px;
 }
 
-@media (max-width: 600px){
-
-  #logo a {
-    padding: 0 0 0 10px;
+@media (min-width: 600px) and (max-width: 1200px) {
+  #book-container .book-images {
+    width: 50vw;
   }
 
+  #book-container .book-info {
+    width: 60vw;   
+  }
+  
+  #book-date {
+    width: 25vw;
+    max-width: 193px;
+  }
+
+  .separator {
+    width: 100%;
+    padding: 0 10px; 
+  }
+}
+
+@media (max-width: 600px){
   #book-container {
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
     width: 100%;
-    min-width: 360px;
     padding: 0;
     gap:20px
   }
@@ -295,13 +297,6 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-  }
-
-  #book-container .book-images .slides-group {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden; 
   }
 
   #book-container .book-info {

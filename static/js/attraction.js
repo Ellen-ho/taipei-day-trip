@@ -49,20 +49,21 @@ function displayBasicInfo(data) {
 }
 
 function setupSlideshow(images) {
-  const imagesContainer = document.querySelector('.slideshow-container');
+  const imagesContainer = document.querySelector('.slides-group');
   const circlesContainer = document.querySelector('.circle-group');
   let slideIndex = 1;
 
   images.forEach((src, index) => {
-      let slide = document.createElement('div');
-      slide.className = 'attraction-slide';
-      slide.innerHTML = `<img src="${src}" alt="Image">`;
-      imagesContainer.appendChild(slide);
+    let img = document.createElement('img');
+    img.className = 'attraction-slide';  
+    img.src = src;
+    img.alt = "Image";
+    imagesContainer.appendChild(img);
 
-      let circle = document.createElement('button');
-      circle.className = 'circle';
-      circle.addEventListener('click', () => currentSlide(index + 1));
-      circlesContainer.appendChild(circle);
+    let circle = document.createElement('button');
+    circle.className = 'circle';
+    circle.addEventListener('click', () => currentSlide(index + 1));
+    circlesContainer.appendChild(circle);
   });
 
   setupNavigation();
@@ -83,12 +84,16 @@ function showSlides(n) {
   if (n > slides.length) slideIndex = 1;
   else if (n < 1) slideIndex = slides.length;
   else slideIndex = n;
-  slides[slideIndex - 1].scrollIntoView({ behavior: 'smooth' });
+  
+  slides.forEach(slide => {
+    slide.classList.remove("active");
+  });
 
-  slides.forEach(slide => slide.style.display = "none");
-  circles.forEach(circle => circle.classList.remove("active"));
+  slides[slideIndex - 1].classList.add("active");
 
-  slides[slideIndex - 1].style.display = "block";
+  circles.forEach(circle => {
+    circle.classList.remove("active");
+  });
   circles[slideIndex - 1].classList.add("active");
 
   if (numText) {
@@ -111,27 +116,9 @@ document.querySelectorAll('.toggle-switch input[type="radio"]').forEach(radio =>
   });
 });
 
-// function calendarEventListener() { 
-//   var calendarIcon = document.getElementById('calendar-icon');
-//     var dateInput = document.getElementById('book-date');
-
-//     calendarIcon.addEventListener('click', function() {
-//         console.log('Calendar icon clicked.'); 
-
-//         var event = new MouseEvent('click', {
-//             bubbles: true,
-//             cancelable: true,
-//             view: window
-//         });
-
-//         dateInput.dispatchEvent(event);
-//         console.log('Click event dispatched on date input.'); 
-//     });
-// };
 
 function init() {
-    changePageEventListener()
-    // calendarEventListener() 
+  changePageEventListener()
 }
 
 window.onload = init;
