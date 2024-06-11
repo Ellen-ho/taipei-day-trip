@@ -192,7 +192,7 @@
 
 #attraction-list .attraction-card {
   position: relative;
-  width: 270px;
+  width: calc((100% - 3 * 30px) / 4);
   height: 242px;
   display: flex;
   flex-direction: column;
@@ -322,9 +322,6 @@
 }
 
 @media (max-width: 600px){
-  .common-wrapper {
-    width: 340px;
-  }
 
   #banner {
    background-position: initial;

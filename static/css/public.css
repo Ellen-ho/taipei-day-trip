@@ -119,8 +119,17 @@
 }
 /* modal */
 
+@media (min-width: 600px) and (max-width: 1200px){
+  #logo a {
+    padding-left: 10px;
+  }
+}
 
 @media (max-width: 600px){
+  .common-wrapper {
+    min-width: 340px;
+  }
+  
   #logo a {
     padding-left: 10px;
   }
