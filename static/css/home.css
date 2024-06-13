@@ -1,111 +1,13 @@
-* {
-  box-sizing: border-box;
-}
-
-body {
-    font-family: 'Noto Sans TC', sans-serif;
-    height: 100vh;
-    padding-top:54px;
-}
-
-.common-wrapper {
-  width: 1200px; 
-}
-
-#fixed-top-navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 54px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    z-index: 10;
-}
-
-.nav-container {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-}
-
-#logo a {
-    color: #448899;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 30px;
-}
-
-#menu-items a {
-    color: #666666;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 16px;
-    padding: 10px;
-}
-
-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #757575;
-    color: #f2f2f2;
-    text-align: center;
-    height: 104px;
-    width: 100%;
-}
-
-
-/* modal */
-.modal {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-.modal .modal-content {
-  text-align: center;
-}
-.modal .close-button {
-  float: right;
-  cursor: pointer;
-  font-size: 24px;
-}
-.modal h2 {
-  color: #666666;
-  margin-bottom: 20px;
-}
-.modal form > input {
-  width: calc(100% - 40px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.modal button {
-  width: 100%;
-  padding: 10px;
-  background-color: #448899;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.modal button:hover {
-  background-color: #0056b3;
-}
-
-.signup-prompt {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666666;
-}
-/* modal */
-
+/* .overlay {
+  display: none; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 998; 
+} */
 
 #banner {
   height: 320px;
@@ -114,9 +16,7 @@ footer {
   align-items: center;
   justify-content: center;
   background-image: url('../images/welcome-image.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-position: top;
 }
 
 .banner-container {
@@ -183,7 +83,9 @@ footer {
   color: white;
   cursor: pointer;
   border-top-right-radius: 4px; 
-  border-bottom-right-radius: 4px; 
+  border-bottom-right-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
 }
 
 .banner-container .search-form button i {
@@ -191,11 +93,23 @@ footer {
 }
 
 .banner-container .search-form button:hover {
-  background-color: #0056b3;
+  background-color: #3c7785;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .banner-container .search-form button:hover i {
   transform: rotate(90deg) scale(1.2);
+}
+
+.banner-container .search-form button:active {
+  background-color: #326670;
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 #content {
@@ -218,17 +132,20 @@ footer {
 #mrt-list .arrow {
   cursor: pointer;
   background: none;
-  border: none;
-  width: 32px;  
-  height: 32px;
-  padding: 9px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: none
+}
+
+#mrt-list .arrow.left{
+  padding: 5px 0 0 15px;
+}
+
+#mrt-list .arrow.right{
+  padding: 5px 15px 0 0;
 }
 
 #mrt-list .arrow img {
-  width: 100%; 
+  width: 32px;  
+  height: 32px;
   opacity: 0.5; 
   transition: opacity 0.3s;  
 }
@@ -244,7 +161,6 @@ footer {
   width: 100%;
   justify-content: space-between;
   padding: 13px 10px; 
-  gap: 4px; 
   scroll-behavior: smooth;
 }
 
@@ -293,7 +209,7 @@ footer {
 
 #attraction-list .attraction-card {
   position: relative;
-  width: 270px;
+  width: calc((100% - 3 * 30px) / 4);
   height: 242px;
   display: flex;
   flex-direction: column;
@@ -302,6 +218,13 @@ footer {
   border: 1px solid #E8E8E8; 
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.attraction-card:hover {
+  transform: scale(1.05); 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
 }
 
 #attraction-list .attraction-card img {
@@ -310,6 +233,7 @@ footer {
   right: 0;
   width: 100%; 
   height: 197px;
+  object-fit: cover;
 }
 
 #attraction-list .attraction-card .name-container {
@@ -356,6 +280,7 @@ footer {
 
 .no-data {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 180px;
@@ -380,50 +305,67 @@ footer {
   opacity: 0.7;
 }
 
+.no-data-link {
+  margin-top: 10px;
+  color: #448899;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-size: 18px;
+}
+
+.no-data-link:hover {
+  color: #326670;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@media (min-width: 600px) and (max-width: 1024px){
+@media (min-width: 600px) and (max-width: 1200px){
   .common-wrapper {
-    width: 680px; 
+    width: 90%; 
   }
-  
+
   .banner-container .search-form {
     width: 420px;
   }
   
   .banner-container .search-form input[type="text"] {
-    width: 360px; 
+    width: 360px;
   }
   
   #attraction-list .attraction-card {
-    width: 310px;
-    height:268px;
+    width: calc(50% - 15px);
+    height:300px;
   }
   
   #attraction-list .attraction-card img {
-    height: 218px;
+    height: 255px;
+    object-fit: cover;
   }
 
   #attraction-list .attraction-card .name-container {
-    top: 172px;
+    top: 208px;
   } 
-  
 }
 
 @media (max-width: 600px){
-  .common-wrapper {
-    width: 340px;
+
+  #banner {
+   background-position: initial;
+   background-size: cover;
   }
 
-  #menu-items a {
-      color: #666666;
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 16px;
-      padding: 10px;
+  #banner .common-wrapper {
+    width: auto;
+  }
+
+  #content .common-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .banner-container .search-form {
@@ -440,23 +382,22 @@ footer {
   }
 
   #attraction-list{
+    width: 360px;
     flex-direction: column;
-    align-items: center; 
-    padding: 4px;
     gap: 20px;
   }
 
   #attraction-list .attraction-card {
-    width: 322px;
+    width:100%;
     height: 280px;
   }
 
   #attraction-list .attraction-card img {
-    height: 235px;
+    height: 235px; 
+    object-fit: cover;
   }
 
   #attraction-list .attraction-card .name-container {
-    top: 187px;
+    top: 187px;  
   } 
 }
-

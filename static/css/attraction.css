@@ -1,0 +1,371 @@
+#book-container {
+  display: flex;
+  padding: 0 15px;
+  justify-content: space-between;
+  gap:30px
+}
+
+#book-container .book-images {
+  position: relative;
+  width: 540px;
+  height: 400px;
+  overflow: hidden
+}
+
+#book-container .book-images .slides-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#book-container .book-images .slides-group .attraction-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.1); 
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+#book-container .book-images .slides-group .attraction-slide.active {
+  opacity: 1;
+  transform: scale(1); 
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+#book-container .book-images .number-text{
+  position: absolute;
+  top: 10px;
+  left: 10px; 
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px; 
+  background: hsla(0, 0%, 0%, 0.3);
+  padding: 8px
+}
+
+#book-container .book-images .arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); 
+  cursor: pointer;
+  background: none; 
+  border: none; 
+} 
+
+#book-container .book-images .arrow img {
+  width:36px;
+  height:36px;
+  opacity: 0.75;
+  transition: opacity 0.3s ease; 
+}
+
+#book-container .book-images .arrow:hover img {
+  opacity: 1; 
+}
+
+#book-container .book-images .left {
+  left: 0; 
+}
+
+#book-container .book-images .right {
+  right: 0; 
+}
+
+#book-container .book-images .circle-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%; 
+  height: 12px;
+  position: absolute;
+  bottom: 10px; 
+  left: 0; 
+  justify-content: center;
+  opacity: 75%;
+  gap:6px
+}
+
+#book-container .book-images .circle-group .circle {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  background: url('/static/images/white-circle.png') no-repeat center;
+}
+
+#book-container .book-images .circle-group .circle.active {
+  background-image: url('/static/images/black-circle.png');
+}
+
+#book-container .book-info {
+  width:600px;
+  height:400px;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+  gap:15px;
+  color:#666666
+}
+
+.book-info .book-attraction-title {
+  font-size: 24px;
+  font-weight: 700;
+  height: 33px;
+}
+
+.book-info .book-attraction-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 13.3px;
+  height: 22px
+}
+
+#book-tour-card {
+  display: flex;
+  flex-direction: column;
+  height: 302px;
+  padding: 15px 20px;
+  gap: 15px;
+  font-size: 16px;
+  background-color: #E8E8E8;
+}
+
+#book-tour-card .card-bold-content {
+  font-weight: 700;
+  line-height: 13.3px;
+}
+
+#book-tour-card .attraction-title {
+  height: 22px
+}
+
+#book-tour-card .attraction-subtitle {
+  font-weight: 400;
+  height: 24px;
+  line-height: 13.3px;
+}
+
+#book-button{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  width: 154px;
+  height: 36px;
+  background-color: #448899;
+  color:#FFFFFF;
+  font-size: 19px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+#book-button:hover {
+  background-color: #3c7785;
+  transform: translateY(-2px) scale(1.02); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+}
+
+#book-button:active {
+  background-color: #326670;
+  transform: translateY(0) scale(0.98); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+.book-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#book-date {
+  width: 193px;
+  height:35px;
+  border:none;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 5px 10px;
+  margin-left: 5px;
+  color:#000000;
+}
+
+#book-date::-webkit-calendar-picker-indicator {
+  background: url("/static/images/calendar-icon.png") no-repeat center;
+  background-size: 24px; 
+  object-fit: cover;
+  width: 24px; 
+  height: 24px; 
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+#book-date::-webkit-calendar-picker-indicator:hover {
+  transform: scale(1.2);
+}
+
+.book-row.time-row {
+  height: 22px;
+}
+
+.book-row.cost-row {
+  height: 22px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+  position: relative;
+}
+
+.radio-option span {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 13.3px;
+}
+
+.radio-option .radio-input-container {
+  display: flex;
+  width: 22px;
+  height: 22px;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-option .radio-input-container input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  transition: width 0.2s ease, height 0.2s ease; 
+  position: relative; 
+  overflow: hidden;  
+}
+
+.radio-option .radio-input-container input[type="radio"]:checked {
+  width: 18px;
+  height: 18px;
+  border: none; 
+}
+
+.radio-option .radio-input-container input[type="radio"]:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14.5px;
+  height: 14.5px;
+  background-color: #448899;
+  border-radius: 50%;
+  display: block;
+}
+
+.separator {
+  margin-top: 40px;  
+  margin-bottom: 40px; 
+  text-align: center;  
+}
+
+.separator hr {
+  border: 1px solid #E8E8E8;
+}
+
+#tour-cost {
+  font-weight: 400;
+  line-height: 13.3px;
+  margin-left: 5px;
+}
+
+#attraction-text-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  font-size: 16px;
+  color:#666666;
+  gap:25px
+}
+
+.text-title {
+  height:32px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+#attraction-text-detail .attraction-description{
+  font-weight: 400;
+  line-height: 23.17px;
+} 
+
+#attraction-text-detail .text-content {
+  line-height: 23.17px;
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+
+  #book-container .book-images {
+    width: 50vw;
+  }
+
+  #book-container .book-info {
+    width: 60vw;   
+  }
+  
+  #book-date {
+    width: 25vw;
+    max-width: 193px;
+  }
+
+  .separator {
+    width: 100%;
+    padding: 0 10px; 
+  }
+}
+
+@media (max-width: 600px){
+  #content {
+    display: flex;
+    justify-content: center;
+    padding: 0 0 40px 0;
+    min-height: 786px;
+  }
+    
+  #book-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    padding: 0;
+    gap:20px
+  }
+
+  #book-container .book-images {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #book-container .book-info {
+    width:100%;
+    padding: 10px 10px 0 10px;
+  }
+
+  .separator {
+    width: 100%;
+    padding: 0 10px; 
+  }
+
+  #attraction-text-detail {
+    height:auto;
+  }
+}
