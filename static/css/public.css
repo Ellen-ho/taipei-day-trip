@@ -69,45 +69,90 @@
   }
 
   /* modal */
+#signin-modal{
+  width: 340px;
+  height:275px;
+}
+
+#signup-modal{
+  width: 340px;
+  height:332px;
+}
+
 .modal {
   display: none; 
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000; 
+  top:80px;
+  z-index: 800; 
   background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 25px 15px 15px 15px;
+  border-radius: 6px;
+  box-shadow: 0px 4px 60px 0px #AAAAAA;
+  border-top: 10px solid; 
+  border-image: linear-gradient(90deg, #337788 0%, #66AABB 100%) 1;
 }
+
+.modal .modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 24px;
+  margin-bottom: 15px;
+  color:#666666;
+}
+
 .modal .modal-content {
   text-align: center;
 }
+
 .modal .close-button {
-  float: right;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 20px;
+  left: 300px;
+  z-index: 1000;  
   cursor: pointer;
-  font-size: 24px;
+  padding: 7px;
 }
-.modal h2 {
-  color: #666666;
-  margin-bottom: 20px;
+
+.modal .close-button img {
+  width: 16px;
+  height: 16px
 }
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px
+}
+
 .modal form > input {
-  width: calc(100% - 40px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  width: 100%;
+  height: 47px;
+  padding: 15px;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 13.3px;
+  color:#757575;
 }
 
 .modal button {
   width: 100%;
+  height: 47px;
   padding: 10px;
   background-color: #448899;
   color: white;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 16px;
+  text-align: center;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -115,11 +160,19 @@
   background-color: #0056b3;
 }
 
-.signup-prompt {
-  margin-top: 10px;
-  font-size: 14px;
+.prompt {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 13.3px;
   color: #666666;
+  align-items: center;
 }
+
+.prompt span {
+  cursor: pointer;
+}
+
 /* modal */
 
 @media (min-width: 600px) and (max-width: 1200px){

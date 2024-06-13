@@ -46,34 +46,30 @@
   </footer>
   <!-- Signin Modal -->
     <div id="signin-modal" class="modal">
-      <div class="modal-content">
-          <span class="close-button">X</span>
-          <h2>登入會員帳號</h2>
+          <div class="close-button"><img src="/static/images/close-button.png"></div>
+          <div class="modal-title">登入會員帳號</div>
           <form id="signin-form">
               <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
               <input type="password" id="signin-password" placeholder="輸入密碼" required>
               <button>登入帳戶</button>
-              <div class="signup-prompt">
+              <div class="prompt">
                   還沒有帳戶？<span id="switch-to-signup">點此註冊</span>
               </div>
           </form>
-      </div>
   </div>
   <!-- Signup Modal -->
   <div id="signup-modal" class="modal">
-      <div class="modal-content">
-          <span class="close-button">X</span>
-          <h2>註冊會員帳號</h2>
+          <div class="close-button"><img src="/static/images/close-button.png"></div>
+          <div class="modal-title">註冊會員帳號</div>
           <form id="signup-form">
               <input type="text" id="signup-name" placeholder="輸入姓名" required>
               <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
               <input type="password" id="signup-password" placeholder="輸入密碼" required>
               <button>註冊新帳戶</button>
-              <div class="signin-prompt">
-                  已經有帳戶了？<a href="#" id="switch-to-signup">點此登入</a>
+              <div class="prompt">
+                  已經有帳戶了？<span id="switch-to-signin">點此登入</span>
               </div>
           </form>
-      </div>
   </div>
   <script src="/static/js/home.js"></script>
   </body>

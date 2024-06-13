@@ -182,16 +182,13 @@ function addLoadMrtsEventListener() {
 }
 
 function addModalEventListener() {
-    var overlay = document.createElement('div');
+    const overlay = document.createElement('div');
     overlay.className = 'overlay';
     document.body.appendChild(overlay);
 
     function toggleModal(modalId) {
-        var modal = document.getElementById(modalId);
-        console.log(modalId)
-        if (!modal.classList.contains('show')) {
-            adjustModalPosition(modalId); 
-        }
+        const modal = document.getElementById(modalId);
+
         modal.classList.toggle('show');
         modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
         overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
@@ -201,12 +198,11 @@ function addModalEventListener() {
     function switchModals(currentModalId, newModalId) {
         toggleModal(currentModalId); 
         toggleModal(newModalId); 
-        adjustModalPosition(newModalId); 
     }
 
     document.getElementById('menu-items').addEventListener('click', function(event) {
         event.preventDefault();
-        var action = event.target.getAttribute('data-action');
+        const action = event.target.getAttribute('data-action');
         if (action === 'signin') {
             toggleModal('signin-modal');
         }
@@ -214,7 +210,7 @@ function addModalEventListener() {
         
     document.querySelectorAll('.close-button').forEach(function(button) {
         button.addEventListener('click', function() {
-            var modal = button.closest('.modal');
+            const modal = button.closest('.modal');
             if (modal) {
                 toggleModal(modal.id);
             }
@@ -226,32 +222,17 @@ function addModalEventListener() {
         switchModals('signin-modal', 'signup-modal');
     });
 
+    document.getElementById('switch-to-signin').addEventListener('click', function(event) {
+        event.preventDefault();
+        switchModals('signup-modal', 'signin-modal');
+    });
+
     overlay.addEventListener('click', function() {
         document.querySelectorAll('.modal.show').forEach(function(modal) {
             toggleModal(modal.id);
         });
     });
 }
-
-function adjustModalPosition(modalId) {
-    const modal = document.getElementById(modalId);
-    const banner = document.getElementById('banner');
-    const nav = document.getElementById('fixed-top-navbar');
-
-    modal.style.display = 'block';
-
-    const modalTopPosition = (banner.offsetHeight / 2) + nav.offsetHeight - (modal.offsetHeight / 2);
-
-    modal.style.top = `${modalTopPosition}px`;
-    console.log(modal.style.top);
-
-    console.log(modal.classList.contains('show'))
-
-    if (!modal.classList.contains('show')) {
-        modal.style.display = 'none';
-    }
-}
-
 
 function init() {
     setupInfiniteScroll(),
