@@ -4,10 +4,12 @@ from mysql.connector import pooling
 from typing import Optional
 import os
 from dotenv import load_dotenv
-from models import ResponseData, Attraction, AttractionResponse, MRTListResponse
+from models import ResponseData, Attraction, AttractionResponse, MRTListResponse, SignupData, SigninData
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from auth import create_access_token, check_existing_user, authenticate_user, create_user
+from database import get_db_connection
 
 app=FastAPI()
 
@@ -15,21 +17,42 @@ load_dotenv()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-db_config = {
-    'host': os.getenv('DB_HOST'),
-    'user': os.getenv('DB_USER'),
-    'password': os.getenv('DB_PASSWORD'),
-    'database': os.getenv('DB_NAME')
-}
+# db_config = {
+#     'host': os.getenv('DB_HOST'),
+#     'user': os.getenv('DB_USER'),
+#     'password': os.getenv('DB_PASSWORD'),
+#     'database': os.getenv('DB_NAME')
+# }
 
-db_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **db_config)
+# db_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **db_config)
 
-def get_db_connection():
-    try:
-        return db_pool.get_connection()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
+# def get_db_connection():
+#     try:
+#         return db_pool.get_connection()
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
 
+@app.post("/signup")
+async def signup(form_data: SignupData):
+	print(SignupData)
+	if check_existing_user(form_data.email):
+		raise HTTPException(status_code=400, detail="Email already registered")
+
+	user_id = create_user(form_data.username, form_data.email, form_data.password)
+	if not user_id:
+		raise HTTPException(status_code=500, detail="Could not create user")
+
+	return {"message": "User created successfully, please sign in."}
+
+@app.post("/signin")
+async def signin(form_data: SigninData):
+	user = authenticate_user(form_data.email, form_data.password)
+	if not user:
+		raise HTTPException(status_code=401, detail="Invalid credentials")
+
+	access_token = create_access_token(data={"sub": str(user['id'])})
+	return {"access_token": access_token, "token_type": "bearer"}
+    
 @app.get("/api/attractions", response_model=ResponseData)
 def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None):
 	limit = 12
