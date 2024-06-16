@@ -182,9 +182,9 @@ function addLoadMrtsEventListener() {
 }
 
 function addModalEventListener() {
-    const overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    document.body.appendChild(overlay);
+    // const overlay = document.createElement('div');
+    // overlay.className = 'overlay';
+    // document.body.appendChild(overlay);
 
     document.getElementById('menu-items').addEventListener('click', function(event) {
         event.preventDefault();
@@ -213,11 +213,11 @@ function addModalEventListener() {
         switchModals('signup-modal', 'signin-modal');
     });
 
-    overlay.addEventListener('click', function() {
-        document.querySelectorAll('.modal.show').forEach(function(modal) {
-            toggleModal(modal.id);
-        });
-    });
+    // overlay.addEventListener('click', function() {
+    //     document.querySelectorAll('.modal.show').forEach(function(modal) {
+    //         toggleModal(modal.id);
+    //     });
+    // });
 }
 
 function toggleModal(modalId) {
@@ -225,8 +225,8 @@ function toggleModal(modalId) {
 
     modal.classList.toggle('show');
     modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
-    overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
-    console.log(overlay.style.display)
+    // overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
+    // console.log(overlay.style.display)
 }
 
 function switchModals(currentModalId, newModalId) {
