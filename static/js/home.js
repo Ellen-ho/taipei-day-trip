@@ -186,20 +186,6 @@ function addModalEventListener() {
     overlay.className = 'overlay';
     document.body.appendChild(overlay);
 
-    function toggleModal(modalId) {
-        const modal = document.getElementById(modalId);
-
-        modal.classList.toggle('show');
-        modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
-        overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
-        console.log(overlay.style.display)
-    }
-
-    function switchModals(currentModalId, newModalId) {
-        toggleModal(currentModalId); 
-        toggleModal(newModalId); 
-    }
-
     document.getElementById('menu-items').addEventListener('click', function(event) {
         event.preventDefault();
         const action = event.target.getAttribute('data-action');
@@ -234,11 +220,114 @@ function addModalEventListener() {
     });
 }
 
+function toggleModal(modalId) {
+    const modal = document.getElementById(modalId);
+
+    modal.classList.toggle('show');
+    modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
+    overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
+    console.log(overlay.style.display)
+}
+
+function switchModals(currentModalId, newModalId) {
+    toggleModal(currentModalId); 
+    toggleModal(newModalId); 
+}
+
+function addButtonEventListener(buttonId, actionFunction) {
+    const button = document.getElementById(buttonId);
+    if (button) {  
+        button.addEventListener('click', function() {
+            actionFunction();  
+        });
+    } else {
+        console.warn(`Button with ID '${buttonId}' does not exist.`);
+    }
+}
+
+function signup() {
+    const username = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value.trim();
+
+    if (!username || !email || !password) {
+        console.error('All fields are required');
+        alert('所有欄位都是必填。');
+        return;  
+    }
+
+    console.log(username)
+    console.log(email)
+    console.log(password)
+
+    const userData = {
+        username: username,
+        email: email,
+        password: password
+    };
+
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  
+        },
+        body: JSON.stringify(userData)  
+    })
+    .then(response => response.json())  
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function signin() {
+    const email = document.getElementById('signin-email').value.trim();
+    const password = document.getElementById('signin-password').value.trim();
+
+    if (!email || !password) {
+        console.error('All fields are required');
+        alert('所有欄位都是必填。');
+        return;  
+    }
+
+    console.log(email);
+    console.log(password);
+
+    const signinData = {
+        email: email,
+        password: password
+    };
+
+    fetch('/signin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  
+        },
+        body: JSON.stringify(signinData)  
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 function init() {
     setupInfiniteScroll(),
     addLoadMrtsEventListener(),
     addSearchInputListener(),
-    addModalEventListener()
+    addModalEventListener(),
+    addButtonEventListener('signup-button', signup),
+    addButtonEventListener('signin-button', signin)
 }
 
 window.onload = init;
