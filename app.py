@@ -1,10 +1,10 @@
 from fastapi import *
 from fastapi.responses import FileResponse
-from mysql.connector import pooling
+# from mysql.connector import pooling
 from typing import Optional
 import os
 from dotenv import load_dotenv
-from models import ResponseData, Attraction, AttractionResponse, MRTListResponse, SignupData, SigninData
+from models import ResponseData, Attraction, AttractionResponse, MRTListResponse, TokenResponse, SignupData, SigninData
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,74 +32,92 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
 
-@app.post("/signup")
-async def signup(form_data: SignupData):
-	print(SignupData)
-	if check_existing_user(form_data.email):
-		raise HTTPException(status_code=400, detail="Email already registered")
+def handle_error(e):
+    if isinstance(e, HTTPException):
+        return JSONResponse(status_code=e.status_code, content={"error": True, "message": str(e)})
+    else:
+        return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 
-	user_id = create_user(form_data.username, form_data.email, form_data.password)
-	if not user_id:
-		raise HTTPException(status_code=500, detail="Could not create user")
+@app.post("/api/user")
+async def signin(form_data: SignupData):
+	conn = None
+	try:
+		conn = get_db_connection()
+		if check_existing_user(conn, form_data.email):
+			return JSONResponse(status_code=400, content={"error": True, "message": "Email 已經註冊帳戶"})
+		user_id = create_user(conn, form_data.name, form_data.email, form_data.password)
+		if not user_id:
+			return JSONResponse(status_code=500, content={"error": True, "message":"註冊失敗"})
+		return {"ok": True}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
 
-	return {"message": "User created successfully, please sign in."}
-
-@app.post("/signin")
+@app.put("/api/user/auth", response_model=TokenResponse)
 async def signin(form_data: SigninData):
-	user = authenticate_user(form_data.email, form_data.password)
-	if not user:
-		raise HTTPException(status_code=401, detail="Invalid credentials")
-
-	access_token = create_access_token(data={"sub": str(user['id'])})
-	return {"access_token": access_token, "token_type": "bearer"}
+	conn = None  
+	try:
+		conn = get_db_connection()
+		user = authenticate_user(conn, form_data.email, form_data.password)
+		if not user:
+			return JSONResponse(status_code=400, content={"error": True, "message": "電子郵件或密碼錯誤"})
+		access_token = create_access_token({
+			"sub": str(user['id']), 
+			"name": user['name'],    
+			"email": user['email']   
+		})
+		if not access_token:
+			return JSONResponse(status_code=500, content={"error": True, "message": "Failed to create access token"})
+		return {"token": access_token}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:  
+			conn.close()
     
 @app.get("/api/attractions", response_model=ResponseData)
 def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None):
 	limit = 12
+	conn = None 
 	try:
 		conn = get_db_connection()
-		try:
-			result = get_attractions(conn, keyword, page, limit)
-			return result
-		except Exception as e:
-			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
-		finally:
-			if conn:
-				conn.close()
+		result = get_attractions(conn, keyword, page, limit)
+		return result
 	except Exception as e:
-		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
 
 @app.get("/api/attraction/{attractionId}", response_model=AttractionResponse)
 def search_single_attraction(attractionId: int = Path(...)):
+	conn = None 
 	try:
 		conn = get_db_connection()
-		try:
-			attraction = get_attraction_by_id(conn, attractionId)
-			if not attraction:
-				return JSONResponse(status_code=400, content={"error": True, "message": "景點id不正確"})
-			return {"data": attraction}
-		except Exception as e:
-			return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
-		finally:
-			if conn:
-				conn.close()
+		attraction = get_attraction_by_id(conn, attractionId)
+		if not attraction:
+			return JSONResponse(status_code=400, content={"error": True, "message": "景點id不正確"})
+		return {"data": attraction}
 	except Exception as e:
-		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
 
 @app.get("/api/mrts", response_model=MRTListResponse)
 def get_mrt_list():
-    try:
-        conn = get_db_connection()
-        try:
-            mrts = get_mrts(conn)
-            return {"data": mrts}
-        except Exception as e:
-            return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
-        finally:
-            if conn:
-                conn.close()
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+	conn = None
+	try:
+		conn = get_db_connection()
+		mrts = get_mrts(conn)
+		return {"data": mrts}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
 
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
