@@ -45,17 +45,18 @@
       COPYRIGHT © 2021 台北一日遊
   </footer>
   <!-- Signin Modal -->
-    <div id="signin-modal" class="modal">
-      <div class="close-button"><img src="/static/images/close-button.png"></div>
-      <div class="modal-title">登入會員帳號</div>
-      <div class="form">
-          <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
-          <input type="password" id="signin-password" placeholder="輸入密碼" required>
-          <button id="signin-button">登入帳戶</button>
-          <div class="prompt">
-            <span>還沒有帳戶？</span><span id="switch-to-signup">點此註冊</span>
-          </div>
-      </div>
+  <div id="signin-modal" class="modal">
+    <div class="close-button"><img src="/static/images/close-button.png"></div>
+    <div class="modal-title">登入會員帳號</div>
+    <div class="form">
+        <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
+        <input type="password" id="signin-password" placeholder="輸入密碼" required>
+        <button id="signin-button">登入帳戶</button>
+        <div id="signin-message-container" class="message"></div>
+        <div class="prompt">
+          <span>還沒有帳戶？</span><span id="switch-to-signup">點此註冊</span>
+        </div>
+    </div>
   </div>
   <!-- Signup Modal -->
   <div id="signup-modal" class="modal">
@@ -66,11 +67,13 @@
         <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
         <input type="password" id="signup-password" placeholder="輸入密碼" required>
         <button id="signup-button">註冊新帳戶</button>
+        <div id="signup-message-container" class="message"></div>
         <div class="prompt">
           <span>已經有帳戶了？</span><span id="switch-to-signin">點此登入</span>
         </div>
     </div>
   </div>
-  <script src="/static/js/home.js"></script>
+  <script src="/static/js/modals.js"></script>
+<script src="/static/js/home.js"></script>
   </body>
 </html>

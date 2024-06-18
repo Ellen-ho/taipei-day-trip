@@ -76,7 +76,7 @@
 
 #signup-modal{
   width: 340px;
-  height:332px;
+  height: 332px;
 }
 
 .modal {
@@ -137,7 +137,7 @@
   color:#757575;
 }
 
-.modal button {
+.modal .form button {
   width: 100%;
   height: 47px;
   padding: 10px;
@@ -152,8 +152,38 @@
   cursor: pointer;
 }
 
-.modal button:hover {
+.modal .form button:hover {
   background-color: #0056b3;
+}
+
+/* .modal .form .message {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 13.3px;
+} */
+
+.modal .form .message {
+  font-size: 16px;     
+  font-weight: 500;     
+  line-height: 13.3px; 
+  height: 0;            
+  overflow: hidden;     
+  padding: 0;          
+  margin-top: 0;       
+  transition: all 0.3s ease;  
+}
+
+.modal .form .message:not(:empty) {
+  height: auto;           
+  overflow: visible;  
+}
+
+.modal .form .message.error-message {
+  color:red;
+}
+
+.modal .form .message.success-message {
+  color:#4CAF50;
 }
 
 .modal .form .prompt {
