@@ -8,13 +8,16 @@ from typing import List, Optional
 #     hashed_password: str
 
 class SignupData(BaseModel):
-    username: str
+    name: str
     email: EmailStr  
     password: str
 
 class SigninData(BaseModel):
     email: EmailStr  
     password: str
+
+class TokenResponse(BaseModel):
+    token: str
 
 class Attraction(BaseModel):
     id: int
