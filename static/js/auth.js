@@ -15,7 +15,6 @@ async function fetchUserStatus() {
     }
     if (isTokenExpired(token)) {
         localStorage.removeItem('token') 
-        localStorage.setItem('expiredSession', 'true');
         window.location.href = '/'  
         return;
     }
@@ -38,7 +37,6 @@ async function fetchUserStatus() {
             switch (response.status) {
                 case 401:
                     localStorage.removeItem('token') 
-                    localStorage.setItem('expiredSession', 'true');
                     window.location.href = '/'    
                 default:
                     renderSignIn();
@@ -75,7 +73,6 @@ function setupEventListeners() {
         signinLink.addEventListener('click', () => toggleModal('signin-modal'));
     }
 
-    console.log(signoutLink)
     if (signoutLink) {
         signoutLink.addEventListener('click', signout); 
     }  
