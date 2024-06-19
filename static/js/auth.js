@@ -94,6 +94,8 @@ function setupEventListeners() {
 
 function handleCloseButtonClick(event) {
     const modal = event.currentTarget.closest('.modal');
+    const signinModal = document.getElementById('signin-modal');
+    const signupModal = document.getElementById('signup-modal');
     if (modal) {
         toggleModal(modal.id);
 
@@ -103,6 +105,17 @@ function handleCloseButtonClick(event) {
                 input.value = '';
             }
         });
+
+        const modalPrefix = modal.id.split('-')[0]; 
+        if(modalPrefix === 'signin'){
+            clearMessage(modalPrefix + '-message-container');
+            signinModal.style.height = '275px';
+        }
+
+        if(modalPrefix === 'signup'){
+            clearMessage(modalPrefix + '-message-container');
+            signupModal.style.height = '332px';
+        }
     }
 }
 
@@ -136,6 +149,28 @@ function toggleModal(modalId) {
 }
 
 function switchModals(currentModalId, newModalId) {
+    const currentModal = document.getElementById(currentModalId);
+    const signinModal = document.getElementById('signin-modal');
+    const signupModal = document.getElementById('signup-modal');
+
+    if (currentModal) {
+        const inputs = currentModal.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.value = '';  
+        });
+
+        const modalPrefix = currentModalId.split('-')[0]; 
+        if(modalPrefix === 'signin'){
+            clearMessage(modalPrefix + '-message-container');
+            signinModal.style.height = '275px';
+        }
+        if(modalPrefix === 'signup'){
+            clearMessage(modalPrefix + '-message-container');
+            signupModal.style.height = '332px';
+        }
+        
+    }
+
     toggleModal(currentModalId); 
     toggleModal(newModalId); 
 }
