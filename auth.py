@@ -80,14 +80,15 @@ def get_current_user(conn, token: str):
         raise HTTPException(status_code=401, detail="Token has expired")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-    user_id = payload.get("sub")
-    if user_id is None:
+    user_id = payload.get("sub")  
+    user_name = payload.get("name") 
+    user_email = payload.get("email")  
+    if not user_id or not user_name or not user_email:
         return None
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT id, name, email FROM users WHERE id = %s", (user_id,))
-    user = cursor.fetchone()
-    cursor.close()
-    if not user:
-        return None
-    return user
+    user_info = {
+        "id": user_id,
+        "name": user_name,
+        "email": user_email
+    }
+    return user_info
     
