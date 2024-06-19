@@ -1,20 +1,24 @@
 from fastapi import *
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from typing import Optional
 import os
 from dotenv import load_dotenv
 from models import ResponseData, ErrorResponse, SignupResponse, UserResponse, Attraction, AttractionResponse, MRTListResponse, TokenResponse, SignupData, SigninData
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
-from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user
 from database import get_db_connection
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import jwt
+from jwt import PyJWTError
 
 app=FastAPI()
 
 load_dotenv()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+bearer_scheme = HTTPBearer()
 
 def handle_error(e):
     if isinstance(e, HTTPException):
@@ -68,11 +72,12 @@ async def signin(form_data: SigninData):
 			conn.close()
 		
 @app.get("/api/user/auth", response_model=UserResponse)
-async def get_signin_user():
+async def get_signin_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 	conn = None  
 	try:
 		conn = get_db_connection()
-		user = get_current_user()
+		user = get_current_user(conn, credentials.credentials)
+		print('user:', user)
 		if not user:
 			return UserResponse()
 		return UserResponse(data=user)
