@@ -65,11 +65,9 @@ def create_access_token(user_data: dict, expires_delta: Optional[timedelta] = No
     to_encode = user_data.copy()
     expire = datetime.utcnow() + timedelta(days=7)
     to_encode.update({"exp": expire})
-    try:
-        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-        return encoded_jwt
-    except Exception as e:
-        raise ValueError("Failed to create access token") from e
+    
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
 
 def get_current_user(conn, token: str):
     if not token:
