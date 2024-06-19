@@ -1,11 +1,38 @@
 * {
     box-sizing: border-box;
   }
-    
+
   body {
     font-family: 'Noto Sans TC', sans-serif;
     height: 100vh;
     padding-top:54px;
+  }
+
+  .shadow-animation {
+    transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+
+  .shadow-animation:hover {
+    color: #333;
+    text-shadow: 
+      1px 1px 1px rgba(255, 255, 255, 0.7),
+      -1px 1px 1px rgba(255, 255, 255, 0.7),
+      1px -1px 1px rgba(255, 255, 255, 0.7),
+      -1px -1px 1px rgba(255, 255, 255, 0.7),
+      1px 1px 5px rgba(0, 0, 0, 0.1),
+      2px 2px 7px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05) translateY(-1px);
+  }
+
+  .shadow-animation:active {
+    color: #555;
+    text-shadow: 
+      1px 1px 1px rgba(0, 0, 0, 0.1),
+      -1px 1px 1px rgba(0, 0, 0, 0.1),
+      1px -1px 1px rgba(0, 0, 0, 0.1),
+      -1px -1px 1px rgba(0, 0, 0, 0.1);
+    transform: scale(0.95) translateY(1px);
   }
   
   #content {
@@ -57,6 +84,30 @@
     font-weight: 500;
     font-size: 16px;
     padding: 10px;
+    transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
+  }
+
+  #menu-items a:hover {
+    color: #333;
+    text-shadow: 
+      1px 1px 1px rgba(255, 255, 255, 0.7),
+      -1px 1px 1px rgba(255, 255, 255, 0.7),
+      1px -1px 1px rgba(255, 255, 255, 0.7),
+      -1px -1px 1px rgba(255, 255, 255, 0.7),
+      1px 1px 5px rgba(0, 0, 0, 0.1),
+      2px 2px 7px rgba(0, 0, 0, 0.1);
+    transform: scale(1.05) translateY(-1px);
+    cursor: pointer;
+  }
+  
+  #menu-items a:active {
+    color: #555;
+    text-shadow: 
+      1px 1px 1px rgba(0, 0, 0, 0.1),
+      -1px 1px 1px rgba(0, 0, 0, 0.1),
+      1px -1px 1px rgba(0, 0, 0, 0.1),
+      -1px -1px 1px rgba(0, 0, 0, 0.1);
+    transform: scale(0.95) translateY(1px);
   }
 
   #signout-link {
@@ -122,6 +173,19 @@
   padding: 7px;
 }
 
+#mrt-list .mrt-link:hover {
+  color: #333;
+  text-shadow: 
+    1px 1px 1px rgba(255, 255, 255, 0.7),
+    -1px 1px 1px rgba(255, 255, 255, 0.7),
+    1px -1px 1px rgba(255, 255, 255, 0.7),
+    -1px -1px 1px rgba(255, 255, 255, 0.7),
+    1px 1px 5px rgba(0, 0, 0, 0.1),
+    2px 2px 7px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05) translateY(-1px);
+  cursor: pointer;
+}
+
 .modal .close-button img {
   width: 16px;
   height: 16px
@@ -159,10 +223,17 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .modal .form button:hover {
-  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  opacity: 0.9;
+}
+
+.modal .form:active {
+  transform: scale(0.95); 
+  box-shadow: none; 
 }
 
 .modal .form .message {

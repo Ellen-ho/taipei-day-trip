@@ -172,31 +172,6 @@
   background-color: #FFFFFF; 
   padding: 5px 15px; 
   line-height: 13.3px;
-  transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
-  display: inline-block;
-}
-
-#mrt-list .mrt-link:hover {
-  color: #333;
-  text-shadow: 
-    1px 1px 1px rgba(255, 255, 255, 0.7),
-    -1px 1px 1px rgba(255, 255, 255, 0.7),
-    1px -1px 1px rgba(255, 255, 255, 0.7),
-    -1px -1px 1px rgba(255, 255, 255, 0.7),
-    1px 1px 5px rgba(0, 0, 0, 0.1),
-    2px 2px 7px rgba(0, 0, 0, 0.1);
-  transform: scale(1.05) translateY(-1px);
-  cursor: pointer;
-}
-
-#mrt-list .mrt-link:active {
-  color: #555;
-  text-shadow: 
-    1px 1px 1px rgba(0, 0, 0, 0.1),
-    -1px 1px 1px rgba(0, 0, 0, 0.1),
-    1px -1px 1px rgba(0, 0, 0, 0.1),
-    -1px -1px 1px rgba(0, 0, 0, 0.1);
-  transform: scale(0.95) translateY(1px);
 }
 
 #attraction-list { 
