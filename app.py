@@ -1,14 +1,13 @@
 from fastapi import *
 from fastapi.responses import FileResponse
-# from mysql.connector import pooling
 from typing import Optional
 import os
 from dotenv import load_dotenv
-from models import ResponseData, Attraction, AttractionResponse, MRTListResponse, TokenResponse, SignupData, SigninData
+from models import ResponseData, ErrorResponse, SignupResponse, UserResponse, Attraction, AttractionResponse, MRTListResponse, TokenResponse, SignupData, SigninData
 from db_operations import get_attractions, get_attraction_by_id, get_mrts
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from auth import create_access_token, check_existing_user, authenticate_user, create_user
+from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user
 from database import get_db_connection
 
 app=FastAPI()
@@ -17,29 +16,17 @@ load_dotenv()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# db_config = {
-#     'host': os.getenv('DB_HOST'),
-#     'user': os.getenv('DB_USER'),
-#     'password': os.getenv('DB_PASSWORD'),
-#     'database': os.getenv('DB_NAME')
-# }
-
-# db_pool = pooling.MySQLConnectionPool(pool_name="mypool", pool_size=10, **db_config)
-
-# def get_db_connection():
-#     try:
-#         return db_pool.get_connection()
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
-
 def handle_error(e):
     if isinstance(e, HTTPException):
         return JSONResponse(status_code=e.status_code, content={"error": True, "message": str(e)})
     else:
         return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 
-@app.post("/api/user")
-async def signin(form_data: SignupData):
+@app.post("/api/user", response_model=SignupResponse, responses={
+    400: {"model": ErrorResponse, "description": "註冊失敗，重複的 Email 或其他原因"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
+async def signup(form_data: SignupData):
 	conn = None
 	try:
 		conn = get_db_connection()
@@ -55,7 +42,10 @@ async def signin(form_data: SignupData):
 		if conn:
 			conn.close()
 
-@app.put("/api/user/auth", response_model=TokenResponse)
+@app.put("/api/user/auth", response_model=TokenResponse, responses={
+    400: {"model": ErrorResponse, "description": "登入失敗，帳號或密碼錯誤或其他原因"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
 async def signin(form_data: SigninData):
 	conn = None  
 	try:
@@ -71,6 +61,21 @@ async def signin(form_data: SigninData):
 		if not access_token:
 			return JSONResponse(status_code=500, content={"error": True, "message": "Failed to create access token"})
 		return {"token": access_token}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:  
+			conn.close()
+		
+@app.get("/api/user/auth", response_model=UserResponse)
+async def get_signin_user():
+	conn = None  
+	try:
+		conn = get_db_connection()
+		user = get_current_user()
+		if not user:
+			return UserResponse()
+		return UserResponse(data=user)
 	except Exception as e:
 		return handle_error(e)
 	finally:

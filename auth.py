@@ -72,16 +72,20 @@ def create_access_token(user_data: dict, expires_delta: Optional[timedelta] = No
     except Exception as e:
         raise ValueError("Failed to create access token") from e
 
-# def get_current_user(token: str = Depends(oauth2_scheme)):
-#     credentials_exception = HTTPException(status_code=401, detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
-#     try:
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         username = payload.get("sub")
-#         if username is None:
-#             raise credentials_exception
-#     except jwt.PyJWTError:
-#         raise credentials_exception
-#     user = authenticate_user(username)
-#     if user is None:
-#         raise credentials_exception
-#     return user
+def get_current_user(conn, token: str = Depends(oauth2_scheme)):
+    if not token:
+        return None 
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+        if user_id is None:
+            return None
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id, name, email FROM users WHERE id = %s", (user_id,))
+        user = cursor.fetchone()
+        cursor.close()
+        if not user:
+            return None
+        return user
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")

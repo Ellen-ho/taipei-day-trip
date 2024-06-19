@@ -1,11 +1,21 @@
 from pydantic import BaseModel, HttpUrl, EmailStr 
 from typing import List, Optional
 
-# class User(BaseModel):
-#     id: int = Field(..., description="Primary key, uniquely identifying the user")
-#     username: str
-#     email: str = Field(..., description="Unique email address")
-#     hashed_password: str
+class User(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+
+class UserResponse(BaseModel):
+    data: Optional[User] = None
+
+
+class ErrorResponse(BaseModel):
+    error: bool
+    message: str
+
+class SignupResponse(BaseModel):
+    ok: bool
 
 class SignupData(BaseModel):
     name: str
