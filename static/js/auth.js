@@ -1,49 +1,111 @@
-function addModalEventListener() {
-    // const overlay = document.createElement('div');
-    // overlay.className = 'overlay';
-    // document.body.appendChild(overlay);
-
-    document.getElementById('menu-items').addEventListener('click', function(event) {
-        event.preventDefault();
-        const action = event.target.getAttribute('data-action');
-        if (action === 'signin') {
-            toggleModal('signin-modal');
-        }
-    });
-        
-    document.querySelectorAll('.close-button').forEach(function(button) {
-        button.addEventListener('click', function() {
-            const modal = button.closest('.modal');
-            if (modal) {
-                toggleModal(modal.id);
+async function fetchUserStatus() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        renderSignIn();
+        return;
+    }
+  
+    try {
+        const response = await fetch('/api/user/auth', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
         });
+  
+        if (response.ok) {
+            const userData = await response.json();
+            if (userData) {
+                renderSignOut();
+            } else {
+                renderSignIn();
+            }
+        } else {
+            throw new Error('Failed to fetch user data');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        renderSignIn();
+    }
+ }
+
+function renderSignIn() {
+    const signinLink = document.getElementById('signin-link');
+    const signoutLink = document.getElementById('signout-link');
+    signinLink.style.display = 'block';
+    signoutLink.style.display = 'none';
+    signinLink.textContent = '登入/註冊';
+}
+
+function renderSignOut() {
+    const signinLink = document.getElementById('signin-link');
+    const signoutLink = document.getElementById('signout-link');
+    signinLink.style.display = 'none';
+    signoutLink.style.display = 'block';
+    signoutLink.textContent = '登出系統';
+}
+
+function setupEventListeners() {
+    const signinLink = document.getElementById('signin-link');
+    const signoutLink = document.getElementById('signout-link');
+    if (signinLink) {
+        signinLink.addEventListener('click', () => toggleModal('signin-modal'));
+    }
+
+    console.log(signoutLink)
+    if (signoutLink) {
+        signoutLink.addEventListener('click', signout); 
+    }
+
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', handleCloseButtonClick);
     });
 
-    document.getElementById('switch-to-signup').addEventListener('click', function(event) {
-        event.preventDefault();
-        switchModals('signin-modal', 'signup-modal');
-    });
+    const switchToSignup = document.getElementById('switch-to-signup');
+    const switchToSignin = document.getElementById('switch-to-signin');
+    if (switchToSignup && switchToSignin) {
+        switchToSignup.addEventListener('click', () => switchModals('signin-modal', 'signup-modal'));
+        switchToSignin.addEventListener('click', () => switchModals('signup-modal', 'signin-modal'));
+    }
 
-    document.getElementById('switch-to-signin').addEventListener('click', function(event) {
-        event.preventDefault();
-        switchModals('signup-modal', 'signin-modal');
-    });
+    addButtonEventListener('signup-button', signup);
+    addButtonEventListener('signin-button', signin);
+}
 
-    // overlay.addEventListener('click', function() {
-    //     document.querySelectorAll('.modal.show').forEach(function(modal) {
-    //         toggleModal(modal.id);
-    //     });
-    // });
+function handleCloseButtonClick(event) {
+    const modal = event.currentTarget.closest('.modal');
+    if (modal) {
+        toggleModal(modal.id);
+
+        const inputs = modal.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.type !== 'button') {
+                input.value = '';
+            }
+        });
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal && modal.classList.contains('show')) {
+        toggleModal(modalId); 
+
+        const inputs = modal.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.type !== 'button') {
+                input.value = '';
+            }
+        });
+    }
 }
 
 function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
+    if (!modal) return;
 
     modal.classList.toggle('show');
     modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
-    // overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
-    // console.log(overlay.style.display)
 }
 
 function switchModals(currentModalId, newModalId) {
@@ -53,40 +115,60 @@ function switchModals(currentModalId, newModalId) {
 
 function addButtonEventListener(buttonId, actionFunction) {
     const button = document.getElementById(buttonId);
-    if (button) {  
-        button.addEventListener('click', function() {
-            actionFunction();  
-        });
+    if (button) {
+        button.addEventListener('click', actionFunction);
     } else {
         console.warn(`Button with ID '${buttonId}' does not exist.`);
     }
+}
+
+function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+function clearMessage(containerId) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.textContent = ''; 
+        container.className = 'message'; 
+        container.style.display = 'none';
+    }
+}
+
+function showMessage(containerId, message, className) {
+    clearMessage(containerId); 
+
+    let container = document.getElementById(containerId);
+    const button = document.getElementById(containerId.replace('message-container', 'button')); 
+
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        if (button) {
+            button.insertAdjacentElement('afterend', container);
+        }
+    }
+
+    container.textContent = message;
+    container.className = `message ${className}`; 
+    container.style.display = 'block';
 }
 
 async function signup() {
     const name = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value.trim();
-    const signupButton = document.getElementById('signup-button');
-    let messageContainer = document.querySelector('.message');
     const signupModal = document.getElementById('signup-modal');
 
-    if (!messageContainer) {
-        messageContainer = document.createElement('div');
-        signupButton.insertAdjacentElement('afterend', messageContainer);
-    }
-
-    messageContainer.textContent = '';
-
     if (!name || !email || !password) {
-        messageContainer.textContent = '所有欄位都是必填';
-        messageContainer.className = 'message error-message'; 
+        showMessage('signup-message-container', '所有欄位都是必填', 'error-message');
         signupModal.style.height = '357px';
         return;
     }
 
     if (!validateEmail(email)) {
-        messageContainer.textContent = 'Email 格式不正確';
-        messageContainer.className = 'message error-message';
+        showMessage('signup-message-container', 'Email 格式不正確', 'error-message');
         signupModal.style.height = '357px';
         return;
     }
@@ -111,13 +193,12 @@ async function signup() {
             const errorMessage = responseData.message || `HTTP error! status: ${response.status}`;
             throw new Error(errorMessage);
         }
-        messageContainer.textContent = '註冊成功，請登入系統';
-        messageContainer.className = 'message success-message';
+        showMessage('signup-message-container', '註冊成功，請登入系統', 'success-message');
+        signupModal.style.height = '357px';
     } catch (error) {
         console.error('Fetch error:', error);
 
-        messageContainer.textContent = error.message || 'Error during sign up'; 
-        messageContainer.className = 'message error-message'; 
+        showMessage('signup-message-container', error.message || 'Error during sign up', 'error-message');
         signupModal.style.height = '357px';
     }
 }
@@ -126,27 +207,16 @@ async function signup() {
 async function signin() {
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value.trim();
-    const signinButton = document.getElementById('signin-button');
-    let messageContainer = document.querySelector('.message');
     const signinModal = document.getElementById('signin-modal');
 
-    if (!messageContainer) {
-        messageContainer = document.createElement('div');
-        signinButton.insertAdjacentElement('afterend', messageContainer);
-    }
-
-    messageContainer.textContent = '';
-
     if (!email || !password) {
-        messageContainer.textContent = '所有欄位都是必填';
-        messageContainer.className = 'message error-message'; 
+        showMessage('signin-message-container', '所有欄位都是必填', 'error-message');
         signinModal.style.height = '300px';
         return;
     }
 
     if (!validateEmail(email)) {
-        messageContainer.textContent = 'Email 格式不正確';
-        messageContainer.className = 'message error-message';
+        showMessage('signin-message-container', 'Email 格式不正確', 'error-message');
         signinModal.style.height = '300px';
         return;
     }
@@ -173,24 +243,22 @@ async function signin() {
         }
 
         localStorage.setItem('token', responseData.token);
-        console.log('Success:', responseData);
+        renderSignOut();
+        closeModal('signin-modal')
     } catch (error) {
         console.error('Fetch error:', error);
 
-        messageContainer.textContent = error.message || 'Error during sign in'; 
-        messageContainer.className = 'message error-message'; 
+        showMessage('signin-message-container', error.message || 'Error during sign in', 'error-message');
         signinModal.style.height = '300px';
     }
 }
 
-function validateEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+function signout() {
+    localStorage.removeItem('token')
+    renderSignIn();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    addModalEventListener(),
-    addButtonEventListener('signup-button', signup),
-    addButtonEventListener('signin-button', signin)
+    setupEventListeners();
+    fetchUserStatus()
 });
-
