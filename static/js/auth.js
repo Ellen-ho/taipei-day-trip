@@ -1,10 +1,25 @@
+function isTokenExpired(token) {
+    const payloadBase64 = token.split('.')[1];
+    const decodedJson = atob(payloadBase64);
+    const decoded = JSON.parse(decodedJson);
+    const exp = decoded.exp;
+    const currentUnixTime = Math.round(Date.now() / 1000);
+    return exp < currentUnixTime;
+}
+
 async function fetchUserStatus() {
     const token = localStorage.getItem('token');
     if (!token) {
         renderSignIn();
         return;
     }
-  
+    if (isTokenExpired(token)) {
+        localStorage.removeItem('token') 
+        localStorage.setItem('expiredSession', 'true');
+        window.location.href = '/'  
+        return;
+    }
+
     try {
         const response = await fetch('/api/user/auth', {
             method: 'GET',
@@ -12,7 +27,6 @@ async function fetchUserStatus() {
                 'Authorization': `Bearer ${token}`
             }
         });
-  
         if (response.ok) {
             const userData = await response.json();
             if (userData) {
@@ -21,13 +35,22 @@ async function fetchUserStatus() {
                 renderSignIn();
             }
         } else {
-            throw new Error('Failed to fetch user data');
+            switch (response.status) {
+                case 401:
+                    localStorage.removeItem('token') 
+                    localStorage.setItem('expiredSession', 'true');
+                    window.location.href = '/'    
+                default:
+                    renderSignIn();
+                    break;
+               }
         }
-    } catch (error) {
+    }catch (error) {
         console.error('Fetch error:', error);
         renderSignIn();
+    
     }
- }
+}
 
 function renderSignIn() {
     const signinLink = document.getElementById('signin-link');
@@ -55,7 +78,7 @@ function setupEventListeners() {
     console.log(signoutLink)
     if (signoutLink) {
         signoutLink.addEventListener('click', signout); 
-    }
+    }  
 
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', handleCloseButtonClick);
@@ -104,8 +127,15 @@ function toggleModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
 
-    modal.classList.toggle('show');
-    modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
+    if (modal.classList.contains('show')) {
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        backdrop.style.display = 'none'; 
+    } else {
+        modal.classList.add('show');
+        modal.style.display = 'block';
+        backdrop.style.display = 'block'; 
+    }
 }
 
 function switchModals(currentModalId, newModalId) {

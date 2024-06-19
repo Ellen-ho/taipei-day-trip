@@ -148,7 +148,7 @@ function displayMRTs(data) {
         const link = document.createElement('a');
         link.href = "#";
         link.textContent = mrt;
-        link.className = 'mrt-link';
+        link.className = 'mrt-link shadow-animation';
         link.addEventListener('click', (event) => {
             event.preventDefault();
             const input = document.getElementById('search-input');
