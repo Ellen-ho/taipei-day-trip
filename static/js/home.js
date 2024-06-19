@@ -181,10 +181,8 @@ function addLoadMrtsEventListener() {
     fetchMRTData();
 }
 
-function init() {
+document.addEventListener('DOMContentLoaded', function() {
     setupInfiniteScroll(),
     addLoadMrtsEventListener(),
     addSearchInputListener()
-}
-
-window.onload = init;
+});

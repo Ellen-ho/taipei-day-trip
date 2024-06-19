@@ -5,6 +5,7 @@ function changePageEventListener() {
   fetchSingleAttraction(attractionId);
 };
 
+
 async function fetchSingleAttraction(attractionId) {
   try {
       const response = await fetch(`/api/attraction/${attractionId}`, {
@@ -153,10 +154,8 @@ function checkBookingButtonListener(){
   });
 }
 
-function init() {
+document.addEventListener('DOMContentLoaded', function() {
   changePageEventListener(),
   timeOptionsChangeListener(),
   checkBookingButtonListener()
-}
-
-window.onload = init;
+});

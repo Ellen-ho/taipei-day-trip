@@ -1,8 +1,12 @@
 function setupEventListeners() {
-    const menuItems = document.getElementById('menu-items');
-    if (menuItems) {
-        console.log(menuItems)
-        menuItems.addEventListener('click', handleMenuClick);
+    const signinLink = document.getElementById('signin-link');
+    const signoutLink = document.getElementById('signout-link');
+    if (signinLink) {
+        signinLink.addEventListener('click', () => toggleModal('signin-modal'));
+    }
+
+    if (signoutLink) {
+        signoutLink.addEventListener('click', signout); 
     }
 
     document.querySelectorAll('.close-button').forEach(button => {
@@ -18,14 +22,6 @@ function setupEventListeners() {
 
     addButtonEventListener('signup-button', signup);
     addButtonEventListener('signin-button', signin);
-}
-
-function handleMenuClick(event) {
-    event.preventDefault();
-    const action = event.target.getAttribute('data-action');
-    if (action === 'signin') {
-        toggleModal('signin-modal');
-    }
 }
 
 function handleCloseButtonClick(event) {
@@ -64,27 +60,17 @@ function addButtonEventListener(buttonId, actionFunction) {
     }
 }
 
-function updateNavLink(action) {
-    const link = document.querySelector(`a[data-action="${action === 'signout' ? 'signin' : 'signout'}"]`);
-    if (link) {
-        link.textContent = action === 'signout' ? '登出系统' : '登入/註冊';
-        link.setAttribute('data-action', action);
-        link.removeEventListener('click', action === 'signout' ? handleSigninClick : handleSignoutClick);
-        link.addEventListener('click', action === 'signout' ? handleSignoutClick : handleSigninClick);
+function updateNavigationLinks() {
+    const signinLink = document.getElementById('signin-link');
+    const signoutLink = document.getElementById('signout-link');
+
+    if (localStorage.getItem('token')) {
+        signinLink.style.display = 'none';
+        signoutLink.style.display = 'block';
+    } else {
+        signinLink.style.display = 'block';
+        signoutLink.style.display = 'none';
     }
-}
-
-
-function handleSignoutClick(event) {
-    event.preventDefault();
-    localStorage.removeItem('token');
-    updateNavLink('signin');  
-    window.location.reload(); 
-}
-
-function handleSigninClick(event) {
-    event.preventDefault();
-    toggleModal('signin-modal');
 }
 
 function validateEmail(email) {
@@ -97,6 +83,7 @@ function clearMessage(containerId) {
     if (container) {
         container.textContent = ''; 
         container.className = 'message'; 
+        container.style.display = 'none';
     }
 }
 
@@ -116,27 +103,14 @@ function showMessage(containerId, message, className) {
 
     container.textContent = message;
     container.className = `message ${className}`; 
+    container.style.display = 'block';
 }
 
 async function signup() {
     const name = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value.trim();
-    // const signupButton = document.getElementById('signup-button');
-    // let messageContainer = document.getElementById('signup-message-container');
     const signupModal = document.getElementById('signup-modal');
-
-    // if (!messageContainer) {
-    //     messageContainer = document.createElement('div');
-    //     messageContainer.id = 'signup-message-container'; 
-    //     signupButton.insertAdjacentElement('afterend', messageContainer);
-    // }
-
-    console.log(messageContainer)
-
-    messageContainer.textContent = '';
-
-    console.log(messageContainer.textContent)
 
     if (!name || !email || !password) {
         showMessage('signup-message-container', '所有欄位都是必填', 'error-message');
@@ -184,17 +158,7 @@ async function signup() {
 async function signin() {
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value.trim();
-    // const signinButton = document.getElementById('signin-button');
-    // let messageContainer = document.getElementById('signin-message-container');
     const signinModal = document.getElementById('signin-modal');
-
-    // if (!messageContainer) {
-    //     messageContainer = document.createElement('div');
-    //     messageContainer.id = 'signin-message-container'; 
-    //     signinButton.insertAdjacentElement('afterend', messageContainer);
-    // }
-
-    // messageContainer.textContent = '';
 
     if (!email || !password) {
         showMessage('signin-message-container', '所有欄位都是必填', 'error-message');
@@ -230,8 +194,8 @@ async function signin() {
         }
 
         localStorage.setItem('token', responseData.token);
-        updateNavLink('signout'); 
         closeModal('signin-modal')
+        updateNavigationLinks()
     } catch (error) {
         console.error('Fetch error:', error);
 
@@ -242,8 +206,16 @@ async function signin() {
 
 function signout() {
     localStorage.removeItem('token');
+    updateNavigationLinks();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
+    updateNavigationLinks();
 });
+
+// function initAuth() {
+//     setupEventListeners()
+// }
+
+// window.onload = initAuth;
