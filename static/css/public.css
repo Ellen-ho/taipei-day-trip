@@ -8,6 +8,17 @@
     padding-top:54px;
   }
 
+  #backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 700;  
+    display: none;
+  }
+
   .shadow-animation {
     transition: color 0.3s, text-shadow 0.3s, transform 0.3s;
     cursor: pointer;
@@ -139,6 +150,20 @@
   height: 332px;
 }
 
+#expired-modal .modal{
+  width: 340px;
+  height: 200px;
+  display: none; 
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top:80px;
+  z-index: 800; 
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0px 4px 60px 0px #AAAAAA;
+}
+
 .modal {
   display: none; 
   position: fixed;
@@ -229,11 +254,6 @@
 .modal .form button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   opacity: 0.9;
-}
-
-.modal .form:active {
-  transform: scale(0.95); 
-  box-shadow: none; 
 }
 
 .modal .form .message {
