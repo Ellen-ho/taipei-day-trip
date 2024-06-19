@@ -77,12 +77,13 @@ async def get_signin_user(credentials: HTTPAuthorizationCredentials = Depends(be
 	try:
 		conn = get_db_connection()
 		user = get_current_user(conn, credentials.credentials)
-		print('user:', user)
 		if not user:
 			return UserResponse()
 		return UserResponse(data=user)
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
 	except Exception as e:
-		return handle_error(e)
+		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 	finally:
 		if conn:  
 			conn.close()

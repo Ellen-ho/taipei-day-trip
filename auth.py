@@ -6,7 +6,7 @@ import os
 import jwt
 from fastapi.security import OAuth2PasswordBearer, HTTPBearer
 from passlib.context import CryptContext
-from jwt import decode
+from jwt import decode, ExpiredSignatureError, InvalidTokenError
 
 
 load_dotenv()
@@ -63,12 +63,8 @@ def authenticate_user(conn, email: str, password: str):
 
 def create_access_token(user_data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = user_data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(days=7)
+    expire = datetime.utcnow() + timedelta(days=7)
     to_encode.update({"exp": expire})
-
     try:
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt
@@ -78,7 +74,12 @@ def create_access_token(user_data: dict, expires_delta: Optional[timedelta] = No
 def get_current_user(conn, token: str):
     if not token:
         return None 
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     user_id = payload.get("sub")
     if user_id is None:
         return None
