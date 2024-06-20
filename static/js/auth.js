@@ -7,6 +7,13 @@ function isTokenExpired(token) {
     return exp < currentUnixTime;
 }
 
+function checkTokenExpiredAndShowModal() {
+    if (localStorage.getItem('expiredSession') === 'true') {
+        toggleModal('expired-modal'); 
+        localStorage.removeItem('expiredSession'); 
+    }
+}
+
 async function fetchUserStatus() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -14,7 +21,8 @@ async function fetchUserStatus() {
         return;
     }
     if (isTokenExpired(token)) {
-        localStorage.removeItem('token') 
+        localStorage.removeItem('token')
+        localStorage.setItem('expiredSession', 'true'); 
         window.location.href = '/'  
         return;
     }
@@ -321,6 +329,7 @@ function signout() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    setupEventListeners();
+    setupEventListeners(),
+    checkTokenExpiredAndShowModal(),
     fetchUserStatus()
 });
