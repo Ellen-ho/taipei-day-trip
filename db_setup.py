@@ -13,25 +13,48 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 
-def create_tables(cursor):
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS attractions (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            category VARCHAR(255),
-            rate VARCHAR(50),
-            description TEXT,
-            memo_time TEXT,
-            address VARCHAR(255) NOT NULL,
-            latitude FLOAT,
-            longitude FLOAT,
-            mrt VARCHAR(255),
-            date DATE,
-            transport TEXT,
-            images JSON
-        );
-    """)
-    
+def create_tables():
+    db = mysql.connector.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME
+    )
+    cursor = db.cursor()
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS attractions (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                category VARCHAR(255),
+                rate VARCHAR(50),
+                description TEXT,
+                memo_time TEXT,
+                address VARCHAR(255) NOT NULL,
+                latitude FLOAT,
+                longitude FLOAT,
+                mrt VARCHAR(255),
+                date DATE,
+                transport TEXT,
+                images JSON
+            );
+        """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        db.commit()
+    except Error as e:
+        db.rollback()
+        print("Error while creating tables:", e)
+    finally:
+        cursor.close()
+        db.close()
 
 def convert_date(date_str):
     return datetime.strptime(date_str, '%Y/%m/%d').date()
@@ -45,7 +68,7 @@ def filter_images(file_str):
             valid_images.append(url)
     return valid_images
 
-def load_data():
+def load_attractions_data():
     db = None
     cursor = None
     try:
@@ -56,7 +79,6 @@ def load_data():
             database=DB_NAME
         )
         cursor = db.cursor()
-        create_tables(cursor)
         file_path = os.path.join('data', 'taipei-attractions.json')
 
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -81,11 +103,10 @@ def load_data():
                 ))
 
             db.commit()
-
     except Error as e:
         if db:
             db.rollback()
-        print("Error while connecting to MySQL", e)
+        print("Error during database operation:", e)
     finally:
         if cursor:
             cursor.close()
@@ -95,10 +116,13 @@ def load_data():
 
 def main():
     parser = argparse.ArgumentParser(description="Load data into the database.")
-    parser.add_argument('--load', action='store_true', help='Load data into the database')
+    parser.add_argument('--init-db', action='store_true', help='Initialize database tables')
+    parser.add_argument('--load-data', action='store_true', help='Load attractions data into the database')
     args = parser.parse_args()
-    if args.load:
-        load_data()
+    if args.init_db:
+        create_tables()
+    if args.load_data:
+        load_attractions_data()
 
 if __name__ == '__main__':
     main()

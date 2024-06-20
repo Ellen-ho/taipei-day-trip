@@ -148,7 +148,7 @@ function displayMRTs(data) {
         const link = document.createElement('a');
         link.href = "#";
         link.textContent = mrt;
-        link.className = 'mrt-link';
+        link.className = 'mrt-link shadow-animation';
         link.addEventListener('click', (event) => {
             event.preventDefault();
             const input = document.getElementById('search-input');
@@ -181,83 +181,8 @@ function addLoadMrtsEventListener() {
     fetchMRTData();
 }
 
-function addModalEventListener() {
-    var overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    document.body.appendChild(overlay);
-
-    function toggleModal(modalId) {
-        var modal = document.getElementById(modalId);
-        console.log(modalId)
-        if (!modal.classList.contains('show')) {
-            adjustModalPosition(modalId); 
-        }
-        modal.classList.toggle('show');
-        modal.style.display = modal.classList.contains('show') ? 'block' : 'none';
-        overlay.style.display = modal.classList.contains('show') ? 'block' : 'none';
-        console.log(overlay.style.display)
-    }
-
-    function switchModals(currentModalId, newModalId) {
-        toggleModal(currentModalId); 
-        toggleModal(newModalId); 
-        adjustModalPosition(newModalId); 
-    }
-
-    document.getElementById('menu-items').addEventListener('click', function(event) {
-        event.preventDefault();
-        var action = event.target.getAttribute('data-action');
-        if (action === 'signin') {
-            toggleModal('signin-modal');
-        }
-    });
-        
-    document.querySelectorAll('.close-button').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var modal = button.closest('.modal');
-            if (modal) {
-                toggleModal(modal.id);
-            }
-        });
-    });
-
-    document.getElementById('switch-to-signup').addEventListener('click', function(event) {
-        event.preventDefault();
-        switchModals('signin-modal', 'signup-modal');
-    });
-
-    overlay.addEventListener('click', function() {
-        document.querySelectorAll('.modal.show').forEach(function(modal) {
-            toggleModal(modal.id);
-        });
-    });
-}
-
-function adjustModalPosition(modalId) {
-    const modal = document.getElementById(modalId);
-    const banner = document.getElementById('banner');
-    const nav = document.getElementById('fixed-top-navbar');
-
-    modal.style.display = 'block';
-
-    const modalTopPosition = (banner.offsetHeight / 2) + nav.offsetHeight - (modal.offsetHeight / 2);
-
-    modal.style.top = `${modalTopPosition}px`;
-    console.log(modal.style.top);
-
-    console.log(modal.classList.contains('show'))
-
-    if (!modal.classList.contains('show')) {
-        modal.style.display = 'none';
-    }
-}
-
-
-function init() {
+document.addEventListener('DOMContentLoaded', function() {
     setupInfiniteScroll(),
     addLoadMrtsEventListener(),
-    addSearchInputListener(),
-    addModalEventListener()
-}
-
-window.onload = init;
+    addSearchInputListener()
+});

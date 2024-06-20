@@ -11,13 +11,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+  <div id="backdrop" style="display:none;"></div>
     <nav id="fixed-top-navbar">
       <div class="nav-container common-wrapper">
         <div id="logo"><a href="/">台北一日遊</a></div>
         <div id="menu-items">
-            <a href="#" data-action="book">預留行程</a>
-            <a href="#" data-action="signin">登入/註冊</a>
-        </div>
+          <a href="#" id="book-link">預留行程</a>
+          <a href="#" id="signin-link">登入/註冊</a>
+          <a href="#" id="signout-link">登出系统</a>
+      </div>
       </div>
     </nav>
     <div id="banner">
@@ -44,37 +46,43 @@
     <footer>
       COPYRIGHT © 2021 台北一日遊
   </footer>
+  <div id="expired-modal" class="modal">
+    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+    <div class="text-container">
+      <p>登入時效到期</p>
+      <p>請重新登入</p>
+  </div>
+  </div>
   <!-- Signin Modal -->
-    <div id="signin-modal" class="modal">
-      <div class="modal-content">
-          <span class="close-button">X</span>
-          <h2>登入會員帳號</h2>
-          <form id="signin-form">
-              <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
-              <input type="password" id="signin-password" placeholder="輸入密碼" required>
-              <button>登入帳戶</button>
-              <div class="signup-prompt">
-                  還沒有帳戶？<span id="switch-to-signup">點此註冊</span>
-              </div>
-          </form>
-      </div>
+  <div id="signin-modal" class="modal">
+    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+    <div class="modal-title">登入會員帳號</div>
+    <div class="form">
+        <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
+        <input type="password" id="signin-password" placeholder="輸入密碼" required>
+        <button id="signin-button">登入帳戶</button>
+        <div id="signin-message-container" class="message"></div>
+        <div class="prompt">
+          <span>還沒有帳戶？</span><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+        </div>
+    </div>
   </div>
   <!-- Signup Modal -->
   <div id="signup-modal" class="modal">
-      <div class="modal-content">
-          <span class="close-button">X</span>
-          <h2>註冊會員帳號</h2>
-          <form id="signup-form">
-              <input type="text" id="signup-name" placeholder="輸入姓名" required>
-              <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
-              <input type="password" id="signup-password" placeholder="輸入密碼" required>
-              <button>註冊新帳戶</button>
-              <div class="signin-prompt">
-                  已經有帳戶了？<a href="#" id="switch-to-signup">點此登入</a>
-              </div>
-          </form>
-      </div>
+    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+    <div class="modal-title">註冊會員帳號</div>
+    <div class="form">
+        <input type="text" id="signup-name" placeholder="輸入姓名" required>
+        <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
+        <input type="password" id="signup-password" placeholder="輸入密碼" required>
+        <button id="signup-button">註冊新帳戶</button>
+        <div id="signup-message-container" class="message"></div>
+        <div class="prompt">
+          <span>已經有帳戶了？</span><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+        </div>
+    </div>
   </div>
-  <script src="/static/js/home.js"></script>
+  <script src="/static/js/auth.js"></script>
+<script src="/static/js/home.js"></script>
   </body>
 </html>

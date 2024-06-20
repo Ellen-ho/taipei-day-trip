@@ -197,7 +197,6 @@
 #book-date::-webkit-calendar-picker-indicator {
   background: url("/static/images/calendar-icon.png") no-repeat center;
   background-size: 24px; 
-  object-fit: cover;
   width: 24px; 
   height: 24px; 
   cursor: pointer;
