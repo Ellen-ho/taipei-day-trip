@@ -4,8 +4,95 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+  <link href="/static/css/public.css" rel="stylesheet">
+  <link href="/static/css/booking.css" rel="stylesheet">
 </head>
 <body>
-  
+  <nav id="fixed-top-navbar">
+    <div class="nav-container common-wrapper">
+      <div id="logo"><a href="/">台北一日遊</a></div>
+      <div id="menu-items">
+        <a href="#" id="book-link">預留行程</a>
+        <a href="#" id="signin-link">登入/註冊</a>
+        <a href="#" id="signout-link">登出系统</a>
+    </div>
+    </div>
+  </nav>
+  <div id="content">
+    <div class="wrapper common-wrapper">
+      <div class="booking-greet booking-text-title">
+        您好，<span id="user-name"></span>，待預訂的行程如下：
+      </div>
+      <div id="booking-container">
+        <div class="booking-attraction-image"></div> 
+        <div class="booking-info">
+          <div class="name-container">
+            <span>台北一日遊 :</span>
+            <span class="booking-attraction-name"></span>
+          </div>
+          <div class="booking-list-container">
+            <div class="booking-row">
+              <span class="info-bold-content">日期：</span>
+              <span class="selected-date selected-items"></span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">時間：</span>
+              <span class="selected-time selected-items"></span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">費用：</span>
+              <span class="selected-cost selected-items"></span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">地點：</span>
+              <span class="selected-address selected-items"></span>
+           </div>
+          </div>
+        </div>
+      </div>
+      <div class="separator"><hr></div>
+      <div id="contact-container">
+        <div class="other-info booking-text-title">您的聯絡資訊</div>
+        <div class="contact-detail">
+            <div class="input-row">
+              <label for="contact-name" class="booking-text-subtitle">聯絡姓名：</label>
+              <input type="text" name="contact-name" placeholder="">
+            </div>
+           <div class="input-row">
+            <label for="contact-email" class="booking-text-subtitle">聯絡信箱：</label>
+            <input type="email" name="contact-email" placeholder="">
+          </div>
+          <div class="input-row">
+            <label for="contact-phone" class="booking-text-subtitle">手機號碼：</label>
+            <input type="tel" name="contact-phone" placeholder="">
+          </div>
+          <div class="notice">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
+        </div>
+      </div>
+      <div class="separator"><hr></div>
+      <div id="payment-container">
+        <div class="input-row">
+          <label for="card-number" class="booking-text-subtitle">卡片號碼：</label>
+          <input type="text" id="card-number" name="card-number" inputmode="numeric" pattern="\d*" maxlength="19">
+        </div>
+        <div class="input-row">
+          <label for="expiration-date" class="booking-text-subtitle">過期時間：</label>
+          <input type="text" id="expiration-date" name="expiration-date" placeholder="MM / YY" inputmode="numeric" pattern="\d{2}\/\d{2}" maxlength="5">
+        </div>
+        <div class="input-row">
+          <label for="cvv" class="booking-text-subtitle">驗證密碼：</label>
+          <input type="text" id="cvv" name="cvv" placeholder="CVV" inputmode="numeric" pattern="\d*" maxlength="4">
+        </div>
+       </div>
+       <div class="separator"><hr></div>
+    </div>
+  </div>
+  <footer>
+    COPYRIGHT © 2021 台北一日遊
+</footer>
+  <script src="/static/js/auth.js"></script>
+  <script src="/static/js/booking.js"></script>
 </body>
 </html>

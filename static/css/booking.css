@@ -1,0 +1,125 @@
+.booking-greet {
+    padding: 0 100px;
+    margin-bottom: 30px;
+}
+
+.booking-text-title {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 16px;
+    color:#666666;
+}
+
+#booking-container{
+    padding: 0 110px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap:30px
+}
+
+#booking-container .booking-attraction-image {
+    width: 250px;
+    height: 200px
+}
+
+#booking-container .booking-info {
+    width: 700px;
+    height: 170px;
+    font-size: 16px;
+    line-height: 13.3px;
+}
+
+#booking-container .name-container{
+    color:#448899;
+    font-weight: 700;
+    height: 24px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#booking-container .booking-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+#booking-container .booking-list-container .booking-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 24px;
+  color:#666666;
+}
+
+#booking-container .booking-row .info-bold-content {
+  font-weight: 700
+}
+
+#booking-container .booking-row .selected-items {
+  font-weight: 400
+}
+
+.separator {
+    margin-top: 40px;  
+    margin-bottom: 40px; 
+    text-align: center;  
+  }
+  
+.separator hr {
+ border: 1px solid #E8E8E8;
+}
+
+#contact-container .other-info {
+    margin-bottom: 20px;
+}
+
+#contact-container .contact-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+  }
+
+.input-row {
+    display: flex;
+    flex-direction: row;
+    height: 38px;
+    align-items: center;
+}
+
+.input-row .booking-text-subtitle {
+    color: #666666;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 13.3px;
+}
+
+.input-row input {
+    color: #000000;  
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 13.3px;
+    background-color: #ffffff;  
+    border: 1px solid #E8E8E8;  
+    border-radius: 5px;
+    padding: 10px;  
+    width: 200px; 
+    height: 38px
+}
+
+#contact-container .contact-detail .notice {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 13.3px;
+    color: #666666
+}
+
+#payment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+}
+
+#payment-container input {
+    color: #757575;
+}
