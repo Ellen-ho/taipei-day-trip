@@ -3,14 +3,16 @@ from fastapi.responses import FileResponse, JSONResponse
 from typing import Optional
 import os
 from dotenv import load_dotenv
-from models import ResponseData, ErrorResponse, SignupResponse, UserResponse, Attraction, AttractionResponse, MRTListResponse, TokenResponse, SignupData, SigninData
-from db_operations import get_attractions, get_attraction_by_id, get_mrts
+from models import (
+    ResponseData, ErrorResponse, SignupResponse, UserResponse, DeleteResponse,AttractionResponse, MRTListResponse, TokenResponse,
+    SignupData, SigninData, Booking, BookingResponse
+)
+from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking
 from fastapi.staticfiles import StaticFiles
 from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user
 from database import get_db_connection
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import jwt
-from jwt import PyJWTError
+
 
 app=FastAPI()
 
@@ -89,7 +91,7 @@ async def get_signin_user(credentials: HTTPAuthorizationCredentials = Depends(be
 			conn.close()
     
 @app.get("/api/attractions", response_model=ResponseData)
-def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None):
+async def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None):
 	limit = 12
 	conn = None 
 	try:
@@ -103,7 +105,7 @@ def search_attractions(page: int = Query(0, ge=0), keyword: Optional[str] = None
 			conn.close()
 
 @app.get("/api/attraction/{attractionId}", response_model=AttractionResponse)
-def search_single_attraction(attractionId: int = Path(...)):
+async def search_single_attraction(attractionId: int = Path(...)):
 	conn = None 
 	try:
 		conn = get_db_connection()
@@ -118,12 +120,83 @@ def search_single_attraction(attractionId: int = Path(...)):
 			conn.close()
 
 @app.get("/api/mrts", response_model=MRTListResponse)
-def get_mrt_list():
+async def get_mrt_list():
 	conn = None
 	try:
 		conn = get_db_connection()
 		mrts = get_mrts(conn)
 		return {"data": mrts}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.post("/api/booking", response_model=BookingResponse, responses={
+    400: {"model": ErrorResponse, "description": "建立失敗，輸入不正確或其他原因"},
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
+async def create_booking(booking: Booking, credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	conn = None
+	if not credentials:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+	try:
+		conn = get_db_connection()
+		booking_id = create_booking_to_db(conn, booking)
+		if not booking_id:
+			return JSONResponse(status_code=400, content={"error": True, "message":"建立失敗，輸入不正確或其他原因"})
+		return {"ok": True}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.get("/api/booking", response_model=BookingResponse, responses={
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"}
+})
+async def get_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	conn = None
+	if not credentials:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+	try:
+		conn = get_db_connection()
+		booking_info = get_booking_details(conn, credentials.user_id)
+		if booking_info is None:
+			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，無法取得"})
+		return {
+            "data": {
+                "attraction": {
+                    "id": booking_info['attraction_id'],
+                    "name": booking_info['name'],
+                    "address": booking_info['address'],
+                    "image": booking_info['image'][0]
+                },
+                "date": booking_info['date'],
+                "time": booking_info['time'],
+                "price": booking_info['price']
+            }
+        }
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.delete("/api/booking", response_model=DeleteResponse, responses={
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"}
+})
+async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	conn = None
+	if not credentials:
+		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+	try:
+		conn = get_db_connection()
+		affected_rows = delete_booking(conn, credentials.user_id)
+		if affected_rows == 0:
+			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，刪除失敗"})
+		return {"ok": True}
 	except Exception as e:
 		return handle_error(e)
 	finally:

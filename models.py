@@ -1,5 +1,17 @@
-from pydantic import BaseModel, HttpUrl, EmailStr 
+from pydantic import BaseModel, Field, HttpUrl, EmailStr 
 from typing import List, Optional
+
+class BaseResponse(BaseModel):
+    ok: bool
+
+class SignupResponse(BaseResponse):
+    pass
+
+class BookingResponse(BaseResponse):
+    pass
+
+class DeleteResponse(BaseResponse):
+    pass
 
 class User(BaseModel):
     id: int
@@ -13,9 +25,6 @@ class UserResponse(BaseModel):
 class ErrorResponse(BaseModel):
     error: bool
     message: str
-
-class SignupResponse(BaseModel):
-    ok: bool
 
 class SignupData(BaseModel):
     name: str
@@ -50,3 +59,9 @@ class ResponseData(BaseModel):
 
 class MRTListResponse(BaseModel):
     data: List[str]
+
+class Booking(BaseModel):
+    attraction_id: int = Field(..., alias='attractionId')
+    date: str 
+    time: str 
+    price: int

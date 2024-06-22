@@ -77,3 +77,47 @@ def get_mrts(conn):
     results = cursor.fetchall()
     cursor.close()
     return [result['mrt'] for result in results]
+
+def create_booking_to_db(conn, booking):
+    cursor = conn.cursor(dictionary=True)
+    sql_query = """
+    INSERT INTO bookings (attraction_id, date, time, price)
+    VALUES (%s, %s, %s, %s)
+    """
+    values = (booking.attraction_id, booking.date, booking.time, booking.price)
+    try:
+        cursor.execute(sql_query, values)
+        conn.commit()  
+        return cursor.lastrowid  
+    except Exception as e:
+        conn.rollback()  
+        raise
+    finally:
+        cursor.close() 
+
+def get_booking_details(conn, user_id):
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            b.date, b.time, b.price,
+            a.id as 'attraction_id', a.name, a.address, JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as 'image'
+        FROM bookings b
+        INNER JOIN attractions a ON b.attraction_id = a.id
+        WHERE b.user_id = %s
+    """, (user_id,))
+    booking_info = cursor.fetchone()
+    cursor.close()
+    return booking_info 
+
+def delete_booking(conn, user_id):
+    cursor = conn.cursor(dictionary=True)
+    try:
+        cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,))
+        affected_rows = cursor.rowcount
+        conn.commit()
+        return affected_rows
+    except Exception as e:
+        conn.rollback()  
+        raise 
+    finally:
+        cursor.close()
