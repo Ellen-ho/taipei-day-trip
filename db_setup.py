@@ -48,6 +48,19 @@ def create_tables():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS bookings (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            attraction_id INT NOT NULL,
+            date DATE NOT NULL,
+            time ENUM('morning', 'afternoon') NOT NULL,
+            price INT CHECK(price IN (2000, 2500)),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (attraction_id) REFERENCES attractions(id)
+        );
+        """)
         db.commit()
     except Error as e:
         db.rollback()
