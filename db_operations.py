@@ -78,13 +78,13 @@ def get_mrts(conn):
     cursor.close()
     return [result['mrt'] for result in results]
 
-def create_booking_to_db(conn, booking):
+def create_booking_to_db(conn, booking, user_id):
     cursor = conn.cursor(dictionary=True)
     sql_query = """
-    INSERT INTO bookings (attraction_id, date, time, price)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO bookings (user_id, attraction_id, date, time, price)
+    VALUES (%s, %s, %s, %s, %s)
     """
-    values = (booking.attraction_id, booking.date, booking.time, booking.price)
+    values = (user_id, booking.attraction_id, booking.date, booking.time, booking.price)
     try:
         cursor.execute(sql_query, values)
         conn.commit()  
@@ -95,19 +95,61 @@ def create_booking_to_db(conn, booking):
     finally:
         cursor.close() 
 
+# def get_booking_details(conn, user_id):
+#     cursor = conn.cursor(dictionary=True)
+#     sql_query = """
+#         SELECT 
+#             b.date, b.time, b.price,
+#             a.id as attraction_id, a.name, a.address, 
+#             JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
+#         FROM bookings b
+#         INNER JOIN attractions a ON b.attraction_id = a.id
+#         WHERE b.user_id = %s
+#     """
+#     cursor.execute(sql_query, (user_id,))
+#     booking_info = cursor.fetchone()
+#     cursor.close()
+#     if booking_info:
+#         return {
+#             "attraction": {
+#                 "id": booking_info['attraction_id'],
+#                 "name": booking_info['name'],
+#                 "address": booking_info['address'],
+#                 "image": booking_info['image']
+#             },
+#             "date": booking_info['date'],
+#             "time": booking_info['time'],
+#             "price": booking_info['price']
+#         }
+#     return None 
+
 def get_booking_details(conn, user_id):
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT 
-            b.date, b.time, b.price,
-            a.id as 'attraction_id', a.name, a.address, JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as 'image'
-        FROM bookings b
-        INNER JOIN attractions a ON b.attraction_id = a.id
-        WHERE b.user_id = %s
-    """, (user_id,))
-    booking_info = cursor.fetchone()
-    cursor.close()
-    return booking_info 
+    with conn.cursor(dictionary=True) as cursor:
+        sql_query = """
+            SELECT 
+                b.date, b.time, b.price,
+                a.id as attraction_id, a.name, a.address, 
+                JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
+            FROM bookings b
+            INNER JOIN attractions a ON b.attraction_id = a.id
+            WHERE b.user_id = %s
+        """
+        cursor.execute(sql_query, (user_id,))
+        booking_info = cursor.fetchall()
+    
+    if booking_info:
+        return {
+            "attraction": {
+                "id": booking_info['attraction_id'],
+                "name": booking_info['name'],
+                "address": booking_info['address'],
+                "image": booking_info['image']
+            },
+            "date": booking_info['date'],
+            "time": booking_info['time'],
+            "price": booking_info['price']
+        }
+    return None
 
 def delete_booking(conn, user_id):
     cursor = conn.cursor(dictionary=True)

@@ -1,3 +1,4 @@
+from cmath import e
 from fastapi import *
 from fastapi.responses import FileResponse, JSONResponse
 from typing import Optional
@@ -5,14 +6,13 @@ import os
 from dotenv import load_dotenv
 from models import (
     ResponseData, ErrorResponse, SignupResponse, UserResponse, DeleteResponse,AttractionResponse, MRTListResponse, TokenResponse,
-    SignupData, SigninData, Booking, BookingResponse
+    SignupData, SigninData, Booking, BookingResponse, BookingData
 )
 from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking
 from fastapi.staticfiles import StaticFiles
-from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user
+from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user, validate_token
 from database import get_db_connection
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
 
 app=FastAPI()
 
@@ -78,12 +78,13 @@ async def get_signin_user(credentials: HTTPAuthorizationCredentials = Depends(be
 	conn = None  
 	try:
 		conn = get_db_connection()
-		user = get_current_user(conn, credentials.credentials)
+		token = credentials.credentials
+		user = get_current_user(token)
 		if not user:
 			return UserResponse()
 		return UserResponse(data=user)
-	except HTTPException as e:
-		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
+	# except HTTPException as e:
+	# 	return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
 	except Exception as e:
 		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 	finally:
@@ -139,13 +140,17 @@ async def get_mrt_list():
 })
 async def create_booking(booking: Booking, credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 	conn = None
-	if not credentials:
-		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
+	
 	try:
 		conn = get_db_connection()
-		booking_id = create_booking_to_db(conn, booking)
+		booking_id = create_booking_to_db(conn, booking, user_id)
 		if not booking_id:
-			return JSONResponse(status_code=400, content={"error": True, "message":"建立失敗，輸入不正確或其他原因"})
+			return JSONResponse(status_code=400, content={"error": True, "message": "建立失敗，輸入不正確或其他原因"})
 		return {"ok": True}
 	except Exception as e:
 		return handle_error(e)
@@ -153,31 +158,19 @@ async def create_booking(booking: Booking, credentials: HTTPAuthorizationCredent
 		if conn:
 			conn.close()
 
-@app.get("/api/booking", response_model=BookingResponse, responses={
+@app.get("/api/booking", response_model= BookingData, responses={
 	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"}
 })
 async def get_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 	conn = None
-	if not credentials:
-		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
 	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
 		conn = get_db_connection()
-		booking_info = get_booking_details(conn, credentials.user_id)
+		booking_info = get_booking_details(conn, user_id)
 		if booking_info is None:
 			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，無法取得"})
-		return {
-            "data": {
-                "attraction": {
-                    "id": booking_info['attraction_id'],
-                    "name": booking_info['name'],
-                    "address": booking_info['address'],
-                    "image": booking_info['image'][0]
-                },
-                "date": booking_info['date'],
-                "time": booking_info['time'],
-                "price": booking_info['price']
-            }
-        }
+		return BookingData(**booking_info)
 	except Exception as e:
 		return handle_error(e)
 	finally:
@@ -189,11 +182,14 @@ async def get_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer
 })
 async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
 	conn = None
-	if not credentials:
-		return JSONResponse(status_code=403, content={"error": True, "message": "未登入系統，拒絕存取"})
+	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
 	try:
 		conn = get_db_connection()
-		affected_rows = delete_booking(conn, credentials.user_id)
+		affected_rows = delete_booking(conn, user_id)
 		if affected_rows == 0:
 			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，刪除失敗"})
 		return {"ok": True}
