@@ -1,7 +1,8 @@
+let attractionId
 function changePageEventListener() {
   const path = window.location.pathname;
   const parts = path.split('/');
-  const attractionId = parts[parts.length - 1]; 
+  attractionId = parts[parts.length - 1]; 
   fetchSingleAttraction(attractionId);
 };
 
@@ -33,10 +34,10 @@ function displayAttractionDetails(data) {
 }
 
 function displayBasicInfo(data) {
-  const titleElement = document.querySelector('.book-attraction-title');
+  const titleElement = document.querySelector('.attraction-detail-title');
   titleElement.textContent = data.name;
 
-  const subtitleElement = document.querySelector('.book-attraction-subtitle');
+  const subtitleElement = document.querySelector('.attraction-detail-subtitle');
   subtitleElement.textContent = `${data.category} at ${data.mrt}`;
 
   const descriptionElement = document.querySelector('.attraction-description');
@@ -112,7 +113,7 @@ function currentSlide(n) {
 }
 
 function timeOptionsChangeListener() {
-  const timeOptions = document.querySelectorAll('input[name="book-time"]');
+  const timeOptions = document.querySelectorAll('input[name="tour-time"]');
   timeOptions.forEach(option => {
     option.addEventListener('change', function() {
       const tourCostElement = document.getElementById('tour-cost'); 
@@ -127,9 +128,9 @@ function timeOptionsChangeListener() {
 
 function checkBookingButtonListener(){
   const bookButton = document.getElementById('book-button');
-  const bookDate = document.getElementById('book-date');
+  const bookDate = document.getElementById('tour-date');
 
-  bookButton.addEventListener('click', function(event) {
+  bookButton.addEventListener('click', async function(event) {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -144,15 +145,53 @@ function checkBookingButtonListener(){
       return;
     }
 
-    const timeOptions = document.querySelectorAll('input[name="book-time"]');
+    const timeOptions = document.querySelectorAll('input[name="tour-time"]');
     const isSelected = Array.from(timeOptions).some(option => option.checked);
 
     if (!isSelected) {
       alert('尚未選擇時間!');
       event.preventDefault();
+      return;
     }
-  });
+
+    const selectedTime = document.querySelector('input[name="tour-time"]:checked').value;
+    const costElement = document.getElementById('tour-cost');
+    const matches = costElement.textContent.match(/\d+/);
+    if (!matches) {
+      return;
+    }
+    const cost = parseInt(matches[0], 10); 
+
+    const bookingData = {
+      attractionId,
+      date: bookDate.value,
+      time: selectedTime,
+      price:cost
+    };
+
+    try {
+      const response = await fetch('/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert('Error: ' + errorData.message);
+        return;
+      }
+      window.location.href = '/booking';
+    } catch (error) {
+      alert('An error occurred. Please try again.');
+      console.error('Error:', error);
+    }
+  })
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
   changePageEventListener(),

@@ -36,6 +36,7 @@ async function fetchUserStatus() {
         });
         if (response.ok) {
             const userData = await response.json();
+            console.log(userData)
             if (userData) {
                 renderSignOut();
             } else {
