@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from models import (
     ResponseData, ErrorResponse, SignupResponse, UserResponse, DeleteResponse,AttractionResponse, MRTListResponse, TokenResponse,
-    SignupData, SigninData, Booking, BookingResponse, BookingData
+    SignupData, SigninData, Booking, BookingResponse
 )
 from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking
 from fastapi.staticfiles import StaticFiles
@@ -83,8 +83,6 @@ async def get_signin_user(credentials: HTTPAuthorizationCredentials = Depends(be
 		if not user:
 			return UserResponse()
 		return UserResponse(data=user)
-	# except HTTPException as e:
-	# 	return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
 	except Exception as e:
 		return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 	finally:
@@ -158,7 +156,7 @@ async def create_booking(booking: Booking, credentials: HTTPAuthorizationCredent
 		if conn:
 			conn.close()
 
-@app.get("/api/booking", response_model= BookingData, responses={
+@app.get("/api/booking", response_model=Optional[dict], responses={
 	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"}
 })
 async def get_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
@@ -167,20 +165,20 @@ async def get_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer
 		payload = validate_token(credentials.credentials)
 		user_id = payload.get('sub')
 		conn = get_db_connection()
-		booking_info = get_booking_details(conn, user_id)
-		if booking_info is None:
-			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，無法取得"})
-		return BookingData(**booking_info)
+		result = get_booking_details(conn, user_id)
+		if result is None:
+			return None 
+		return result
 	except Exception as e:
 		return handle_error(e)
 	finally:
 		if conn:
 			conn.close()
 
-@app.delete("/api/booking", response_model=DeleteResponse, responses={
+@app.delete("/api/booking/{bookingId}", response_model=DeleteResponse, responses={
 	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"}
 })
-async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),bookingId:int = Path(...)):
 	conn = None
 	try:
 		payload = validate_token(credentials.credentials)
@@ -189,7 +187,7 @@ async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bea
 		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
 	try:
 		conn = get_db_connection()
-		affected_rows = delete_booking(conn, user_id)
+		affected_rows = delete_booking(conn, user_id, bookingId)
 		if affected_rows == 0:
 			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，刪除失敗"})
 		return {"ok": True}

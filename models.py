@@ -68,8 +68,10 @@ class Booking(BaseModel):
     time: str 
     price: int
 
-class BookingData(BaseModel):
-    attraction: Attraction
-    date: date 
-    time: str  
-    price: int
+class AttractionBooking(BaseModel):
+    id: int
+    name: str
+    address: Optional[str]
+    image: Optional[HttpUrl]
+
+

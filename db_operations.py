@@ -95,39 +95,11 @@ def create_booking_to_db(conn, booking, user_id):
     finally:
         cursor.close() 
 
-# def get_booking_details(conn, user_id):
-#     cursor = conn.cursor(dictionary=True)
-#     sql_query = """
-#         SELECT 
-#             b.date, b.time, b.price,
-#             a.id as attraction_id, a.name, a.address, 
-#             JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
-#         FROM bookings b
-#         INNER JOIN attractions a ON b.attraction_id = a.id
-#         WHERE b.user_id = %s
-#     """
-#     cursor.execute(sql_query, (user_id,))
-#     booking_info = cursor.fetchone()
-#     cursor.close()
-#     if booking_info:
-#         return {
-#             "attraction": {
-#                 "id": booking_info['attraction_id'],
-#                 "name": booking_info['name'],
-#                 "address": booking_info['address'],
-#                 "image": booking_info['image']
-#             },
-#             "date": booking_info['date'],
-#             "time": booking_info['time'],
-#             "price": booking_info['price']
-#         }
-#     return None 
-
 def get_booking_details(conn, user_id):
     with conn.cursor(dictionary=True) as cursor:
         sql_query = """
             SELECT 
-                b.date, b.time, b.price,
+                b.id, b.date, b.time, b.price,
                 a.id as attraction_id, a.name, a.address, 
                 JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
             FROM bookings b
@@ -136,25 +108,32 @@ def get_booking_details(conn, user_id):
         """
         cursor.execute(sql_query, (user_id,))
         booking_info = cursor.fetchall()
-    
-    if booking_info:
-        return {
-            "attraction": {
-                "id": booking_info['attraction_id'],
-                "name": booking_info['name'],
-                "address": booking_info['address'],
-                "image": booking_info['image']
-            },
-            "date": booking_info['date'],
-            "time": booking_info['time'],
-            "price": booking_info['price']
-        }
-    return None
 
-def delete_booking(conn, user_id):
+        if len(booking_info) == 0:
+            return None 
+        
+        bookings = []
+        for booking in booking_info:
+            bookings.append({
+                "attraction": {
+                    "id": booking['attraction_id'],
+                    "name": booking['name'],
+                    "address": booking['address'],
+                    "image": booking['image']
+                },
+                "id": booking['id'],
+                "date": booking['date'].strftime('%Y-%m-%d'),  
+                "time": booking['time'],
+                "price": booking['price']
+            })
+
+        return {"data": bookings}  
+
+def delete_booking(conn, user_id, booking_id):
     cursor = conn.cursor(dictionary=True)
     try:
-        cursor.execute("DELETE FROM bookings WHERE user_id = %s", (user_id,))
+        sql = "DELETE FROM bookings WHERE user_id = %s AND id = %s"
+        cursor.execute(sql, (user_id, booking_id))
         affected_rows = cursor.rowcount
         conn.commit()
         return affected_rows
