@@ -131,6 +131,13 @@ function checkBookingButtonListener(){
   const bookDate = document.getElementById('tour-date');
 
   bookButton.addEventListener('click', async function(event) {
+    const token = localStorage.getItem('token');
+
+    if (!token || isTokenExpired(token)) {
+      toggleModal('signin-modal'); 
+      return;
+    }
+
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -173,15 +180,18 @@ function checkBookingButtonListener(){
       const response = await fetch('/api/booking', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('token')
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(bookingData)
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert('Error: ' + errorData.message);
+        console.log(errorData)
+        if (response.status === 403) {
+          toggleModal('signin-modal'); 
+      }
         return;
       }
       window.location.href = '/booking';
