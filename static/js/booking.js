@@ -44,6 +44,15 @@ function displayBookingDetails(bookings) {
         bookingContainer.className = 'booking-container';
         bookingContainer.dataset.bookingId = booking.id;
 
+        const checkBoxWrapper = document.createElement('div');
+        checkBoxWrapper.className = 'checkbox-wrapper';
+    
+        const checkBox = document.createElement('input');
+        checkBox.type = 'checkbox';
+        checkBox.className = 'booking-checkbox';
+        checkBox.dataset.price = booking.price;
+        checkBoxWrapper.appendChild(checkBox); 
+
         const imageDiv = document.createElement('div');
         imageDiv.className = 'booking-attraction-image';
         const img = document.createElement('img');
@@ -57,7 +66,7 @@ function displayBookingDetails(bookings) {
         const formattedTime = formatTime(booking.time);
         
         infoDiv.innerHTML = `
-          <button class="delete-button"><img src="/static/images/delete-button.png" alt="Delete"></button>
+          <img class="delete-button shadow-animation" src="/static/images/delete-button.png" alt="Delete">
           <div class="name-container">
             <span>台北一日遊 : ${booking.attraction.name}</span>
           </div>
@@ -80,10 +89,19 @@ function displayBookingDetails(bookings) {
             </div>
           </div>
         `;
+        bookingContainer.appendChild(checkBoxWrapper);
         bookingContainer.appendChild(imageDiv);
         bookingContainer.appendChild(infoDiv);
         bookingInfoContainer.appendChild(bookingContainer);
+
+        bookingContainer.addEventListener('mouseover', function() {
+            this.classList.add('hover-effect');
+        });
+        bookingContainer.addEventListener('mouseout', function() {
+            this.classList.remove('hover-effect');
+        });
     });
+    setupPriceCalculation();
 }
 
 function setupBookingEventListeners() {
@@ -97,6 +115,27 @@ function setupBookingEventListeners() {
             deleteBooking(bookingId, bookingContainer);
         }
     });
+}
+
+function setupPriceCalculation() {
+    const checkBoxes = document.querySelectorAll('.booking-checkbox');
+    checkBoxes.forEach(checkBox => {
+        checkBox.addEventListener('change', updateTotalCost);
+    });
+}
+
+function updateTotalCost() {
+    let totalCost = 0;
+    const selectedBoxes = document.querySelectorAll('.booking-checkbox:checked');
+    selectedBoxes.forEach(box => {
+        totalCost += parseFloat(box.dataset.price);
+    });
+    const totalCostDisplay = document.getElementById('total-cost');
+    if (totalCost > 0) {
+        totalCostDisplay.textContent = `新台幣 ${totalCost} 元`;
+    } else {
+        totalCostDisplay.textContent = ''; 
+    }
 }
 
 function formatTime(timeText) {
@@ -166,7 +205,7 @@ function hideBookingElements() {
 
     if (noBookingMessage) {
         noBookingMessage.style.display = 'block';
-        if (footer) footer.style.height = '865px'; 
+        if (footer) footer.style.minHeight = '100vh'; 
         if (content) content.style.minHeight = '0px';
     } else {
         if (footer) footer.style.height = '104px'; 
@@ -174,7 +213,27 @@ function hideBookingElements() {
     }
 }
 
+function setupCreditCardInput() {
+  const cardNumberInput = document.getElementById('card-number');
+  cardNumberInput.addEventListener('input', function() {
+    this.value = this.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+    this.value = this.value.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+  });
+
+  const expirationInput = document.getElementById('expiration-date');
+  expirationInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{2})(\d{2})/, '$1/$2');
+  });
+
+  const cvvInput = document.getElementById('cvv');
+  cvvInput.addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+}
+
+
 document.addEventListener('DOMContentLoaded', function() {
     fetchBookingDetails(),
-    setupBookingEventListeners()
+    setupBookingEventListeners(),
+    setupCreditCardInput()
   });
