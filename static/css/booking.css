@@ -11,62 +11,78 @@
 }
 
 #booking-group-container {
-    padding: 0 110px;
     display: flex;
     flex-direction: column;
-    gap:30px
+    gap:30px;
 }
 
 .booking-container{
-    /* padding: 0 110px; */
+    padding: 0 60px; 
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    gap:30px
+    gap:30px;
+    transition: background-color 0.3s ease; 
+    background-color: #fff; 
+}
+
+.booking-container.hover-effect {
+    background-color: #e6e6fa; 
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;  
+    width: 20px;
+}
+
+.booking-container .booking-checkbox {
+    width: 20px; 
+    height: 20px;
+    cursor: pointer;
 }
 
 .booking-container .booking-attraction-image {
-    width: 250px;
+    flex: 5; 
+    display: flex;
     height: 200px;
     overflow: hidden
 }
 
 .booking-container .booking-attraction-image img {
     width: 100%;
-    height: 100%;
+    min-height: 200px;
     object-fit: cover;  
 }
 
 .booking-container .booking-info {
     position: relative;
-    width: 700px;
-    height: 170px;
+    flex: 14;
+    height: 200px;
     font-size: 16px;
     line-height: 13.3px;
 }
 
 .booking-container .booking-info .delete-button {
     position: absolute; 
-    top: 0; 
+    top: 5px; 
     right: 0; 
     background: none; 
     border: none; 
     cursor: pointer; 
-}
-
-.booking-container .booking-info .delete-button img {
     width: 30px; 
     height: 30px;  
 }
 
 .booking-container .name-container{
+    display: flex; 
+    align-items: center; 
     height: 24px;
     font-size: 16px;
     font-weight: 700;
     color:#448899;
     line-height: 13.3px;
-    align-items: center;
     margin-bottom: 20px;
+    margin-top: 5px;
 }
 
 .booking-container .booking-list-container {
@@ -212,4 +228,50 @@
     font-size: 16px;
     line-height: 13.3px;
     padding: 0 10px;
+}
+
+@media (max-width: 600px){
+    .booking-greet {
+        padding: 0 10px;
+    }
+
+    .booking-container{
+        padding: 0 10px; 
+        flex-direction: column;
+        gap:15px;
+    }
+
+    .checkbox-wrapper {
+        display: flex;
+        justify-items: center;  
+        width: 100%;
+        height: 25px;
+    }
+
+    .booking-container .booking-checkbox {
+        width: 18px; 
+        height: 18px
+    }
+
+    .booking-container .booking-attraction-image,
+    .booking-container .booking-info {
+        flex: 0 0 100%; 
+        height: 200px;
+    }
+    
+    .booking-container .booking-info .delete-button {
+        top: auto; 
+        bottom: 0; 
+    }
+
+    #contact-container .contact-detail .notice {
+       line-height: 23.17px;
+    }
+      
+    #contact-container,
+    #payment-container,
+    #total-cost-container,
+    .separator {
+        padding: 0 10px;
+    }
 }
