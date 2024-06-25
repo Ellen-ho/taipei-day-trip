@@ -10,27 +10,56 @@
     color:#666666;
 }
 
-#booking-container{
+#booking-group-container {
     padding: 0 110px;
+    display: flex;
+    flex-direction: column;
+    gap:30px
+}
+
+.booking-container{
+    /* padding: 0 110px; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     gap:30px
 }
 
-#booking-container .booking-attraction-image {
+.booking-container .booking-attraction-image {
     width: 250px;
-    height: 200px
+    height: 200px;
+    overflow: hidden
 }
 
-#booking-container .booking-info {
+.booking-container .booking-attraction-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;  
+}
+
+.booking-container .booking-info {
+    position: relative;
     width: 700px;
     height: 170px;
     font-size: 16px;
     line-height: 13.3px;
 }
 
-#booking-container .name-container{
+.booking-container .booking-info .delete-button {
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+}
+
+.booking-container .booking-info .delete-button img {
+    width: 30px; 
+    height: 30px;  
+}
+
+.booking-container .name-container{
     height: 24px;
     font-size: 16px;
     font-weight: 700;
@@ -40,13 +69,13 @@
     margin-bottom: 20px;
 }
 
-#booking-container .booking-list-container {
+.booking-container .booking-list-container {
     display: flex;
     flex-direction: column;
     gap: 10px
 }
 
-#booking-container .booking-list-container .booking-row {
+.booking-container .booking-list-container .booking-row {
   display: flex;
   align-items: center;
   width: 100%;
@@ -62,7 +91,7 @@
   align-items: center;
 }
 
-#booking-container .booking-row .selected-items {
+.booking-container .booking-row .selected-items {
   font-weight: 400
 }
 
@@ -104,7 +133,7 @@
     line-height: 13.3px;
 }
 
-.input-row input {
+#contact-container .input-row input {
     color: #000000;  
     font-size: 16px;
     font-weight: 500;
@@ -115,6 +144,13 @@
     padding: 10px;  
     width: 200px; 
     height: 38px
+}
+
+#contact-container .input-row input::placeholder {
+    color: #000000; 
+    font-size: 16px; 
+    font-weight: 500; 
+    opacity: 1; 
 }
 
 #payment-container {
@@ -130,7 +166,7 @@
     gap: 15px
   }
 
-#payment-container  .payment-detail input {
+#payment-container .input-row input {
     color: #757575;
 }
 
@@ -162,4 +198,18 @@
     line-height: 16px;
     text-align: center;
     background-color: #448899;
+}
+
+#no-booking-message {
+    display: none;
+    padding: 0 100px;
+    height: 24px;
+}
+
+#no-booking-message span {
+    color: #666666;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13.3px;
+    padding: 0 10px;
 }

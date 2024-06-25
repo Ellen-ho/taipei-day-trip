@@ -25,33 +25,35 @@
       <div class="booking-greet booking-text-title">
         您好，<span id="user-name"></span>，待預訂的行程如下：
       </div>
-      <div id="booking-container">
+      <div id="booking-group-container"></div>
+      <!-- <div id="booking-container">
         <div class="booking-attraction-image"></div> 
         <div class="booking-info">
+          <button class="delete-button"><img src="/static/images/delete-button.png" alt="Delete"></button>
           <div class="name-container">
             <span>台北一日遊 :</span>
-            <span class="booking-attraction-name"></span>
+            <span id="booking-attraction-name"></span>
           </div>
           <div class="booking-list-container">
             <div class="booking-row">
               <span class="info-bold-content">日期：</span>
-              <span class="selected-date selected-items"></span>
+              <span id="selected-date" class="selected-items"></span>
             </div>
             <div class="booking-row">
               <span class="info-bold-content">時間：</span>
-              <span class="selected-time selected-items"></span>
+              <span id="selected-time" class="selected-items"></span>
             </div>
             <div class="booking-row">
               <span class="info-bold-content">費用：</span>
-              <span class="selected-cost selected-items"></span>
+              <span id="selected-cost" class="selected-items"></span>
             </div>
             <div class="booking-row">
               <span class="info-bold-content">地點：</span>
-              <span class="selected-address selected-items"></span>
+              <span id="selected-address" class="selected-items"></span>
            </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="separator"><hr></div>
       <div id="contact-container">
         <div class="other-info booking-text-title">您的聯絡資訊</div>
@@ -97,6 +99,9 @@
         </div>
         <button id="confirm-cost">確認訂購並付款</button>
        </div>
+       <div id="no-booking-message">
+        <span>目前沒有任何待預訂的行程</span>
+      </div>
     </div>
   </div>
   <footer>
