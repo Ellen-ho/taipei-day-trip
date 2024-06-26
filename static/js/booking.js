@@ -255,11 +255,21 @@ function checkTotalCostButtonListener() {
     });
 }
 
+function resetCheckboxes() {
+    const checkboxes = document.querySelectorAll('.booking-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+}
 
 document.addEventListener('DOMContentLoaded', async function() {
     await auth();
     fetchBookingDetails();
     setupBookingEventListeners();
-    setupBookingInfoInput();
-    checkTotalCostButtonListener();
+    setupBookingInfoInput()
   });
+
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        resetCheckboxes();
+    }
+});
+

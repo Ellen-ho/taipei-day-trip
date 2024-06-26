@@ -204,9 +204,34 @@ function checkBookingButtonListener(){
   })
 }
 
+function resetBookingForm() {
+  const dateInput = document.getElementById('tour-date');
+  if (dateInput) {
+      dateInput.value = '';
+  }
+
+  const timeOptions = document.querySelectorAll('input[name="tour-time"]');
+  if (timeOptions.length > 0) {
+    timeOptions.forEach(option => {
+      option.checked = false;
+    });
+  }
+
+  const costElement = document.getElementById('tour-cost');
+  if (costElement) {
+    costElement.textContent = '';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
   await auth();
   changePageEventListener();
   timeOptionsChangeListener();
   checkBookingButtonListener();
+});
+
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted) { 
+      resetBookingForm(); 
+  }
 });

@@ -112,7 +112,6 @@ function setupEventListeners() {
 
 function handleBookingClick(event) {
     event.preventDefault();
-    resetBookingForm()
     const token = localStorage.getItem('token');
     
     if (!token || isTokenExpired(token)) {
@@ -121,25 +120,6 @@ function handleBookingClick(event) {
     }
     window.location.href = '/booking';
 }
-
-function resetBookingForm() {
-    const dateInput = document.getElementById('tour-date');
-    if (dateInput) {
-        dateInput.value = '';
-    }
-  
-    const timeOptions = document.querySelectorAll('input[name="tour-time"]');
-    if (timeOptions.length > 0) {
-      timeOptions.forEach(option => {
-        option.checked = false;
-      });
-    }
-  
-    const costElement = document.getElementById('tour-cost');
-    if (costElement) {
-      costElement.textContent = '';
-    }
-  }
 
 function handleCloseButtonClick(event) {
     const modal = event.currentTarget.closest('.modal');
@@ -374,12 +354,6 @@ async function auth() {
     checkTokenExpiredAndShowModal();
     await fetchUserStatus();
 }
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     setupEventListeners(),
-//     checkTokenExpiredAndShowModal(),
-//     fetchUserStatus()
-// });
 
 window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
