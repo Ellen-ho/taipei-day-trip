@@ -13,7 +13,6 @@ async function fetchBookingDetails() {
             throw new Error('Failed to fetch booking details');
         }
         const result = await response.json();
-        console.log(result)
         if(!result){
             if (userData && userData.data) {
                 document.getElementById("user-name").textContent = userData.data.name}
@@ -29,7 +28,6 @@ async function fetchBookingDetails() {
 
 function displayBookingDetails(bookings) {
     const bookingInfoContainer = document.getElementById('booking-group-container');
-    bookingInfoContainer.innerHTML = ''
     const noBookingMessage = document.getElementById('no-booking-message');
     noBookingMessage.style.display = 'none';
 
@@ -141,9 +139,9 @@ function updateTotalCost() {
 function formatTime(timeText) {
     switch(timeText) {
         case "morning":
-            return '早上 9 點到中午 12 點';
+            return '早上 9 點到下午 4 點';
         case "afternoon":
-            return '下午 1 點到下午 4 點';
+            return '下午 2 點到晚上 9 點';
         default:
             return timeText; 
     }
@@ -177,7 +175,7 @@ async function deleteBooking(bookingId, bookingContainer) {
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('刪除失敗，請重試');
+        alert('刪除失敗，請再試一次');
     }
 }
 
@@ -205,7 +203,10 @@ function hideBookingElements() {
 
     if (noBookingMessage) {
         noBookingMessage.style.display = 'block';
-        if (footer) footer.style.minHeight = '100vh'; 
+        if (footer) {
+            footer.style.minHeight = 'calc(100vh - 215px)';
+            footer.style.paddingTop = '40px';
+            footer.style.alignItems = 'flex-start'}
         if (content) content.style.minHeight = '0px';
     } else {
         if (footer) footer.style.height = '104px'; 
@@ -213,7 +214,7 @@ function hideBookingElements() {
     }
 }
 
-function setupCreditCardInput() {
+function setupBookingInfoInput() {
   const cardNumberInput = document.getElementById('card-number');
   cardNumberInput.addEventListener('input', function() {
     this.value = this.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
@@ -229,11 +230,35 @@ function setupCreditCardInput() {
   cvvInput.addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
   });
+
+  const phoneInput = document.getElementById('contact-phone');
+    phoneInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); 
+    });
+}
+
+function checkTotalCostButtonListener() {
+    const confirmButton = document.getElementById('confirm-cost');
+    confirmButton.addEventListener('click', function() {
+        const inputs = document.querySelectorAll('#contact-container input, #payment-container input');
+        let allFilled = true;
+
+        inputs.forEach(input => {
+            if (input.value.trim() === '') {
+                allFilled = false;
+            }
+        });
+
+        if (!allFilled) {
+            alert('所有欄位皆不可空白');
+        }
+    });
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
     fetchBookingDetails(),
     setupBookingEventListeners(),
-    setupCreditCardInput()
+    setupBookingInfoInput(),
+    checkTotalCostButtonListener()
   });
