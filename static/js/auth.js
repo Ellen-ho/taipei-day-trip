@@ -374,3 +374,9 @@ document.addEventListener('DOMContentLoaded', function() {
     checkTokenExpiredAndShowModal(),
     fetchUserStatus()
 });
+
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        fetchUserStatus();  
+    }
+});
