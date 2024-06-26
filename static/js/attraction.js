@@ -3,7 +3,7 @@ function changePageEventListener() {
   const path = window.location.pathname;
   const parts = path.split('/');
   attractionId = parts[parts.length - 1]; 
-  fetchSingleAttraction(attractionId);
+  fetchSingleAttraction(attractionId)
 };
 
 
@@ -187,21 +187,41 @@ function checkBookingButtonListener(){
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log(errorData)
         if (response.status === 403) {
           toggleModal('signin-modal'); 
       }
+      if (response.status === 409) {
+        toggleModal('conflict-modal'); 
+    }
         return;
       }
+      resetBookingForm()
       window.location.href = '/booking';
     } catch (error) {
-      alert('An error occurred. Please try again.');
+      alert('預定發生錯誤，請再試一次');
       console.error('Error:', error);
     }
   })
 }
 
+function resetBookingForm() {
+  const dateInput = document.getElementById('tour-date');
+  if (dateInput) {
+      dateInput.value = '';
+  }
+
+  const timeOptions = document.querySelectorAll('input[name="tour-time"]');
+  if (timeOptions.length > 0) {
+    timeOptions.forEach(option => {
+      option.checked = false;
+    });
+  }
+
+  const costElement = document.getElementById('tour-cost');
+  if (costElement) {
+    costElement.textContent = '';
+  }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   changePageEventListener(),
