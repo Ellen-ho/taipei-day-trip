@@ -18,9 +18,12 @@ function checkTokenExpiredAndShowModal() {
 
 async function fetchUserStatus() {
     const token = localStorage.getItem('token');
-    console.log(token)
+    const currentPage = window.location.pathname;
     if (!token) {
         renderSignIn();
+        if (currentPage === '/booking') {
+            window.location.href = '/';
+        }
         return;
     }
     if (isTokenExpired(token)) {
@@ -39,7 +42,6 @@ async function fetchUserStatus() {
         });
         if (response.ok) {
             userData = await response.json();
-            console.log(userData)
             if (userData) {
                 renderSignOut();
             } else {
@@ -110,6 +112,7 @@ function setupEventListeners() {
 
 function handleBookingClick(event) {
     event.preventDefault();
+    resetBookingForm()
     const token = localStorage.getItem('token');
     
     if (!token || isTokenExpired(token)) {
