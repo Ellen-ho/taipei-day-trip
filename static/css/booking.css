@@ -29,7 +29,7 @@
     background-color: #e6e6fa; 
 }
 
-.checkbox-wrapper {
+.booking-container .checkbox-wrapper {
     display: flex;
     align-items: center;  
     width: 20px;
@@ -211,6 +211,21 @@
     line-height: 16px;
     text-align: center;
     background-color: #448899;
+    cursor: pointer; 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#total-cost-container button:hover {
+    background-color: #3c7785;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#total-cost-container button:active {
+    background-color: #326670;
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 #no-booking-message {
@@ -227,7 +242,7 @@
     padding: 0 10px;
 }
 
-@media (max-width: 600px){
+@media (max-width: 768px){
     .booking-greet {
         padding: 0 10px;
     }
@@ -252,7 +267,7 @@
 
     .booking-container .booking-attraction-image,
     .booking-container .booking-info {
-        flex: 0 0 100%; 
+        flex: none; 
         height: 200px;
     }
     
