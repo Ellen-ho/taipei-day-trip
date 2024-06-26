@@ -8,7 +8,7 @@ from models import (
     ResponseData, ErrorResponse, SignupResponse, UserResponse, DeleteResponse,AttractionResponse, MRTListResponse, TokenResponse,
     SignupData, SigninData, Booking, BookingResponse
 )
-from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking
+from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking, check_existing_booking
 from fastapi.staticfiles import StaticFiles
 from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user, validate_token
 from database import get_db_connection
@@ -146,6 +146,9 @@ async def create_booking(booking: Booking, credentials: HTTPAuthorizationCredent
 	
 	try:
 		conn = get_db_connection()
+		if check_existing_booking(conn, user_id, booking):
+			return JSONResponse(status_code=409,
+                                content={"error": True, "message": "日期跟時段重複預約"})
 		booking_id = create_booking_to_db(conn, booking, user_id)
 		if not booking_id:
 			return JSONResponse(status_code=400, content={"error": True, "message": "建立失敗，輸入不正確或其他原因"})

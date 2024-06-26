@@ -78,6 +78,20 @@ def get_mrts(conn):
     cursor.close()
     return [result['mrt'] for result in results]
 
+def check_existing_booking(conn, user_id, booking):
+     cursor = conn.cursor(dictionary=True)
+     sql_query = """
+        SELECT id FROM bookings
+        WHERE user_id = %s AND date = %s AND time = %s AND is_deleted = 0
+    """
+     cursor.execute(sql_query, (user_id, booking.date, booking.time))
+     existing_booking = cursor.fetchone()
+     cursor.close()
+     if existing_booking:
+            return existing_booking['id']  
+     else:
+        return None 
+
 def create_booking_to_db(conn, booking, user_id):
     cursor = conn.cursor(dictionary=True)
     sql_query = """
