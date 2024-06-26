@@ -81,10 +81,10 @@ def get_mrts(conn):
 def create_booking_to_db(conn, booking, user_id):
     cursor = conn.cursor(dictionary=True)
     sql_query = """
-    INSERT INTO bookings (user_id, attraction_id, date, time, price)
-    VALUES (%s, %s, %s, %s, %s)
+    INSERT INTO bookings (user_id, attraction_id, date, time, price, is_deleted)
+    VALUES (%s, %s, %s, %s, %s, %s)
     """
-    values = (user_id, booking.attraction_id, booking.date, booking.time, booking.price)
+    values = (user_id, booking.attraction_id, booking.date, booking.time, booking.price, 0)
     try:
         cursor.execute(sql_query, values)
         conn.commit()  
@@ -104,7 +104,7 @@ def get_booking_details(conn, user_id):
                 JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
             FROM bookings b
             INNER JOIN attractions a ON b.attraction_id = a.id
-            WHERE b.user_id = %s
+            WHERE b.user_id = %s AND b.is_deleted = 0
         """
         cursor.execute(sql_query, (user_id,))
         booking_info = cursor.fetchall()
@@ -132,13 +132,13 @@ def get_booking_details(conn, user_id):
 def delete_booking(conn, user_id, booking_id):
     cursor = conn.cursor(dictionary=True)
     try:
-        sql = "DELETE FROM bookings WHERE user_id = %s AND id = %s"
+        sql = "UPDATE bookings SET is_deleted = 1 WHERE user_id = %s AND id = %s AND is_deleted = 0"
         cursor.execute(sql, (user_id, booking_id))
-        affected_rows = cursor.rowcount
-        conn.commit()
+        affected_rows = cursor.rowcount  
+        conn.commit() 
         return affected_rows
     except Exception as e:
         conn.rollback()  
-        raise 
+        raise
     finally:
-        cursor.close()
+        cursor.close() 

@@ -57,6 +57,7 @@ def create_tables():
             time ENUM('morning', 'afternoon') NOT NULL,
             price INT CHECK(price IN (2000, 2500)),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            is_deleted TINYINT(1) DEFAULT 0,
             FOREIGN KEY (attraction_id) REFERENCES attractions(id),
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
