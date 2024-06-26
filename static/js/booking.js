@@ -147,7 +147,7 @@ function formatTime(timeText) {
     }
 }
 
-async function deleteBooking(bookingId, bookingContainer) {
+async function deleteBooking(bookingId) {
     const token = localStorage.getItem('token');
     if (!token) {
         toggleModal('signin-modal');
@@ -168,10 +168,7 @@ async function deleteBooking(bookingId, bookingContainer) {
         const data = await response.json();
         alert('已成功刪除該筆預定');
         if (data.ok) {
-            bookingContainer.remove();
-            if (document.querySelectorAll('.booking-container').length === 0) {
-                hideBookingElements(); 
-            }
+            window.location.reload();
         }
     } catch (error) {
         console.error('Error:', error);
