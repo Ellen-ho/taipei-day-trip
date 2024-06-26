@@ -10,6 +10,7 @@
   <link href="/static/css/booking.css" rel="stylesheet">
 </head>
 <body>
+  <div id="backdrop"></div>
   <nav id="fixed-top-navbar">
     <div class="nav-container common-wrapper">
       <div id="logo"><a href="/">台北一日遊</a></div>
@@ -26,49 +27,21 @@
         您好，<span id="user-name"></span>，待預訂的行程如下：
       </div>
       <div id="booking-group-container"></div>
-      <!-- <div id="booking-container">
-        <div class="booking-attraction-image"></div> 
-        <div class="booking-info">
-          <button class="delete-button"><img src="/static/images/delete-button.png" alt="Delete"></button>
-          <div class="name-container">
-            <span>台北一日遊 :</span>
-            <span id="booking-attraction-name"></span>
-          </div>
-          <div class="booking-list-container">
-            <div class="booking-row">
-              <span class="info-bold-content">日期：</span>
-              <span id="selected-date" class="selected-items"></span>
-            </div>
-            <div class="booking-row">
-              <span class="info-bold-content">時間：</span>
-              <span id="selected-time" class="selected-items"></span>
-            </div>
-            <div class="booking-row">
-              <span class="info-bold-content">費用：</span>
-              <span id="selected-cost" class="selected-items"></span>
-            </div>
-            <div class="booking-row">
-              <span class="info-bold-content">地點：</span>
-              <span id="selected-address" class="selected-items"></span>
-           </div>
-          </div>
-        </div>
-      </div> -->
       <div class="separator"><hr></div>
       <div id="contact-container">
         <div class="other-info booking-text-title">您的聯絡資訊</div>
         <div class="contact-detail">
             <div class="input-row">
               <label for="contact-name" class="booking-text-subtitle">聯絡姓名：</label>
-              <input type="text" name="contact-name">
+              <input type="text" name="contact-name" id="contact-name" required>
             </div>
            <div class="input-row">
             <label for="contact-email" class="booking-text-subtitle">聯絡信箱：</label>
-            <input type="email" name="contact-email">
+            <input type="email" name="contact-email" id="contact-email" required>
           </div>
           <div class="input-row">
             <label for="contact-phone" class="booking-text-subtitle">手機號碼：</label>
-            <input type="tel" name="contact-phone">
+            <input type="tel" name="contact-phone" id="contact-phone" required>
           </div>
           <div class="notice info-bold-content">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
         </div>
@@ -79,15 +52,15 @@
         <div class="payment-detail">
           <div class="input-row">
             <label for="card-number" class="booking-text-subtitle">卡片號碼：</label>
-            <input type="text" id="card-number" name="card-number" inputmode="numeric" pattern="\d*" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" required>
+            <input type="text" id="card-number" name="card-number" inputmode="numeric" pattern="\d{16}" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" required>
           </div>
           <div class="input-row">
             <label for="expiration-date" class="booking-text-subtitle">過期時間：</label>
-            <input type="text" id="expiration-date" name="expiration-date" placeholder="MM / YY" inputmode="numeric" pattern="\d{2}\/\d{2}" maxlength="5">
+            <input type="text" id="expiration-date" name="expiration-date" placeholder="MM / YY" inputmode="numeric" pattern="\d{2}\/\d{2}" maxlength="5" required>
           </div>
           <div class="input-row">
             <label for="cvv" class="booking-text-subtitle">驗證密碼：</label>
-            <input type="text" id="cvv" name="cvv" placeholder="CVV" inputmode="numeric" pattern="\d*" maxlength="4">
+            <input type="text" id="cvv" name="cvv" placeholder="CVV" inputmode="numeric" pattern="\d{3,4}" maxlength="4" required>
           </div>
          </div>
        </div>
@@ -106,7 +79,36 @@
   </div>
   <footer>
     COPYRIGHT © 2021 台北一日遊
-</footer>
+  </footer>
+    <!-- Signin Modal -->
+    <div id="signin-modal" class="modal">
+      <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+      <div class="modal-title">登入會員帳號</div>
+      <div class="form">
+          <input type="email" id="signin-email" placeholder="輸入電子信箱" required>
+          <input type="password" id="signin-password" placeholder="輸入密碼" required>
+          <button id="signin-button">登入帳戶</button>
+          <div id="signin-message-container" class="message"></div>
+          <div class="prompt">
+            <span>還沒有帳戶？</span><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+          </div>
+      </div>
+    </div>
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="modal">
+      <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+      <div class="modal-title">註冊會員帳號</div>
+      <div class="form">
+          <input type="text" id="signup-name" placeholder="輸入姓名" required>
+          <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
+          <input type="password" id="signup-password" placeholder="輸入密碼" required>
+          <button id="signup-button">註冊新帳戶</button>
+          <div id="signup-message-container" class="message"></div>
+          <div class="prompt">
+            <span>已經有帳戶了？</span><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+          </div>
+      </div>
+    </div>
   <script src="/static/js/auth.js"></script>
   <script src="/static/js/booking.js"></script>
 </body>
