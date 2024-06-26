@@ -166,7 +166,7 @@ async function deleteBooking(bookingId) {
             throw new Error('Failed to delete booking');
         }
         const data = await response.json();
-        alert('已成功刪除該筆預定');
+        alert('已成功刪除該筆預訂');
         if (data.ok) {
             window.location.reload();
         }

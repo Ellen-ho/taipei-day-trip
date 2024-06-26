@@ -198,7 +198,7 @@ function checkBookingButtonListener(){
       resetBookingForm()
       window.location.href = '/booking';
     } catch (error) {
-      alert('預定發生錯誤，請再試一次');
+      alert('預訂發生錯誤，請再試一次');
       console.error('Error:', error);
     }
   })
