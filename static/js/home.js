@@ -181,8 +181,9 @@ function addLoadMrtsEventListener() {
     fetchMRTData();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    setupInfiniteScroll(),
-    addLoadMrtsEventListener(),
-    addSearchInputListener()
+document.addEventListener('DOMContentLoaded', async function() {
+    await auth();
+    setupInfiniteScroll();
+    addLoadMrtsEventListener();
+    addSearchInputListener();
 });

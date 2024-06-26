@@ -369,14 +369,22 @@ function signout() {
     renderSignIn();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    setupEventListeners(),
-    checkTokenExpiredAndShowModal(),
-    fetchUserStatus()
-});
+async function auth() {
+    setupEventListeners();
+    checkTokenExpiredAndShowModal();
+    await fetchUserStatus();
+}
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     setupEventListeners(),
+//     checkTokenExpiredAndShowModal(),
+//     fetchUserStatus()
+// });
 
 window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
         fetchUserStatus();  
     }
 });
+
+

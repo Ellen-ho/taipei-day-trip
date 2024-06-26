@@ -204,8 +204,9 @@ function checkBookingButtonListener(){
   })
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  changePageEventListener(),
-  timeOptionsChangeListener(),
-  checkBookingButtonListener()
+document.addEventListener('DOMContentLoaded', async function() {
+  await auth();
+  changePageEventListener();
+  timeOptionsChangeListener();
+  checkBookingButtonListener();
 });

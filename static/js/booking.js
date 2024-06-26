@@ -256,9 +256,10 @@ function checkTotalCostButtonListener() {
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    fetchBookingDetails(),
-    setupBookingEventListeners(),
-    setupBookingInfoInput(),
-    checkTotalCostButtonListener()
+document.addEventListener('DOMContentLoaded', async function() {
+    await auth();
+    fetchBookingDetails();
+    setupBookingEventListeners();
+    setupBookingInfoInput();
+    checkTotalCostButtonListener();
   });
