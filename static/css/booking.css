@@ -1,5 +1,5 @@
 .booking-greet {
-    padding: 0 100px;
+    padding: 0 110px;
     margin-bottom: 30px;
 }
 
@@ -283,7 +283,12 @@
     #contact-container,
     #payment-container,
     #total-cost-container,
+    #no-booking-message,
     .separator {
         padding: 0 10px;
+    }
+
+    #no-booking-message span {
+        padding: 0
     }
 }
