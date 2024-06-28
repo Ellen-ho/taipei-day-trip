@@ -1,3 +1,5 @@
+let userData
+
 function isTokenExpired(token) {
     const payloadBase64 = token.split('.')[1];
     const decodedJson = atob(payloadBase64);
@@ -16,8 +18,12 @@ function checkTokenExpiredAndShowModal() {
 
 async function fetchUserStatus() {
     const token = localStorage.getItem('token');
+    const currentPage = window.location.pathname;
     if (!token) {
         renderSignIn();
+        if (currentPage === '/booking') {
+            window.location.href = '/';
+        }
         return;
     }
     if (isTokenExpired(token)) {
@@ -35,7 +41,7 @@ async function fetchUserStatus() {
             }
         });
         if (response.ok) {
-            const userData = await response.json();
+            userData = await response.json();
             if (userData) {
                 renderSignOut();
             } else {
@@ -77,6 +83,8 @@ function renderSignOut() {
 function setupEventListeners() {
     const signinLink = document.getElementById('signin-link');
     const signoutLink = document.getElementById('signout-link');
+    const bookLink = document.getElementById('book-link');
+
     if (signinLink) {
         signinLink.addEventListener('click', () => toggleModal('signin-modal'));
     }
@@ -84,6 +92,8 @@ function setupEventListeners() {
     if (signoutLink) {
         signoutLink.addEventListener('click', signout); 
     }  
+
+    bookLink.addEventListener('click', handleBookingClick)
 
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', handleCloseButtonClick);
@@ -98,6 +108,17 @@ function setupEventListeners() {
 
     addButtonEventListener('signup-button', signup);
     addButtonEventListener('signin-button', signin);
+}
+
+function handleBookingClick(event) {
+    event.preventDefault();
+    const token = localStorage.getItem('token');
+    
+    if (!token || isTokenExpired(token)) {
+        toggleModal('signin-modal'); 
+        return;
+    }
+    window.location.href = '/booking';
 }
 
 function handleCloseButtonClick(event) {
@@ -328,8 +349,16 @@ function signout() {
     renderSignIn();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    setupEventListeners(),
-    checkTokenExpiredAndShowModal(),
-    fetchUserStatus()
+async function auth() {
+    setupEventListeners();
+    checkTokenExpiredAndShowModal();
+    await fetchUserStatus();
+}
+
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        fetchUserStatus();  
+    }
 });
+
+

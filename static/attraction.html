@@ -10,13 +10,13 @@
   <link href="/static/css/attraction.css" rel="stylesheet">
 </head>
 <body>
-  <div id="backdrop" style="display:none;"></div>
+  <div id="backdrop"></div>
   <nav id="fixed-top-navbar">
     <div class="nav-container common-wrapper">
       <div id="logo"><a href="/">台北一日遊</a></div>
       <div id="menu-items">
         <div id="menu-items">
-          <a href="#" id="book-link">預留行程</a>
+          <a href="#" id="book-link">預訂行程</a>
           <a href="#" id="signin-link">登入/註冊</a>
           <a href="#" id="signout-link">登出系统</a>
       </div>
@@ -26,40 +26,40 @@
 
   <div id="content">
     <div class="wrapper common-wrapper">
-      <div id="book-container">
-        <div class="book-images">
+      <div id="attraction-detail-container">
+        <div class="attraction-detail-images">
           <div class="slides-group"></div>
           <div class="number-text"></div>
           <button class="arrow left"><img src="/static/images/left-arrow.png" alt="Left"></button>
           <button class="arrow right"><img src="/static/images/right-arrow.png" alt="Right"></button>
           <div class="circle-group"></div>
         </div>
-        <div class="book-info">
-          <div class="book-attraction-title"></div>
-          <div class="book-attraction-subtitle"></div>
+        <div class="tour-info">
+          <div class="attraction-detail-title"></div>
+          <div class="attraction-detail-subtitle"></div>
           <div id="book-tour-card">
-            <div class="attraction-title card-bold-content">訂購導覽行程</div>
-            <div class="attraction-subtitle">以此景點為中心的一日行程</div>
-            <div class="book-row">
+            <div class="tour-title card-bold-content">訂購導覽行程</div>
+            <div class="tour-subtitle">以此景點為中心的一日行程</div>
+            <div class="tour-row">
                 <span class="card-bold-content">選擇日期：</span>
-                <input type="date" id="book-date" name="book-date">
+                <input type="date" id="tour-date" name="tour-date">
             </div>
-            <div class="book-row time-row">
+            <div class="tour-row time-row">
               <span class="card-bold-content">選擇時間：</span>
               <div class="radio-option">
                 <div class="radio-input-container">
-                  <input type="radio" id="morning" name="book-time" value="morning">
+                  <input type="radio" id="morning" name="tour-time" value="morning">
                 </div>
                 <span>上半天</span>
               </div>
               <div class="radio-option">
                 <div class="radio-input-container">
-                  <input type="radio" id="afternoon" name="book-time" value="afternoon">
+                  <input type="radio" id="afternoon" name="tour-time" value="afternoon">
                 </div>
                 <span>下半天</span>
               </div>
             </div>
-            <div class="book-row cost-row">
+            <div class="tour-row cost-row">
               <span class="card-bold-content">導覽費用：</span>
               <span id="tour-cost"></span>
             </div>
@@ -84,6 +84,13 @@
   <footer>
     COPYRIGHT © 2021 台北一日遊
   </footer>
+  <div id="conflict-modal" class="modal">
+    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
+    <div class="text-container">
+      <h3>重複預訂</h3>
+      <p>您選擇的日期跟時間已有預訂</p>
+    </div>
+  </div>
    <!-- Signin Modal -->
    <div id="signin-modal" class="modal">
     <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>

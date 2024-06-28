@@ -1,12 +1,12 @@
 from fastapi import *
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from dotenv import load_dotenv
 import os
 import jwt
-from fastapi.security import OAuth2PasswordBearer, HTTPBearer
+from fastapi.security import HTTPBearer
 from passlib.context import CryptContext
-from jwt import decode, ExpiredSignatureError, InvalidTokenError
+from jwt import PyJWTError, ExpiredSignatureError
 
 
 load_dotenv()
@@ -14,20 +14,27 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256" 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 bearer_scheme = HTTPBearer()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def check_existing_user(conn, email: str):
-    cursor = conn.cursor(dictionary=True)
-    
-    cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
-    if cursor.fetchone():
-        return True
-    return False
+def validate_token(token: str):
+    if not token:
+        raise HTTPException(status_code=403, detail="未登入系统，拒絕訪問")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token 已經過期")
+    except PyJWTError:
+        raise HTTPException(status_code=403, detail="未登入系统，拒絕訪問")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"伺服器內部錯誤: {str(e)}")
 
-    cursor.close()
+def check_existing_user(conn, email: str):
+    with conn.cursor(dictionary=True) as cursor:
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        return bool(cursor.fetchone())
     
 
 def create_user(conn, name: str, email: str, password: str):
@@ -63,21 +70,20 @@ def authenticate_user(conn, email: str, password: str):
 
 def create_access_token(user_data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = user_data.copy()
-    expire = datetime.utcnow() + timedelta(days=7)
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(days=7)
     to_encode.update({"exp": expire})
     
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def get_current_user(conn, token: str):
-    if not token:
-        return None 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    except ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+def get_current_user(token: str):
+    payload = validate_token(token)  
+    if not payload:
+        return None
+    
     user_id = payload.get("sub")  
     user_name = payload.get("name") 
     user_email = payload.get("email")  
@@ -89,4 +95,5 @@ def get_current_user(conn, token: str):
         "email": user_email
     }
     return user_info
+
     

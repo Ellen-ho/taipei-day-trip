@@ -77,3 +77,82 @@ def get_mrts(conn):
     results = cursor.fetchall()
     cursor.close()
     return [result['mrt'] for result in results]
+
+def check_existing_booking(conn, user_id, booking):
+     cursor = conn.cursor(dictionary=True)
+     sql_query = """
+        SELECT id FROM bookings
+        WHERE user_id = %s AND date = %s AND time = %s AND is_deleted = 0
+    """
+     cursor.execute(sql_query, (user_id, booking.date, booking.time))
+     existing_booking = cursor.fetchone()
+     cursor.close()
+     if existing_booking:
+            return existing_booking['id']  
+     else:
+        return None 
+
+def create_booking_to_db(conn, booking, user_id):
+    cursor = conn.cursor(dictionary=True)
+    sql_query = """
+    INSERT INTO bookings (user_id, attraction_id, date, time, price, is_deleted)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    """
+    values = (user_id, booking.attraction_id, booking.date, booking.time, booking.price, 0)
+    try:
+        cursor.execute(sql_query, values)
+        conn.commit()  
+        return cursor.lastrowid  
+    except Exception as e:
+        conn.rollback()  
+        raise
+    finally:
+        cursor.close() 
+
+def get_booking_details(conn, user_id):
+    with conn.cursor(dictionary=True) as cursor:
+        sql_query = """
+            SELECT 
+                b.id, b.date, b.time, b.price,
+                a.id as attraction_id, a.name, a.address, 
+                JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
+            FROM bookings b
+            INNER JOIN attractions a ON b.attraction_id = a.id
+            WHERE b.user_id = %s AND b.is_deleted = 0
+        """
+        cursor.execute(sql_query, (user_id,))
+        booking_info = cursor.fetchall()
+
+        if len(booking_info) == 0:
+            return None 
+        
+        bookings = []
+        for booking in booking_info:
+            bookings.append({
+                "attraction": {
+                    "id": booking['attraction_id'],
+                    "name": booking['name'],
+                    "address": booking['address'],
+                    "image": booking['image']
+                },
+                "id": booking['id'],
+                "date": booking['date'].strftime('%Y-%m-%d'),  
+                "time": booking['time'],
+                "price": booking['price']
+            })
+
+        return {"data": bookings}  
+
+def delete_booking(conn, user_id, booking_id):
+    cursor = conn.cursor(dictionary=True)
+    try:
+        sql = "UPDATE bookings SET is_deleted = 1 WHERE user_id = %s AND id = %s AND is_deleted = 0"
+        cursor.execute(sql, (user_id, booking_id))
+        affected_rows = cursor.rowcount  
+        conn.commit() 
+        return affected_rows
+    except Exception as e:
+        conn.rollback()  
+        raise
+    finally:
+        cursor.close() 
