@@ -1,0 +1,36 @@
+#thankyou-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0px;
+}
+
+.thankyou-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    min-height: calc(100vh - 238px);
+    text-align: center;
+}
+
+.thankyou-wrapper h2, .thankyou-wrapper h3{
+    color: #666666;
+}
+
+#order-number {
+    background-color: #f0f0f0;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 5px solid #4CAF50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: inline-block;
+    margin: 20px 0;
+    letter-spacing: 1px;
+  }
+
+  .thankyou-wrapper p {
+    color: #666666;
+    font-size: 16px;
+    font-weight: 400;
+  }
