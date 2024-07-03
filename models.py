@@ -1,5 +1,5 @@
 from sqlite3 import Date
-from pydantic import BaseModel, Field, HttpUrl, EmailStr 
+from pydantic import BaseModel, Field, HttpUrl, EmailStr, field_validator
 from typing import List, Optional
 from datetime import date
 
@@ -74,4 +74,21 @@ class AttractionBooking(BaseModel):
     address: Optional[str]
     image: Optional[HttpUrl]
 
+class Trip(BaseModel):
+    booking_id: int
+    
+
+class Contact(BaseModel):
+    name: str
+    email: EmailStr
+    phone: str 
+
+class OrderInput(BaseModel):
+    total_price: int = Field(..., alias="totalPrice")
+    trip: List[Trip]
+    contact: Contact
+
+class OrderData(BaseModel):
+    prime: str
+    order: OrderInput 
 
