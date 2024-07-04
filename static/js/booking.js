@@ -154,6 +154,9 @@ function displayBookingsWithOrderDetails(resultData) {
         document.getElementById('contact-name-display').style.display = 'inline';
         document.getElementById('contact-email-display').style.display = 'inline';
         document.getElementById('contact-phone-display').style.display = 'inline';
+
+        const noticeElement = document.querySelector('.notice.info-bold-content');
+        noticeElement.textContent = '請確認您的聯絡資訊正確，並保持手機暢通，準時到達，導覽人員將用手機與您聯繫。';
     }
 
     resultData.bookings.forEach(booking => {
