@@ -87,7 +87,7 @@ def check_existing_booking(conn, user_id, booking):
      cursor = conn.cursor(dictionary=True)
      sql_query = """
         SELECT id FROM bookings
-        WHERE user_id = %s AND date = %s AND time = %s AND is_deleted = 0
+        WHERE user_id = %s AND date = %s AND time = %s AND is_deleted = 0 AND order_id IS NULL
     """
      cursor.execute(sql_query, (user_id, booking.date, booking.time))
      existing_booking = cursor.fetchone()
