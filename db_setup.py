@@ -61,7 +61,7 @@ def create_tables():
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 number VARCHAR(255) NOT NULL UNIQUE,
                 total_price INT NOT NULL,
-                status TINYINT(1) NOT NULL DEFAULT 0,
+                status ENUM('UNPAID', 'PAID') NOT NULL DEFAULT 'UNPAID',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 user_id INT NOT NULL,
@@ -89,12 +89,13 @@ def create_tables():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS payments (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                status INT NULL,
-                rec_trade_id VARCHAR(50) NOT NULL,
-                bank_transaction_id VARCHAR(50) NOT NULL,
-                amount INT NOT NULL,
+                status INT NOT NULL,
+                msg VARCHAR(255) NOT NULL,
+                rec_trade_id VARCHAR(50) NULL,
+                bank_transaction_id VARCHAR(50) NULL,
+                amount INT NULL,
                 currency VARCHAR(3) NULL,
-                order_number VARCHAR(255) NOT NULL UNIQUE,
+                order_number VARCHAR(255) NULL UNIQUE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 order_id INT NOT NULL,
                 FOREIGN KEY (order_id) REFERENCES orders(id)

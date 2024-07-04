@@ -3,7 +3,6 @@ from fastapi import *
 from dotenv import load_dotenv
 import os
 import httpx
-from models import OrderData
 from fastapi.responses import JSONResponse
 
 load_dotenv()
@@ -36,7 +35,6 @@ async def process_payment(payment_request) -> dict:
         async with httpx.AsyncClient() as client:
             response = await client.post(url, headers=headers, json=post_data)
             data = response.json()
-            print(data)
             if data['status'] == 0:
                 payment_data = {
                     "status": data['status'],
