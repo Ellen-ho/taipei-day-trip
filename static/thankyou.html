@@ -21,12 +21,37 @@
       </div>
     </nav>
     <div id="thankyou-container">
-      <div class="thankyou-wrapper">
-        <h2>行程預訂成功</h2>
-        <h3>感謝您的預訂！您的訂單編號如下：</h3>
+      <div class="thankyou-wrapper success">
+        <div class="thankyou-greet">
+          <div class="greet-title">感謝您的預訂！</div>
+          <div class="greet-subtitle">已經完成付款，訂單編號如下：</div>
+          <div id="success-order-number"></div>
+          <p>請記住此訂單編號，或到歷史訂單查詢</p> 
+        </div>
+        <div class="separator"><hr></div>
+        <div id="order-details-container">
+          <div class="order-detail-title">訂單詳情</div>
+          <div class="order-total-container">
+            <span class="order-total-title">行程總數：</span>
+            <div id="total-count"></div>
+          </div>
+          <div class="order-total-container">
+            <span class="order-total-title">總金額：</span>
+            <div id="total-price"></div>
+          </div>
+        </div>
+          <div id="order-items-group"></div>
 
-        <div id="order-number"></div>
-        <p>請記住此編號，或到會員中心查詢歷史訂單</p>
+        </div>    
+      </div>
+      <div class="thankyou-wrapper failure">
+        <div class="thankyou-greet">
+          <div class="greet-title">感謝您的預訂！</div>
+          <div class="greet-subtitle">尚未完成付款，訂單編號如下：</div>
+          <div id="failure-order-number"></div>
+          <p>請點擊下方前往付款，或到歷史訂單查詢</p>
+          <button>立即前往付款</button> 
+        </div>
       </div>
   </div> 
   <footer>
