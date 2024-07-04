@@ -14,8 +14,6 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256" 
 
-bearer_scheme = HTTPBearer()
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def validate_token(token: str):
