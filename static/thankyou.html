@@ -21,12 +21,19 @@
       </div>
     </nav>
     <div id="thankyou-container">
-      <div class="thankyou-wrapper success">
-        <div class="thankyou-greet">
+      <div class="thankyou-wrapper">
+        <div class="thankyou-greet success">
           <div class="greet-title">感謝您的預訂！</div>
           <div class="greet-subtitle">已經完成付款，訂單編號如下：</div>
           <div id="success-order-number"></div>
-          <p>請記住此訂單編號，或到歷史訂單查詢</p> 
+          <p>請記住此訂單編號以確認查核</p> 
+        </div>
+        <div class="thankyou-greet failure">
+          <div class="greet-title">感謝您的預訂！</div>
+          <div class="greet-subtitle">尚未完成付款，訂單編號如下：</div>
+          <div id="failure-order-number"></div>
+          <p>請點擊下方前往付款，或重新訂購行程</p>
+          <button id="pay-unpaid-order">立即前往付款</button> 
         </div>
         <div class="separator"><hr></div>
         <div id="order-details-container">
@@ -41,18 +48,7 @@
           </div>
         </div>
           <div id="order-items-group"></div>
-
         </div>    
-      </div>
-      <div class="thankyou-wrapper failure">
-        <div class="thankyou-greet">
-          <div class="greet-title">感謝您的預訂！</div>
-          <div class="greet-subtitle">尚未完成付款，訂單編號如下：</div>
-          <div id="failure-order-number"></div>
-          <p>請點擊下方前往付款，或到歷史訂單查詢</p>
-          <button>立即前往付款</button> 
-        </div>
-      </div>
   </div> 
   <footer>
     COPYRIGHT © 2021 台北一日遊
