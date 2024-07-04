@@ -1,12 +1,16 @@
-async function fetchOrderDetails() {
+async function checkUrlAndFetchOrderDetails() {
     const urlParams = new URLSearchParams(window.location.search);
-    const orderNumber = urlParams.get('number'); 
+    const orderNumber = urlParams.get('orderNumber');
 
-    if (!orderNumber) {
+    if (orderNumber) {
+        await fetchOrderDetails(orderNumber);  
+    } else {
         console.error('No order number provided');
-        return; 
     }
+}
 
+
+async function fetchOrderDetails(orderNumber) {
     const url = `/api/order?number=${encodeURIComponent(orderNumber)}`;
     const token = localStorage.getItem('token');
 
@@ -131,5 +135,5 @@ function formatTime(timeText) {
 
 document.addEventListener('DOMContentLoaded', async function() {
     await auth();
-    fetchOrderDetails()
+    checkUrlAndFetchOrderDetails()
   });
