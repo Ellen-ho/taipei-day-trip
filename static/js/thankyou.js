@@ -6,6 +6,7 @@ async function checkUrlAndFetchOrderDetails() {
         await fetchOrderDetails(orderNumber);  
     } else {
         console.error('No order number provided');
+        window.location.href = '/';
     }
 }
 
