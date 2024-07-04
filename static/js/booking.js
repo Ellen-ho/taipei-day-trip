@@ -39,7 +39,7 @@ async function fetchBookingDetails() {
 
 async function fetchOrderDetails(orderNumber) {
     const token = localStorage.getItem('token');
-    const url = `/api/order?number=${encodeURIComponent(orderNumber)}`;
+    const url = `/api/order/${encodeURIComponent(orderNumber)}`;
 
     try {
         const response = await fetch(url, {

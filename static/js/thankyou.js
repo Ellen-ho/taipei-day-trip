@@ -1,9 +1,9 @@
 async function checkUrlAndFetchOrderDetails() {
     const urlParams = new URLSearchParams(window.location.search);
-    const orderNumber = urlParams.get('orderNumber');
+    const number = urlParams.get('number');
 
-    if (orderNumber) {
-        await fetchOrderDetails(orderNumber);  
+    if (number) {
+        await fetchOrderDetails(number);  
     } else {
         console.error('No order number provided');
         window.location.href = '/';
@@ -11,8 +11,8 @@ async function checkUrlAndFetchOrderDetails() {
 }
 
 
-async function fetchOrderDetails(orderNumber) {
-    const url = `/api/order?number=${encodeURIComponent(orderNumber)}`;
+async function fetchOrderDetails(number) {
+    const url = `/api/order?number=${encodeURIComponent(number)}`;
     const token = localStorage.getItem('token');
 
     try {

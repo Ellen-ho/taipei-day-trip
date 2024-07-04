@@ -245,11 +245,12 @@ async def create_order(order_data: OrderData, credentials: HTTPAuthorizationCred
 		if conn:
 			conn.close()
 
-@app.get("/api/order", response_model=Optional[dict], responses={
+@app.get("/api/order/{orderNumber}", response_model=Optional[dict], responses={
 	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"},
     500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
 })
-async def get_order(order_number: str = Query(None, alias='number'), credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+async def get_order(orderNumber: str = Path(...), credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	order_number = orderNumber
 	conn = None
 	try:
 		payload = validate_token(credentials.credentials)
