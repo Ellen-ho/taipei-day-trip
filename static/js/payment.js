@@ -1,4 +1,4 @@
-TPDirect.setupSDK()
+TPDirect.setupSDK(151762, 'app_TJTFwEN7YUfKgGCXUXcJMadG40jIldfe2RL3Ct2bECQNlFMBDfSmeE9zJnEy', 'sandbox')
 const currentUrl = window.location.href;
 const url = new URL(currentUrl);
 const queryParams = new URLSearchParams(url.search);
@@ -151,7 +151,7 @@ function handleConfirmOrder() {
                     }
             
                     responseData = await response.json();
-                    const url = `/thankyou?number=${encodeURIComponent(responseData.data.number)}`;
+                    const url = `/thankyou?orderNumber=${encodeURIComponent(responseData.data.number)}`;
                     window.location.href = url;
                 } catch (error) {
                     console.error('提交訂單錯誤:', error);
@@ -177,7 +177,7 @@ function handleConfirmOrder() {
                     }
             
                     responseData = await response.json();
-                    const url = `/thankyou?number=${encodeURIComponent(responseData.data.number)}`;
+                    const url = `/thankyou?orderNumber=${encodeURIComponent(responseData.data.number)}`;
                     window.location.href = url;
                 } catch (error) {
                     console.error('更新訂單錯誤:', error);
