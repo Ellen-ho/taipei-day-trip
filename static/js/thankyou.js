@@ -12,7 +12,7 @@ async function checkUrlAndFetchOrderDetails() {
 
 
 async function fetchOrderDetails(number) {
-    const url = `/api/order?number=${encodeURIComponent(number)}`;
+    const url = `/api/order/${encodeURIComponent(number)}`;
     const token = localStorage.getItem('token');
 
     try {
