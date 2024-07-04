@@ -161,7 +161,7 @@ function displayBookingsWithOrderDetails(resultData) {
 
     resultData.bookings.forEach(booking => {
         const bookingContainer = document.createElement('div');
-        bookingContainer.className = 'booking-container';
+        bookingContainer.className = 'booking-container read';
         bookingContainer.dataset.bookingId = booking.id;
 
         const imageDiv = document.createElement('div');
