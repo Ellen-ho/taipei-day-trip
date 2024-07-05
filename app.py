@@ -6,13 +6,14 @@ import os
 from dotenv import load_dotenv
 from models import (
     ResponseData, ErrorResponse, SignupResponse, UserResponse, DeleteResponse,AttractionResponse, MRTListResponse, TokenResponse,
-    SignupData, SigninData, Booking, BookingResponse
+    SignupData, SigninData, BookingResponse, Booking, OrderData
 )
-from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking, check_existing_booking
+from db_operations import get_attractions, get_attraction_by_id, get_mrts, create_booking_to_db, get_booking_details, delete_booking, check_existing_booking, create_order_record, update_order_status, create_payment_record, get_order_by_number
 from fastapi.staticfiles import StaticFiles
 from auth import create_access_token, check_existing_user, authenticate_user, create_user, get_current_user, validate_token
 from database import get_db_connection
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from payment import process_payment
 
 app=FastAPI()
 
@@ -194,6 +195,121 @@ async def cancel_booking(credentials: HTTPAuthorizationCredentials = Depends(bea
 		if affected_rows == 0:
 			return JSONResponse(status_code=404, content={"error": True, "message": "找不到預訂，刪除失敗"})
 		return {"ok": True}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.post("/api/orders", response_model= dict, responses={
+    400: {"model": ErrorResponse, "description": "訂單建立失敗，輸入不正確或其他原因"},
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
+async def create_order(order_data: OrderData, credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	conn = None
+	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
+	try:
+		conn = get_db_connection()
+		order_id, order_number = create_order_record(conn, user_id, order_data)
+		if not order_id:
+			return JSONResponse(status_code=400, content={"error": True, "message": "訂單建立失敗，輸入不正確或其他原因"})
+		payment_request = {
+            "prime": order_data.prime,
+            "amount": order_data.order.total_price,
+            "order_number": order_number,
+            "phone_number": order_data.order.contact.phone,
+            "name": order_data.order.contact.name,
+            "email": order_data.order.contact.email
+        }
+		payment_data = await process_payment(payment_request)
+		create_payment_record(conn, payment_data, order_id)
+		if payment_data.get("status") == 0:
+			update_order_status(conn, order_id, 'PAID')
+		return {
+			"data": {
+				"number": order_number,
+				"payment": {
+					"status": payment_data.get("status"),
+                    "message": payment_data.get("message")
+				}
+			}
+		}
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.get("/api/order/{orderNumber}", response_model=Optional[dict], responses={
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
+async def get_order(orderNumber: str = Path(...), credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	order_number = orderNumber
+	conn = None
+	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
+	try:
+		conn = get_db_connection()
+		if not order_number:
+			raise HTTPException(status_code=400, detail="Order number is required.")
+		result = get_order_by_number(conn, order_number, user_id)
+		if result is None:
+			return None 
+		return result
+	except Exception as e:
+		return handle_error(e)
+	finally:
+		if conn:
+			conn.close()
+
+@app.put("/api/order/{orderNumber}", response_model= dict, responses={
+    400: {"model": ErrorResponse, "description": "訂單更新失敗，輸入不正確或其他原因"},
+	403: {"model": ErrorResponse, "description": "未登入系統，拒絕存取"},
+    500: {"model": ErrorResponse, "description": "伺服器內部錯誤"}
+})
+async def update_order(request: Request, orderNumber: str = Path(...), credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
+	order_number = orderNumber
+	conn = None
+	try:
+		payload = validate_token(credentials.credentials)
+		user_id = payload.get('sub')
+		request_data = await request.json() 
+		prime = request_data.get("prime") 
+	except HTTPException as e:
+		return JSONResponse(status_code=e.status_code, content={"error": True, "message": e.detail})
+	try:
+		conn = get_db_connection()
+		order_data = get_order_by_number(conn, order_number, user_id)
+		payment_request = {
+			"prime": prime, 
+			"amount": order_data['data']['totalPrice'], 
+			"order_number": order_data['data']['number'],  
+			"phone_number": order_data['data']['contact']['phone'], 
+			"name": order_data['data']['contact']['name'],  
+			"email": order_data['data']['contact']['email']  
+		}
+		payment_data = await process_payment(payment_request)
+		create_payment_record(conn, payment_data, order_data['data']['id'])
+		if payment_data.get("status") == 0:
+			update_order_status(conn, order_data['data']['id'], 'PAID')
+		return {
+			"data": {
+				"number": order_number,
+				"payment": {
+					"status": payment_data.get("status"),
+                    "message": payment_data.get("message")
+				}
+			}
+		}
 	except Exception as e:
 		return handle_error(e)
 	finally:

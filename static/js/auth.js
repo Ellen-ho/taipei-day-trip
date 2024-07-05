@@ -21,7 +21,7 @@ async function fetchUserStatus() {
     const currentPage = window.location.pathname;
     if (!token) {
         renderSignIn();
-        if (currentPage === '/booking') {
+        if (currentPage === '/booking'|| currentPage.startsWith('/thankyou')) {
             window.location.href = '/';
         }
         return;

@@ -1,3 +1,14 @@
+async function checkUrlAndFetchDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderNumber = urlParams.get('orderNumber');
+
+    if (orderNumber) {
+        fetchOrderDetails(orderNumber);
+    } else {
+        fetchBookingDetails();
+    }
+}
+
 async function fetchBookingDetails() {
     const url = "/api/booking"; 
     const token = localStorage.getItem('token'); 
@@ -23,6 +34,25 @@ async function fetchBookingDetails() {
         
     } catch (error) {
         console.error('Error:', error);
+    }
+}
+
+async function fetchOrderDetails(orderNumber) {
+    const token = localStorage.getItem('token');
+    const url = `/api/order/${encodeURIComponent(orderNumber)}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        const result = await response.json();
+        displayBookingsWithOrderDetails(result.data);
+    } catch (error) {
+        console.error('Error fetching order details:', error);
     }
 }
 
@@ -100,6 +130,80 @@ function displayBookingDetails(bookings) {
         });
     });
     setupPriceCalculation();
+}
+
+function displayBookingsWithOrderDetails(resultData) {
+    const bookingInfoContainer = document.getElementById('booking-group-container');
+    const bookingGreetTitle = document.querySelector('.booking-greet.booking-text-title');
+
+    bookingGreetTitle.innerHTML = `您好，<span id="user-name"></span>，以下是您尚未付款的訂單行程：`;
+
+    if (userData && userData.data) {
+        document.getElementById("user-name").textContent = userData.data.name;
+    }
+
+    if (resultData.contact) {
+        document.getElementById('contact-name-display').textContent = resultData.contact.name;
+        document.getElementById('contact-email-display').textContent = resultData.contact.email;
+        document.getElementById('contact-phone-display').textContent = resultData.contact.phone;
+    
+        document.getElementById('contact-name').style.display = 'none';
+        document.getElementById('contact-email').style.display = 'none';
+        document.getElementById('contact-phone').style.display = 'none';
+    
+        document.getElementById('contact-name-display').style.display = 'inline';
+        document.getElementById('contact-email-display').style.display = 'inline';
+        document.getElementById('contact-phone-display').style.display = 'inline';
+
+        const noticeElement = document.querySelector('.notice.info-bold-content');
+        noticeElement.textContent = '請確認您的聯絡資訊正確，並保持手機暢通，準時到達，導覽人員將用手機與您聯繫。';
+    }
+
+    resultData.bookings.forEach(booking => {
+        const bookingContainer = document.createElement('div');
+        bookingContainer.className = 'booking-container read';
+        bookingContainer.dataset.bookingId = booking.id;
+
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'booking-attraction-image';
+        const img = document.createElement('img');
+        img.src = booking.attraction.image;
+        img.alt = booking.attraction.name;
+        imageDiv.appendChild(img);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'booking-info';
+
+        const formattedTime = formatTime(booking.time);
+        
+        infoDiv.innerHTML = `
+          <div class="name-container">
+            <span>台北一日遊 : ${booking.attraction.name}</span>
+          </div>
+          <div class="booking-list-container">
+            <div class="booking-row">
+              <span class="info-bold-content">日期：</span>
+              <span class="selected-items">${booking.date}</span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">時間：</span>
+              <span class="selected-items">${formattedTime}</span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">費用：</span>
+              <span class="selected-items">新台幣 ${booking.price} 元</span>
+            </div>
+            <div class="booking-row">
+              <span class="info-bold-content">地點：</span>
+              <span class="selected-items">${booking.attraction.address}</span>
+            </div>
+          </div>
+        `;
+        bookingContainer.appendChild(imageDiv);
+        bookingContainer.appendChild(infoDiv);
+        bookingInfoContainer.appendChild(bookingContainer);
+    });
+    document.getElementById('total-cost').textContent = `新台幣 ${resultData.totalPrice} 元`;
 }
 
 function setupBookingEventListeners() {
@@ -211,58 +315,17 @@ function hideBookingElements() {
     }
 }
 
-function setupBookingInfoInput() {
-  const cardNumberInput = document.getElementById('card-number');
-  cardNumberInput.addEventListener('input', function() {
-    this.value = this.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
-    this.value = this.value.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
-  });
-
-  const expirationInput = document.getElementById('expiration-date');
-  expirationInput.addEventListener('input', function() {
-    this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{2})(\d{2})/, '$1/$2');
-  });
-
-  const cvvInput = document.getElementById('cvv');
-  cvvInput.addEventListener('input', function() {
-    this.value = this.value.replace(/[^0-9]/g, '');
-  });
-
-  const phoneInput = document.getElementById('contact-phone');
-    phoneInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); 
-    });
-}
-
-function checkTotalCostButtonListener() {
-    const confirmButton = document.getElementById('confirm-cost');
-    confirmButton.addEventListener('click', function() {
-        const inputs = document.querySelectorAll('#contact-container input, #payment-container input');
-        let allFilled = true;
-
-        inputs.forEach(input => {
-            if (input.value.trim() === '') {
-                allFilled = false;
-            }
-        });
-
-        if (!allFilled) {
-            alert('所有欄位皆不可空白');
-        }
-    });
-}
-
 function resetCheckboxes() {
     const checkboxes = document.querySelectorAll('.booking-checkbox');
     checkboxes.forEach(checkbox => checkbox.checked = false);
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
-    await auth();
-    fetchBookingDetails();
-    setupBookingEventListeners();
-    setupBookingInfoInput()
-  });
+// document.addEventListener('DOMContentLoaded', async function() {
+//     await auth();
+//     checkUrlAndFetchDetails(),
+//     setupBookingEventListeners();
+//     // setupBookingInfoInput()
+//   });
 
 window.addEventListener('pageshow', function(event) {
     if (event.persisted) {

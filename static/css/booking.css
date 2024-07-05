@@ -25,6 +25,13 @@
     background-color: #fff; 
 }
 
+.booking-container.read{
+    padding: 0 110px; 
+    display: flex;
+    flex-direction: row;
+    gap:30px
+}
+
 .booking-container.hover-effect {
     background-color: #e6e6fa; 
 }
@@ -149,6 +156,13 @@
     line-height: 13.3px;
 }
 
+.input-row .tpfield {
+    width: 200px; 
+    height: 38px;
+    border: 1px solid #E8E8E8;  
+    border-radius: 5px;
+}
+
 #contact-container .input-row input {
     color: #000000;  
     font-size: 16px;
@@ -240,6 +254,22 @@
     font-size: 16px;
     line-height: 13.3px;
     padding: 0 10px;
+}
+
+.tpfield {
+    height: 40px;
+    width: 300px;
+    border: 1px solid gray;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.contact-display {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666666;
+    line-height: 13.3px;
+    align-items: center;
 }
 
 @media (max-width: 768px){
