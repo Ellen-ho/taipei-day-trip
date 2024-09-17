@@ -37,7 +37,7 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 
 <div align="center">
   <img width="80%" align="center" src="/static/images/booking.png">
-</div>s
+</div>
 
 <br>
 
