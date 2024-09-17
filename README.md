@@ -12,17 +12,26 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 
 <br>
 
+<p align="center">
+  <a href="">Start Your Taipei Day Trip !</a>
+  <a href="">(test account)</a><br>
+</p>
+
 ## Sign in and Sign up
 
 <div align="center">
   <img width="80%" align="center" src="/static/images/signin_signup.png">
 </div>
 
+<br>
+
 ## Search for Attractions
 
 <div align="center">
   <img width="80%" align="center" src="/static/images/attraction_search.png">
 </div>
+
+<br>
 
 ## Booking a Trip
 
@@ -31,8 +40,37 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 </div>s
 
 <br>
-<br>
-<p align="center">
-  <a href="">Start Your Taipei Day Trip !</a>
-  <a href="">(test account)</a><br>
-</p>
+
+## Installation and Execution
+
+- Clone the Project
+
+```
+git clone https://github.com/Ellen-ho/taipei-day-trip
+```
+
+- Navigate to the Project Directory
+
+```
+cd taipei-day-trip
+```
+
+- Install Dependencies
+
+```
+pip install -r requirements.txt
+```
+
+- Refer to the contents of .env.example, create a .env file, and populate it with the necessary variables.
+
+- Initialize the Database
+
+```
+python db_setup.py
+```
+
+- Start the Application
+
+```
+uvicorn main:app --reload
+```
