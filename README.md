@@ -13,9 +13,16 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 <br>
 
 <p align="center">
-  <a href="">Start Your Taipei Day Trip !</a>
-  <a href="">(test account)</a><br>
+  <a href="http://3.215.131.59:8000/">Start Your Taipei Day Trip !</a>
 </p>
+
+## Test Account
+
+| Email                    | Password |
+| ------------------------ | -------- |
+| tim@gmail.com            | 123456   |
+
+<br>
 
 ## Sign in and Sign up
 
