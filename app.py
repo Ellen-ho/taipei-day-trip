@@ -329,3 +329,7 @@ async def booking(request: Request):
 @app.get("/thankyou", include_in_schema=False)
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
+
+@app.get("/health", include_in_schema=False)
+async def health_check():
+    return JSONResponse(status_code=200, content="Application is running")
