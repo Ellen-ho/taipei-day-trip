@@ -5,7 +5,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.25);
-  z-index: 700;  
+  z-index: 700;
   display: none;
 }
 
@@ -22,16 +22,16 @@
 .banner-container {
   height: 169px;
   padding: 10px;
-  color:white;
-  display: flex;        
-  flex-direction: column; 
+  color: white;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
-  
+
 .banner-container .banner-title {
   font-size: 28px;
   font-weight: 700;
-  color:#F8F8F8;
+  color: #f8f8f8;
   text-shadow: 0px 0px 30px #abc;
   line-height: 24px;
   padding: 8.5px 0px;
@@ -40,7 +40,7 @@
 .banner-container .banner-subtitle {
   font-size: 16px;
   font-weight: 700;
-  color:#F8F8F8;
+  color: #f8f8f8;
   line-height: 13.3px;
   padding: 4.5px 0px;
 }
@@ -52,11 +52,11 @@
   margin-top: 15px;
 }
 
-.banner-container .search-form input[type="text"], 
+.banner-container .search-form input[type='text'],
 .banner-container .search-form button {
-  border: none; 
+  border: none;
   border-radius: 0;
-  margin: 0; 
+  margin: 0;
 }
 
 .banner-container .search-form input::placeholder {
@@ -66,26 +66,26 @@
   opacity: 0.5;
 }
 
-.banner-container .search-form input[type="text"] {
+.banner-container .search-form input[type='text'] {
   width: 400px;
   font-size: 16px;
   font-weight: 700;
   color: #757575;
   padding: 15px;
-  border-top-left-radius: 4px; 
-  border-bottom-left-radius: 4px; 
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .banner-container .search-form button {
   width: 60px;
   font-size: 16px;
-  background-color:#448899;
+  background-color: #448899;
   color: white;
   cursor: pointer;
-  border-top-right-radius: 4px; 
+  border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .banner-container .search-form button i {
@@ -121,60 +121,60 @@
 
 #mrt-list {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
-  width:100%;
+  width: 100%;
   height: 70px;
   padding: 0px 0px 20px 0px;
-  gap: 4px; 
+  gap: 4px;
 }
 
 #mrt-list .arrow {
   cursor: pointer;
   background: none;
-  border: none
+  border: none;
 }
 
-#mrt-list .arrow.left{
+#mrt-list .arrow.left {
   padding: 5px 0 0 15px;
 }
 
-#mrt-list .arrow.right{
+#mrt-list .arrow.right {
   padding: 5px 15px 0 0;
 }
 
 #mrt-list .arrow img {
-  width: 32px;  
+  width: 32px;
   height: 32px;
-  opacity: 0.5; 
-  transition: opacity 0.3s;  
+  opacity: 0.5;
+  transition: opacity 0.3s;
 }
 
 #mrt-list .arrow img:hover {
-  opacity: 1; 
+  opacity: 1;
 }
 
 #mrt-list .mrt-items {
-  display: flex; 
+  display: flex;
   overflow-x: hidden;
-  white-space: nowrap; 
+  white-space: nowrap;
   width: 100%;
   justify-content: space-between;
-  padding: 13px 10px; 
+  padding: 13px 10px;
   scroll-behavior: smooth;
 }
 
 #mrt-list .mrt-link {
-  color: #666666; 
-  text-decoration: none; 
-  font-weight: 500; 
-  font-size: 16px; 
-  background-color: #FFFFFF; 
-  padding: 5px 15px; 
+  color: #666666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  background-color: #ffffff;
+  padding: 5px 15px;
   line-height: 13.3px;
 }
 
-#attraction-list { 
+#attraction-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -189,8 +189,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #FFFFFF;
-  border: 1px solid #E8E8E8; 
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
   border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
@@ -198,15 +198,15 @@
 }
 
 .attraction-card:hover {
-  transform: scale(1.05); 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 #attraction-list .attraction-card img {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%; 
+  width: 100%;
   height: 197px;
   object-fit: cover;
 }
@@ -225,7 +225,7 @@
   padding: 10px;
 }
 
-#attraction-list .attraction-card .name-container span{
+#attraction-list .attraction-card .name-container span {
   color: white;
   font-size: 16px;
 }
@@ -235,18 +235,18 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height:45px;
+  height: 45px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between; 
-  background-color: white; 
+  justify-content: space-between;
+  background-color: white;
   padding: 10px;
 }
 
-#attraction-list .attraction-card .info-container span{
+#attraction-list .attraction-card .info-container span {
   font-size: 16px;
   font-weight: 500;
-  color:#757575;
+  color: #757575;
 }
 
 #attraction-list .attraction-card .name-container {
@@ -294,28 +294,34 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@media (min-width: 600px) and (max-width: 1200px){
+@media (min-width: 600px) and (max-width: 1200px) {
   .common-wrapper {
-    width: 90%; 
+    width: 90%;
   }
 
   .banner-container .search-form {
     width: 420px;
   }
-  
-  .banner-container .search-form input[type="text"] {
+
+  .banner-container .search-form input[type='text'] {
     width: 360px;
   }
-  
+
   #attraction-list .attraction-card {
     width: calc(50% - 15px);
-    height:300px;
+    height: 300px;
   }
-  
+
   #attraction-list .attraction-card img {
     height: 255px;
     object-fit: cover;
@@ -323,14 +329,13 @@
 
   #attraction-list .attraction-card .name-container {
     top: 208px;
-  } 
+  }
 }
 
-@media (max-width: 600px){
-
+@media (max-width: 600px) {
   #banner {
-   background-position: initial;
-   background-size: cover;
+    background-position: initial;
+    background-size: cover;
   }
 
   #banner .common-wrapper {
@@ -347,7 +352,7 @@
     width: 290px;
   }
 
-  .banner-container .search-form input[type="text"] {
+  .banner-container .search-form input[type='text'] {
     width: 225px;
   }
 
@@ -356,23 +361,23 @@
     padding: 40px 0px 20px 0px;
   }
 
-  #attraction-list{
+  #attraction-list {
     width: 360px;
     flex-direction: column;
     gap: 20px;
   }
 
   #attraction-list .attraction-card {
-    width:100%;
+    width: 100%;
     height: 280px;
   }
 
   #attraction-list .attraction-card img {
-    height: 235px; 
+    height: 235px;
     object-fit: cover;
   }
 
   #attraction-list .attraction-card .name-container {
-    top: 187px;  
-  } 
+    top: 187px;
+  }
 }

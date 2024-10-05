@@ -1,101 +1,101 @@
 .booking-greet {
-    padding: 0 110px;
-    margin-bottom: 30px;
+  padding: 0 110px;
+  margin-bottom: 30px;
 }
 
 .booking-text-title {
-    font-size: 19px;
-    font-weight: 700;
-    line-height: 16px;
-    color:#666666;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 16px;
+  color: #666666;
 }
 
 #booking-group-container {
-    display: flex;
-    flex-direction: column;
-    gap:30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.booking-container{
-    padding: 0 60px; 
-    display: flex;
-    flex-direction: row;
-    gap:30px;
-    transition: background-color 0.3s ease; 
-    background-color: #fff; 
+.booking-container {
+  padding: 0 60px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  transition: background-color 0.3s ease;
+  background-color: #fff;
 }
 
-.booking-container.read{
-    padding: 0 110px; 
-    display: flex;
-    flex-direction: row;
-    gap:30px
+.booking-container.read {
+  padding: 0 110px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 }
 
 .booking-container.hover-effect {
-    background-color: #e6e6fa; 
+  background-color: #e6e6fa;
 }
 
 .booking-container .checkbox-wrapper {
-    display: flex;
-    align-items: center;  
-    width: 20px;
+  display: flex;
+  align-items: center;
+  width: 20px;
 }
 
 .booking-container .booking-checkbox {
-    width: 20px; 
-    height: 20px;
-    cursor: pointer;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .booking-container .booking-attraction-image {
-    flex: 5; 
-    display: flex;
-    height: 200px;
-    overflow: hidden
+  flex: 5;
+  display: flex;
+  height: 200px;
+  overflow: hidden;
 }
 
 .booking-container .booking-attraction-image img {
-    width: 100%;
-    min-height: 200px;
-    object-fit: cover;  
+  width: 100%;
+  min-height: 200px;
+  object-fit: cover;
 }
 
 .booking-container .booking-info {
-    position: relative;
-    flex: 14;
-    height: 200px;
-    font-size: 16px;
-    line-height: 13.3px;
+  position: relative;
+  flex: 14;
+  height: 200px;
+  font-size: 16px;
+  line-height: 13.3px;
 }
 
 .booking-container .booking-info .delete-button {
-    position: absolute; 
-    top: 5px; 
-    right: 0; 
-    background: none; 
-    border: none; 
-    cursor: pointer; 
-    width: 30px; 
-    height: 30px;  
+  position: absolute;
+  top: 5px;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
 }
 
-.booking-container .name-container{
-    display: flex; 
-    align-items: center; 
-    height: 24px;
-    font-size: 16px;
-    font-weight: 700;
-    color:#448899;
-    line-height: 13.3px;
-    margin-bottom: 20px;
-    margin-top: 5px;
+.booking-container .name-container {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #448899;
+  line-height: 13.3px;
+  margin-bottom: 20px;
+  margin-top: 5px;
 }
 
 .booking-container .booking-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .booking-container .booking-list-container .booking-row {
@@ -103,7 +103,7 @@
   align-items: center;
   width: 100%;
   height: 24px;
-  color:#666666;
+  color: #666666;
 }
 
 .info-bold-content {
@@ -115,17 +115,17 @@
 }
 
 .booking-container .booking-row .selected-items {
-  font-weight: 400
+  font-weight: 400;
 }
 
 .separator {
-    margin-top: 40px;  
-    margin-bottom: 40px; 
-    text-align: center;  
-  }
-  
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
 .separator hr {
-  border: 1px solid #E8E8E8;
+  border: 1px solid #e8e8e8;
 }
 
 #contact-container {
@@ -133,192 +133,192 @@
 }
 
 #contact-container .other-info {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #contact-container .contact-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 15px
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
 .input-row {
-    display: flex;
-    flex-direction: row;
-    height: 38px;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 38px;
+  align-items: center;
 }
 
 .input-row .booking-text-subtitle {
-    color: #666666;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 13.3px;
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 13.3px;
 }
 
 .input-row .tpfield {
-    width: 200px; 
-    height: 38px;
-    border: 1px solid #E8E8E8;  
-    border-radius: 5px;
+  width: 200px;
+  height: 38px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
 }
 
 #contact-container .input-row input {
-    color: #000000;  
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 13.3px;
-    background-color: #ffffff;  
-    border: 1px solid #E8E8E8;  
-    border-radius: 5px;
-    padding: 10px;  
-    width: 200px; 
-    height: 38px
+  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 13.3px;
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  height: 38px;
 }
 
 #payment-container {
-    display: flex;
-    flex-direction: column;
-    padding: 0 110px;
-    gap: 15px
+  display: flex;
+  flex-direction: column;
+  padding: 0 110px;
+  gap: 15px;
 }
 
 #payment-container .payment-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 15px
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
 #payment-container .input-row input {
-    color: #000000;
+  color: #000000;
 }
 
 #payment-container .input-row input::placeholder {
-    color: #757575;
+  color: #757575;
 }
 
 #total-cost-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    padding: 0 110px;
-    height: 100px;
-    gap: 22px
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 110px;
+  height: 100px;
+  gap: 22px;
 }
 
 #total-cost-container .price-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 20px
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 20px;
 }
 
 #total-cost-container button {
-    width: 173px;
-    height: 36px;
-    padding: 10px 20px;
-    border: none; 
-    border-radius: 5px;
-    color:#ffffff;
-    font-weight: 400;
-    font-size: 19px;
-    line-height: 16px;
-    text-align: center;
-    background-color: #448899;
-    cursor: pointer; 
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 173px;
+  height: 36px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 16px;
+  text-align: center;
+  background-color: #448899;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #total-cost-container button:hover {
-    background-color: #3c7785;
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: #3c7785;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 #total-cost-container button:active {
-    background-color: #326670;
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #326670;
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 #no-booking-message {
-    display: none;
-    padding: 0 100px;
-    height: 24px;
+  display: none;
+  padding: 0 100px;
+  height: 24px;
 }
 
 #no-booking-message span {
-    color: #666666;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 13.3px;
-    padding: 0 10px;
+  color: #666666;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 13.3px;
+  padding: 0 10px;
 }
 
 .tpfield {
-    height: 40px;
-    width: 300px;
-    border: 1px solid gray;
-    margin: 5px 0;
-    padding: 5px;
+  height: 40px;
+  width: 300px;
+  border: 1px solid gray;
+  margin: 5px 0;
+  padding: 5px;
 }
 
 .contact-display {
-    font-size: 16px;
-    font-weight: 400;
-    color: #666666;
-    line-height: 13.3px;
-    align-items: center;
+  font-size: 16px;
+  font-weight: 400;
+  color: #666666;
+  line-height: 13.3px;
+  align-items: center;
 }
 
-@media (max-width: 768px){
-    .booking-greet {
-        padding: 0 10px;
-    }
+@media (max-width: 768px) {
+  .booking-greet {
+    padding: 0 10px;
+  }
 
-    .booking-container{
-        padding: 0 10px; 
-        flex-direction: column;
-        gap:15px;
-    }
+  .booking-container {
+    padding: 0 10px;
+    flex-direction: column;
+    gap: 15px;
+  }
 
-    .checkbox-wrapper {
-        display: flex;
-        justify-items: center;  
-        width: 100%;
-        height: 25px;
-    }
+  .checkbox-wrapper {
+    display: flex;
+    justify-items: center;
+    width: 100%;
+    height: 25px;
+  }
 
-    .booking-container .booking-checkbox {
-        width: 18px; 
-        height: 18px
-    }
+  .booking-container .booking-checkbox {
+    width: 18px;
+    height: 18px;
+  }
 
-    .booking-container .booking-attraction-image,
-    .booking-container .booking-info {
-        flex: none; 
-        height: 200px;
-    }
-    
-    .booking-container .booking-info .delete-button {
-        top: auto; 
-        bottom: 0; 
-    }
+  .booking-container .booking-attraction-image,
+  .booking-container .booking-info {
+    flex: none;
+    height: 200px;
+  }
 
-    #contact-container .contact-detail .notice {
-       line-height: 23.17px;
-    }
-      
-    #contact-container,
-    #payment-container,
-    #total-cost-container,
-    #no-booking-message,
-    .separator {
-        padding: 0 10px;
-    }
+  .booking-container .booking-info .delete-button {
+    top: auto;
+    bottom: 0;
+  }
 
-    #no-booking-message span {
-        padding: 0
-    }
+  #contact-container .contact-detail .notice {
+    line-height: 23.17px;
+  }
+
+  #contact-container,
+  #payment-container,
+  #total-cost-container,
+  #no-booking-message,
+  .separator {
+    padding: 0 10px;
+  }
+
+  #no-booking-message span {
+    padding: 0;
+  }
 }

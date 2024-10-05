@@ -1,125 +1,190 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attraction</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
-  <link href="/static/css/public.css" rel="stylesheet">
-  <link href="/static/css/attraction.css" rel="stylesheet">
-  <link rel="icon" href="/static/favicon.png" type="image/png">
-</head>
-<body>
-  <div id="backdrop"></div>
-  <nav id="fixed-top-navbar">
-    <div class="nav-container common-wrapper">
-      <div id="logo"><a href="/">台北一日遊</a></div>
-      <div id="menu-items">
-        <div id="menu-items">
-          <a href="#" id="book-link">預訂行程</a>
-          <a href="#" id="signin-link">登入/註冊</a>
-          <a href="#" id="signout-link">登出系统</a>
-      </div>
-      </div>
-    </div>
-  </nav>
-
-  <div id="content">
-    <div class="wrapper common-wrapper">
-      <div id="attraction-detail-container">
-        <div class="attraction-detail-images">
-          <div class="slides-group"></div>
-          <div class="number-text"></div>
-          <button class="arrow left"><img src="/static/images/left-arrow.png" alt="Left"></button>
-          <button class="arrow right"><img src="/static/images/right-arrow.png" alt="Right"></button>
-          <div class="circle-group"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attraction</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="/static/css/public.css" rel="stylesheet" />
+    <link href="/static/css/attraction.css" rel="stylesheet" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/static/favicon.png" type="image/png" />
+  </head>
+  <body>
+    <div id="backdrop"></div>
+    <nav id="fixed-top-navbar">
+      <div class="nav-container common-wrapper">
+        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="hamburger-menu">
+          <i class="fa-solid fa-bars"></i>
         </div>
-        <div class="tour-info">
-          <div class="attraction-detail-title"></div>
-          <div class="attraction-detail-subtitle"></div>
-          <div id="book-tour-card">
-            <div class="tour-title card-bold-content">訂購導覽行程</div>
-            <div class="tour-subtitle">以此景點為中心的一日行程</div>
-            <div class="tour-row">
-                <span class="card-bold-content">選擇日期：</span>
-                <input type="date" id="tour-date" name="tour-date">
-            </div>
-            <div class="tour-row time-row">
-              <span class="card-bold-content">選擇時間：</span>
-              <div class="radio-option">
-                <div class="radio-input-container">
-                  <input type="radio" id="morning" name="tour-time" value="morning">
-                </div>
-                <span>上半天</span>
-              </div>
-              <div class="radio-option">
-                <div class="radio-input-container">
-                  <input type="radio" id="afternoon" name="tour-time" value="afternoon">
-                </div>
-                <span>下半天</span>
-              </div>
-            </div>
-            <div class="tour-row cost-row">
-              <span class="card-bold-content">導覽費用：</span>
-              <span id="tour-cost"></span>
-            </div>
-            <button id="book-button">開始預約行程</button>
+        <div id="menu-items">
+          <div id="menu-items">
+            <a href="#" id="book-link">預訂行程</a>
+            <a href="#" id="search-link">訂單查詢</a>
+            <a href="#" id="signin-link">登入/註冊</a>
+            <a href="#" id="signout-link">登出系统</a>
+          </div>
+          <div id="menu-dropdown">
+            <a href="#" id="book-link-mobile">預訂行程</a>
+            <a href="#" id="search-link-mobile">訂單查詢</a>
+            <a href="#" id="signin-link-mobile">登入/註冊</a>
+            <a href="#" id="signout-link-mobile">登出系统</a>
           </div>
         </div>
       </div>
-      <div class="separator"><hr></div>
-      <div id="attraction-text-detail">
-        <div class="attraction-description"></div>
-        <div class="attraction-address">
-          <div class="text-title">景點地址：</div>
-          <div class="address-content text-content"></div>
+    </nav>
+
+    <div id="content">
+      <div class="wrapper common-wrapper">
+        <div id="attraction-detail-container">
+          <div class="attraction-detail-images">
+            <div class="slides-group"></div>
+            <div class="number-text"></div>
+            <button class="arrow left">
+              <img src="/static/images/left-arrow.png" alt="Left" />
+            </button>
+            <button class="arrow right">
+              <img src="/static/images/right-arrow.png" alt="Right" />
+            </button>
+            <div class="circle-group"></div>
+          </div>
+          <div class="tour-info">
+            <div class="attraction-detail-title"></div>
+            <div class="attraction-detail-subtitle"></div>
+            <div id="book-tour-card">
+              <div class="tour-title card-bold-content">訂購導覽行程</div>
+              <div class="tour-subtitle">以此景點為中心的一日行程</div>
+              <div class="tour-row">
+                <span class="card-bold-content">選擇日期：</span>
+                <input type="date" id="tour-date" name="tour-date" />
+              </div>
+              <div class="tour-row time-row">
+                <span class="card-bold-content">選擇時間：</span>
+                <div class="radio-option">
+                  <div class="radio-input-container">
+                    <input
+                      type="radio"
+                      id="morning"
+                      name="tour-time"
+                      value="morning"
+                    />
+                  </div>
+                  <span>上半天</span>
+                </div>
+                <div class="radio-option">
+                  <div class="radio-input-container">
+                    <input
+                      type="radio"
+                      id="afternoon"
+                      name="tour-time"
+                      value="afternoon"
+                    />
+                  </div>
+                  <span>下半天</span>
+                </div>
+              </div>
+              <div class="tour-row cost-row">
+                <span class="card-bold-content">導覽費用：</span>
+                <span id="tour-cost"></span>
+              </div>
+              <button id="book-button">開始預約行程</button>
+            </div>
+          </div>
         </div>
-        <div class="attraction-transport">
-          <div class="text-title">交通方式：</div>
-          <div class="transport-content text-content"></div>
+        <div class="separator"><hr /></div>
+        <div id="attraction-text-detail">
+          <div class="attraction-description"></div>
+          <div class="attraction-address">
+            <div class="text-title">景點地址：</div>
+            <div class="address-content text-content"></div>
+          </div>
+          <div class="attraction-transport">
+            <div class="text-title">交通方式：</div>
+            <div class="transport-content text-content"></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <footer>
-    COPYRIGHT © 2021 台北一日遊
-  </footer>
-  <div id="conflict-modal" class="modal">
-    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
-    <div class="text-container">
-      <h3>重複預訂</h3>
-      <p>您選擇的日期跟時間已有預訂</p>
+    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <div id="conflict-modal" class="modal">
+      <div class="close-button shadow-animation">
+        <img src="/static/images/close-button.png" />
+      </div>
+      <div class="text-container">
+        <h3>重複預訂</h3>
+        <p>您選擇的日期跟時間已有預訂</p>
+      </div>
     </div>
-  </div>
-   <!-- Signin Modal -->
-   <div id="signin-modal" class="modal">
-    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
-    <div class="modal-title">登入會員帳號</div>
-    <div class="form">
-        <input type="email" id="signin-email" placeholder="輸入電子信箱" value="test@gmail.com" required>
-        <input type="password" id="signin-password" placeholder="輸入密碼" value="123456" required>
+    <!-- Signin Modal -->
+    <div id="signin-modal" class="modal">
+      <div class="close-button shadow-animation">
+        <img src="/static/images/close-button.png" />
+      </div>
+      <div class="modal-title">登入會員帳號</div>
+      <div class="form">
+        <input
+          type="email"
+          id="signin-email"
+          placeholder="輸入電子信箱"
+          value="test@gmail.com"
+          required
+        />
+        <input
+          type="password"
+          id="signin-password"
+          placeholder="輸入密碼"
+          value="123456"
+          required
+        />
         <button id="signin-button">登入帳戶</button>
         <div class="prompt">
-          <span>還沒有帳戶？</span><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+          <span>還沒有帳戶？</span
+          ><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
         </div>
+      </div>
     </div>
-  </div>
-  <!-- Signup Modal -->
-  <div id="signup-modal" class="modal">
-    <div class="close-button shadow-animation"><img src="/static/images/close-button.png"></div>
-    <div class="modal-title">註冊會員帳號</div>
-    <div class="form">
-        <input type="text" id="signup-name" placeholder="輸入姓名" required>
-        <input type="email" id="signup-email" placeholder="輸入電子信箱" required>
-        <input type="password" id="signup-password" placeholder="輸入密碼" required>
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="modal">
+      <div class="close-button shadow-animation">
+        <img src="/static/images/close-button.png" />
+      </div>
+      <div class="modal-title">註冊會員帳號</div>
+      <div class="form">
+        <input type="text" id="signup-name" placeholder="輸入姓名" required />
+        <input
+          type="email"
+          id="signup-email"
+          placeholder="輸入電子信箱"
+          required
+        />
+        <input
+          type="password"
+          id="signup-password"
+          placeholder="輸入密碼"
+          required
+        />
         <button id="signup-button">註冊新帳戶</button>
         <div class="prompt">
-          <span>已經有帳戶了？</span><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+          <span>已經有帳戶了？</span
+          ><span id="switch-to-signin" class="shadow-animation">點此登入</span>
         </div>
+      </div>
     </div>
-  </div>
-  <script src="/static/js/auth.js"></script>
-  <script src="/static/js/attraction.js"></script>
-</body>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/attraction.js"></script>
+  </body>
 </html>
