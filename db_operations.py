@@ -258,6 +258,7 @@ def get_order_by_number(conn, order_number, user_id):
             o.number,
             o.total_price,
             o.status,
+            o.updated_at,
             c.name,
             c.email,
             c.phone
@@ -295,6 +296,7 @@ def get_order_by_number(conn, order_number, user_id):
             "number": order_info['number'],
             "totalPrice": order_info['total_price'],
             "status": order_info['status'],
+            "updatedAt": order_info['updated_at'],
             "contact": {
                 "name": order_info['name'],
                 "email": order_info['email'],
