@@ -8,7 +8,7 @@
 
 ## About Taipei-Day-Trip
 
-Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore Taipei’s attractions.By searching with MRT station name or entering keyword, users can swiftly locate points of interest across the city. Each attraction features a detailed description encompassing its historical significance, visitor information, and unique attributes, offering an in-depth understanding of each locale. Moreover, Taipei-Day-Trip provides a user-friendly online booking system, allowing users to book and purchase travel plans, facilitating a smooth travel experience. 
+Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore Taipei’s attractions.By searching with MRT station name or entering keyword, users can swiftly locate points of interest across the city. Each attraction features a detailed description encompassing its historical significance, visitor information, and unique attributes, offering an in-depth understanding of each locale. Moreover, Taipei-Day-Trip provides a user-friendly online booking system, allowing users to book and purchase travel plans, facilitating a smooth travel experience.
 
 <br>
 
@@ -18,9 +18,9 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 
 ## Test Account
 
-| Email                    | Password |
-| ------------------------ | -------- |
-| tim@gmail.com            | 123456   |
+| Email          | Password |
+| -------------- | -------- |
+| test@gmail.com | 123456   |
 
 <br>
 
