@@ -63,7 +63,42 @@ async function fetchUserStatus() {
   }
 }
 
+function getPageTranslations(language) {
+  const translations = {
+    zh: {
+      signin_link: '登入/註冊',
+      signout_link: '登出系統',
+      signin_modal_title: '登入會員帳號',
+      signup_modal_title: '註冊會員帳號',
+      required_fields: '所有欄位都是必填',
+      invalid_email: 'Email 格式不正確',
+      signup_success: '註冊成功，請登入系統',
+      signup_error: '註冊過程中發生錯誤',
+      signin_error: '電子郵件或密碼錯誤',
+      signin_required: '所有欄位都是必填',
+      email_registered: 'Email 已經註冊帳戶',
+    },
+    en: {
+      signin_link: 'Sign In/Sign Up',
+      signout_link: 'Sign Out',
+      signin_modal_title: 'Sign In Your Account',
+      signup_modal_title: 'Register a New Account',
+      required_fields: 'All fields are required',
+      invalid_email: 'Invalid email format',
+      signup_success: 'Registration successful, please log in',
+      signup_error: 'Registration failed',
+      signin_error: 'Incorrect email or password',
+      email_registered: 'This email is already registered',
+      signin_required: 'All fields are required',
+    },
+  };
+
+  return translations[language];
+}
+
 function renderSignIn() {
+  const language = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = getPageTranslations(language);
   const signinLink = document.getElementById('signin-link');
   const signoutLink = document.getElementById('signout-link');
   const signinLinkMobile = document.getElementById('signin-link-mobile');
@@ -71,14 +106,16 @@ function renderSignIn() {
 
   signinLink.style.display = 'block';
   signoutLink.style.display = 'none';
-  signinLink.textContent = '登入/註冊';
+  signinLink.textContent = translations.signin_link;
 
   signinLinkMobile.style.display = 'block';
   signoutLinkMobile.style.display = 'none';
-  signinLinkMobile.textContent = '登入/註冊';
+  signinLinkMobile.textContent = translations.signin_link;
 }
 
 function renderSignOut() {
+  const language = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = getPageTranslations(language);
   const signinLink = document.getElementById('signin-link');
   const signoutLink = document.getElementById('signout-link');
   const signinLinkMobile = document.getElementById('signin-link-mobile');
@@ -86,11 +123,11 @@ function renderSignOut() {
 
   signinLink.style.display = 'none';
   signoutLink.style.display = 'block';
-  signoutLink.textContent = '登出系統';
+  signoutLink.textContent = translations.signout_link;
 
   signinLinkMobile.style.display = 'none';
   signoutLinkMobile.style.display = 'block';
-  signoutLinkMobile.textContent = '登出系統';
+  signoutLinkMobile.textContent = translations.signout_link;
 }
 
 function setupEventListeners() {
@@ -315,18 +352,24 @@ function showMessage(containerId, message, className) {
   container.textContent = message;
   container.className = `message ${className}`;
   container.style.display = 'block';
+  console.log(container.style.display);
 }
 
 async function signup() {
+  const language = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = getPageTranslations(language);
   const name = document.getElementById('signup-name').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value.trim();
   const signupModal = document.getElementById('signup-modal');
 
+  console.log('Translations:', translations);
+  console.log('Selected language:', language);
+
   if (!name || !email || !password) {
     showMessage(
       'signup-message-container',
-      '所有欄位都是必填',
+      translations.required_fields,
       'error-message',
     );
     signupModal.style.height = '357px';
@@ -336,7 +379,7 @@ async function signup() {
   if (!validateEmail(email)) {
     showMessage(
       'signup-message-container',
-      'Email 格式不正確',
+      translations.invalid_email,
       'error-message',
     );
     signupModal.style.height = '357px';
@@ -366,31 +409,43 @@ async function signup() {
     }
     showMessage(
       'signup-message-container',
-      '註冊成功，請登入系統',
+      translations.signup_success,
       'success-message',
     );
     signupModal.style.height = '357px';
   } catch (error) {
-    console.error('Fetch error:', error);
+    console.log('Error message:', error.message);
 
-    showMessage(
-      'signup-message-container',
-      error.message || 'Error during sign up',
-      'error-message',
-    );
+    let errorMessage = error.message;
+
+    if (language === 'en') {
+      if (error.message === 'Email 已經註冊帳戶') {
+        console.log('Email 已經註冊帳戶: ', translations.email_registered);
+        errorMessage = translations.email_registered;
+      } else if (error.message === '註冊失敗') {
+        errorMessage = translations.signup_error;
+      } else {
+        errorMessage = translations.signup_error || 'Error during sign up';
+      }
+    }
+
+    showMessage('signup-message-container', errorMessage, 'error-message');
     signupModal.style.height = '357px';
   }
 }
 
 async function signin() {
+  const language = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = getPageTranslations(language);
   const email = document.getElementById('signin-email').value.trim();
   const password = document.getElementById('signin-password').value.trim();
   const signinModal = document.getElementById('signin-modal');
 
   if (!email || !password) {
+    console.log(translations.required_fields);
     showMessage(
       'signin-message-container',
-      '所有欄位都是必填',
+      translations.required_fields,
       'error-message',
     );
     signinModal.style.height = '300px';
@@ -400,7 +455,7 @@ async function signin() {
   if (!validateEmail(email)) {
     showMessage(
       'signin-message-container',
-      'Email 格式不正確',
+      translations.invalid_email,
       'error-message',
     );
     signinModal.style.height = '300px';
@@ -433,13 +488,12 @@ async function signin() {
     renderSignOut();
     closeModal('signin-modal');
   } catch (error) {
-    console.error('Fetch error:', error);
+    const errorMessage =
+      language === 'zh'
+        ? error.message
+        : translations.signin_error || 'Error during sign in';
 
-    showMessage(
-      'signin-message-container',
-      error.message || 'Error during sign in',
-      'error-message',
-    );
+    showMessage('signin-message-container', errorMessage, 'error-message');
     signinModal.style.height = '300px';
   }
 }
