@@ -61,6 +61,7 @@
   flex-direction: row;
   font-size: 18px;
   color: #666666;
+  gap: 5px;
 }
 
 #order-details-container .order-detail-title {
@@ -152,6 +153,7 @@
   width: 100%;
   height: 24px;
   color: #666666;
+  gap: 6px;
 }
 
 .info-bold-content {
@@ -200,5 +202,21 @@
 
   .separator {
     padding: 0 10px;
+  }
+
+  .input-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 80px;
+    gap: 10px;
+  }
+
+  #order-number-input {
+    width: 100%;
+  }
+
+  #search-order-button {
+    width: 150px;
   }
 }

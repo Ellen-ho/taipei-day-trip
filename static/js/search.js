@@ -1,8 +1,4 @@
-function displayGreet() {
-  if (userData && userData.data) {
-    document.getElementById('user-name').textContent = userData.data.name;
-  }
-}
+let translations = {};
 
 function checkSearchButtonListener() {
   const searchButton = document.getElementById('search-order-button');
@@ -23,7 +19,7 @@ function checkSearchButtonListener() {
 
     if (!orderNumber) {
       const errorMessage = `
-        <p id="order-message" style="color: red; padding: 0 110px;">請輸入訂單編號</p>`;
+        <p id="order-message" style="color: red; padding: 0 110px;">${translations[preferredLanguage]['enter_order_number']}</p>`;
       separator.insertAdjacentHTML('beforebegin', errorMessage);
       orderDetailsContainer.style.display = 'none';
       separator.style.display = 'none';
@@ -39,13 +35,14 @@ function checkSearchButtonListener() {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
+            'Accept-Language': preferredLanguage,
           },
         },
       );
 
       if (!response.ok) {
         const errorMessage = `
-          <p id="order-message" style="color: red; padding: 0 110px;">找不到該訂單</p>`;
+         <p id="order-message" style="color: red; padding: 0 110px;">${translations[preferredLanguage]['order_not_found']}</p>`;
         separator.insertAdjacentHTML('beforebegin', errorMessage);
         orderDetailsContainer.style.display = 'none';
         separator.style.display = 'none';
@@ -56,7 +53,7 @@ function checkSearchButtonListener() {
       const data = await response.json();
       if (!data) {
         const errorMessage = `
-          <p id="order-message" style="color: red; padding: 0 110px;">找不到該訂單</p>`;
+          <p id="order-message" style="color: red; padding: 0 110px;">${translations[preferredLanguage]['order_not_found']}</p>`;
         separator.insertAdjacentHTML('beforebegin', errorMessage);
         orderDetailsContainer.style.display = 'none';
         separator.style.display = 'none';
@@ -68,7 +65,7 @@ function checkSearchButtonListener() {
     } catch (error) {
       console.error('Error:', error);
       const errorMessage = `
-        <p id="order-message" style="color: red; padding: 0 110px;">查詢失敗：${error.message}</p>`;
+       <p id="order-message" style="color: red; padding: 0 110px;">${translations[preferredLanguage]['query_failed']}：${error.message}</p>`;
       separator.insertAdjacentHTML('beforebegin', errorMessage);
       orderDetailsContainer.style.display = 'none';
       separator.style.display = 'none';
@@ -105,27 +102,32 @@ function displayOrderDetails(orderDetails) {
     if (hasExpiredBooking) {
       message = `
         <div id="order-message" style="padding: 0 110px;">
-          <p style="color: ${messageColor};">該筆訂單未付款，且有行程已逾期</p>
+          <p style="color: ${messageColor};">${translations[preferredLanguage]['unpaid_order_with_expired']}</p>
         </div>`;
     } else {
       message = `
         <div id="order-message" style="padding: 0 110px;">
-          <p style="color: ${messageColor};">該筆訂單未付款，請點擊下方前往付款</p>
-          <button id="pay-unpaid-order" style="padding: 10px;">立即前往付款</button>
+          <p style="color: ${messageColor};">${translations[preferredLanguage]['unpaid_order']}</p>
+          <button id="pay-unpaid-order" style="padding: 10px;">${translations[preferredLanguage]['pay_now']}</button>
         </div>`;
     }
   } else if (orderDetails.status === 'PAID') {
     messageColor = '#4CAF50';
     message = `
       <div id="order-message" style="padding: 0 110px;">
-        <p style="color: ${messageColor};">該筆訂單已完成付款</p>
+       <p style="color: ${messageColor};">${translations[preferredLanguage]['order_paid']}</p>
       </div>`;
   }
 
   separator.insertAdjacentHTML('beforebegin', message);
 
-  totalPriceDiv.textContent = `新台幣 ${orderDetails.totalPrice} 元`;
-  totalCountDiv.textContent = `${orderDetails.totalBookings} 筆`;
+  const itemCountKey =
+    orderDetails.totalBookings > 1
+      ? 'item_count_multiple'
+      : 'item_count_single';
+
+  totalPriceDiv.textContent = `${translations[preferredLanguage]['currency']} ${orderDetails.totalPrice} ${translations[preferredLanguage]['currency_suffix']}`;
+  totalCountDiv.textContent = `${orderDetails.totalBookings} ${translations[preferredLanguage][itemCountKey]}`;
 
   orderDetails.bookings.forEach((booking) => {
     const orderContainer = document.createElement('div');
@@ -150,27 +152,27 @@ function displayOrderDetails(orderDetails) {
       </div>
       <div class="order-list-container">
         <div class="order-row">
-          <span class="info-bold-content">行程價格：</span>
-          <span class="selected-items">新台幣 ${booking.price} 元</span>
+        <span class="info-bold-content">${translations[preferredLanguage]['trip_price']}</span>
+          <span class="selected-items">${translations[preferredLanguage]['currency']} ${booking.price} ${translations[preferredLanguage]['currency_suffix']}</span>
         </div>
         <div class="order-row">
-          <span class="info-bold-content">行程日期：</span>
+         <span class="info-bold-content">${translations[preferredLanguage]['trip_date']}</span>
           <span class="selected-items">${booking.date}</span>
         </div>
         <div class="order-row">
-          <span class="info-bold-content">行程時間：</span>
+          <span class="info-bold-content">${translations[preferredLanguage]['trip_time']}</span>
           <span class="selected-items">${formattedTime}</span>
         </div>
         <div class="order-row">
-          <span class="info-bold-content">聯絡姓名：</span>
+           <span class="info-bold-content">${translations[preferredLanguage]['contact_name_label']}</span>
           <span class="selected-items">${orderDetails.contact.name}</span>
         </div>
         <div class="order-row">
-          <span class="info-bold-content">聯絡信箱：</span>
+         <span class="info-bold-content">${translations[preferredLanguage]['contact_email_label']}</span>
           <span class="selected-items">${orderDetails.contact.email}</span>
         </div>
         <div class="order-row">
-          <span class="info-bold-content">聯絡手機：</span>
+          <span class="info-bold-content">${translations[preferredLanguage]['contact_phone_label']}</span>
           <span class="selected-items">${orderDetails.contact.phone}</span>
         </div>
       </div>
@@ -190,19 +192,90 @@ function displayOrderDetails(orderDetails) {
 }
 
 function formatTime(timeText) {
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+  const translations = {
+    zh: {
+      morning: '早上 9 點到下午 4 點',
+      afternoon: '下午 2 點到晚上 9 點',
+    },
+    en: {
+      morning: '9:00 AM to 4:00 PM',
+      afternoon: '2:00 PM to 9:00 PM',
+    },
+  };
+
+  const translation = translations[preferredLanguage];
+
   switch (timeText) {
     case 'morning':
-      return '早上 9 點到下午 4 點';
+      return translation.morning;
     case 'afternoon':
-      return '下午 2 點到晚上 9 點';
+      return translation.afternoon;
     default:
       return timeText;
   }
 }
 
+const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+async function loadTranslations() {
+  try {
+    const response = await fetch('/static/languages.json');
+    translations = await response.json();
+
+    applyTranslations(translations);
+  } catch (error) {
+    console.error('無法加載翻譯文件:', error);
+  }
+}
+
+function applyTranslations(translations) {
+  const elements = document.querySelectorAll('[data-key]');
+
+  elements.forEach((element) => {
+    const key = element.getAttribute('data-key');
+
+    if (
+      element.tagName.toLowerCase() === 'input' &&
+      element.hasAttribute('placeholder')
+    ) {
+      if (
+        translations[preferredLanguage] &&
+        translations[preferredLanguage][key]
+      ) {
+        element.setAttribute(
+          'placeholder',
+          translations[preferredLanguage][key],
+        );
+      }
+    } else if (key === 'search_greeting') {
+      if (userData && userData.data) {
+        const userName = userData.data.name;
+
+        if (
+          translations[preferredLanguage] &&
+          translations[preferredLanguage][key]
+        ) {
+          const message = translations[preferredLanguage][key].replace(
+            '{name}',
+            `<span id="user-name">${userName}</span>`,
+          );
+          element.innerHTML = message;
+        }
+      }
+    } else if (
+      translations[preferredLanguage] &&
+      translations[preferredLanguage][key]
+    ) {
+      element.innerHTML = translations[preferredLanguage][key];
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
   await auth();
-  displayGreet();
+  await loadTranslations();
   checkSearchButtonListener();
 });
 

@@ -47,39 +47,80 @@ def get_attractions(conn, keyword, page, limit=12):
         "data": results
     }
 
-def get_attraction_by_id(conn, attraction_id):
+def get_attractions_en(conn, keyword, page, limit=12):
+    extra_item = 1  
+    offset = page * limit
+    fetch_limit = limit + extra_item 
+
     cursor = conn.cursor(dictionary=True)
     sql_query = """
         SELECT 
             id, name, category, description, address, transport, mrt, 
             latitude, longitude, images 
-        FROM attractions
+        FROM attractions_en
+        WHERE (%s IS NULL OR name LIKE %s OR mrt = %s)
+        LIMIT %s, %s
+    """
+    keyword_like = f'%{keyword}%' if keyword else None
+    cursor.execute(sql_query, (keyword, keyword_like, keyword, offset, fetch_limit))
+    results = cursor.fetchall()
+    cursor.close()
+
+    for result in results:
+        if result['images']:
+            result['images'] = json.loads(result['images']) 
+        else:
+            result['images'] = []
+
+    has_next_page = len(results) > limit
+    if has_next_page:
+        results = results[:-1] 
+
+    next_page = page + 1 if has_next_page else None
+
+    return {
+        "nextPage": next_page,
+        "data": results
+    }
+
+def get_attraction_by_id(conn, attraction_id, table='attractions'):
+    cursor = conn.cursor(dictionary=True)
+    sql_query = f"""
+        SELECT 
+            id, name, category, description, address, transport, mrt, 
+            latitude, longitude, images 
+        FROM {table}
         WHERE id = %s
     """
     cursor.execute(sql_query, (attraction_id,))
     result = cursor.fetchone()
+
     if result:
-        for key in result:
-            if isinstance(result[key], str):
-                result[key] = clean_string(result[key])
+        if table == 'attractions':
+            for key in result:
+                if isinstance(result[key], str):
+                    result[key] = clean_string(result[key])  
+
         if result['images']:
             result['images'] = json.loads(result['images'])
         else:
             result['images'] = []
+
     cursor.close()
     return result
 
-def get_mrts(conn):
+def get_mrts(conn, table):
     cursor = conn.cursor(dictionary=True)
-    sql_query = """
+    sql_query = f"""
         SELECT mrt, COUNT(*) as attraction_count
-        FROM attractions
+        FROM {table}
         WHERE mrt IS NOT NULL
         GROUP BY mrt
         ORDER BY attraction_count DESC
     """
     cursor.execute(sql_query)
     results = cursor.fetchall()
+    print(results)
     cursor.close()
     return [result['mrt'] for result in results]
 
@@ -97,13 +138,24 @@ def check_existing_booking(conn, user_id, booking):
      else:
         return None 
 
-def create_booking_to_db(conn, booking, user_id):
+def create_booking_to_db(conn, booking, user_id, attraction_id=None, attraction_en_id=None):
     cursor = conn.cursor(dictionary=True)
-    sql_query = """
-    INSERT INTO bookings (user_id, attraction_id, date, time, price, is_deleted)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    """
-    values = (user_id, booking.attraction_id, booking.date, booking.time, booking.price, 0)
+    
+    if attraction_id:
+        sql_query = """
+        INSERT INTO bookings (user_id, attraction_id, date, time, price, is_deleted)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        values = (user_id, attraction_id, booking.date, booking.time, booking.price, 0)
+    elif attraction_en_id:
+        sql_query = """
+        INSERT INTO bookings (user_id, attraction_en_id, date, time, price, is_deleted)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        values = (user_id, attraction_en_id, booking.date, booking.time, booking.price, 0)
+    else:
+        raise ValueError("Either attraction_id or attraction_en_id must be provided.")
+    
     try:
         cursor.execute(sql_query, values)
         conn.commit()  
@@ -112,33 +164,67 @@ def create_booking_to_db(conn, booking, user_id):
         conn.rollback()  
         raise
     finally:
-        cursor.close() 
+        cursor.close()
 
-def get_booking_details(conn, user_id):
+def get_booking_details(conn, user_id, table):
     with conn.cursor(dictionary=True) as cursor:
-        sql_query = """
+        booking_query = """
             SELECT 
-                b.id, b.date, b.time, b.price,
-                a.id as attraction_id, a.name, a.address, 
-                JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
+                b.id, b.date, b.time, b.price, 
+                b.attraction_id, b.attraction_en_id
             FROM bookings b
-            INNER JOIN attractions a ON b.attraction_id = a.id
             WHERE b.user_id = %s AND b.is_deleted = 0 AND b.order_id IS NULL
         """
-        cursor.execute(sql_query, (user_id,))
+        cursor.execute(booking_query, (user_id,))
         booking_info = cursor.fetchall()
 
-        if len(booking_info) == 0:
+        if not booking_info:  
             return None 
         
+        attraction_ids = []
+        for booking in booking_info:
+            if booking['attraction_id']: 
+                attraction_ids.append(booking['attraction_id'])
+            elif booking['attraction_en_id']:  
+                attraction_ids.append(booking['attraction_en_id'])
+
+        if not attraction_ids: 
+            return None
+
+        format_strings = ','.join(['%s'] * len(attraction_ids))
+        
+        attraction_query = f"""
+            SELECT 
+                a.id, a.name, a.address, 
+                JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) as image
+            FROM {table} a
+            WHERE a.id IN ({format_strings})
+        """
+        cursor.execute(attraction_query, tuple(attraction_ids))
+        attractions_info = cursor.fetchall()
+
+        if not attractions_info:
+            return None
+
+        attractions_dict = {attraction['id']: attraction for attraction in attractions_info}
+
         bookings = []
         for booking in booking_info:
+            attraction = None
+            if booking['attraction_id']:
+                attraction = attractions_dict.get(booking['attraction_id'])
+            elif booking['attraction_en_id']:
+                attraction = attractions_dict.get(booking['attraction_en_id'])
+            
+            if attraction is None:
+                continue
+
             bookings.append({
                 "attraction": {
-                    "id": booking['attraction_id'],
-                    "name": booking['name'],
-                    "address": booking['address'],
-                    "image": booking['image']
+                    "id": attraction['id'],
+                    "name": attraction['name'],
+                    "address": attraction['address'],
+                    "image": attraction['image']
                 },
                 "id": booking['id'],
                 "date": booking['date'].strftime('%Y-%m-%d'),  
@@ -146,7 +232,7 @@ def get_booking_details(conn, user_id):
                 "price": booking['price']
             })
 
-        return {"data": bookings}  
+        return {"data": bookings}
 
 def delete_booking(conn, user_id, booking_id):
     cursor = conn.cursor(dictionary=True)
@@ -250,8 +336,9 @@ def create_payment_record(conn, payment_data, order_id):
     finally:
         cursor.close()
 
-def get_order_by_number(conn, order_number, user_id):
+def get_order_by_number(conn, order_number, user_id, accept_language):
     cursor = conn.cursor(dictionary=True)
+
     sql_query = """
         SELECT 
             o.id AS order_id,
@@ -278,17 +365,40 @@ def get_order_by_number(conn, order_number, user_id):
             b.date,
             b.time,
             b.price,
-            a.id AS attraction_id,
-            a.name AS attraction_name,
-            a.address AS attraction_address,
-            JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) AS attraction_image
+            b.attraction_id,
+            b.attraction_en_id
         FROM bookings b
-        JOIN attractions a ON b.attraction_id = a.id
         WHERE b.order_id = (SELECT id FROM orders WHERE number = %s)
     """
     cursor.execute(sql_query_bookings, (order_number,))
     bookings = cursor.fetchall()
-    total_count = len(bookings) 
+    total_count = len(bookings)
+
+    attraction_ids = []
+    for booking in bookings:
+        if booking['attraction_id'] or booking['attraction_en_id']:
+            attraction_ids.append(booking['attraction_id'] or booking['attraction_en_id'])
+
+    if not attraction_ids:  
+        return None
+
+    format_strings = ','.join(['%s'] * len(attraction_ids))
+
+    table = 'attractions_en' if 'en' in accept_language else 'attractions'
+    
+    sql_query_attractions = f"""
+        SELECT 
+            a.id,
+            a.name,
+            a.address,
+            JSON_UNQUOTE(JSON_EXTRACT(a.images, '$[0]')) AS image
+        FROM {table} a
+        WHERE a.id IN ({format_strings})
+    """
+    cursor.execute(sql_query_attractions, tuple(attraction_ids))
+    attractions_info = cursor.fetchall()
+
+    attractions_dict = {attraction['id']: attraction for attraction in attractions_info}
 
     result = {
         "data": {
@@ -303,18 +413,28 @@ def get_order_by_number(conn, order_number, user_id):
                 "phone": order_info['phone']
             },
             "totalBookings": total_count,
-            "bookings": [{
-                "attraction": {
-                    "id": booking['attraction_id'],
-                    "name": booking['attraction_name'],
-                    "address": booking['attraction_address'],
-                    "image": booking['attraction_image']
-                },
-                "id": booking['booking_id'],
-                "date": booking['date'].strftime('%Y-%m-%d'),
-                "time": booking['time'],
-                "price": booking['price']
-            } for booking in bookings]
+            "bookings": []
         }
     }
+
+    for booking in bookings:
+        attraction_id = booking['attraction_id'] or booking['attraction_en_id']
+        attraction = attractions_dict.get(attraction_id)
+
+        if not attraction:
+            continue
+
+        result['data']['bookings'].append({
+            "attraction": {
+                "id": attraction['id'],
+                "name": attraction['name'],
+                "address": attraction['address'],
+                "image": attraction['image']
+            },
+            "id": booking['booking_id'],
+            "date": booking['date'].strftime('%Y-%m-%d'),
+            "time": booking['time'],
+            "price": booking['price']
+        })
+
     return result

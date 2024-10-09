@@ -23,66 +23,91 @@
     <div id="backdrop"></div>
     <nav id="fixed-top-navbar">
       <div class="nav-container common-wrapper">
-        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="logo"><a href="/" data-key="title">台北一日遊</a></div>
         <div id="hamburger-menu">
           <i class="fa-solid fa-bars"></i>
         </div>
         <div id="menu-items">
-          <a href="#" id="book-link">預訂行程</a>
-          <a href="#" id="search-link">訂單查詢</a>
-          <a href="#" id="signin-link">登入/註冊</a>
-          <a href="#" id="signout-link">登出系统</a>
+          <a href="#" id="book-link" data-key="book_link">預訂行程</a>
+          <a href="#" id="search-link" data-key="search_link">訂單查詢</a>
+          <a href="#" id="signin-link" data-key="signin_link">登入/註冊</a>
+          <a href="#" id="signout-link" data-key="signout_link">登出系统</a>
         </div>
         <div id="menu-dropdown">
-          <a href="#" id="book-link-mobile">預訂行程</a>
-          <a href="#" id="search-link-mobile">訂單查詢</a>
-          <a href="#" id="signin-link-mobile">登入/註冊</a>
-          <a href="#" id="signout-link-mobile">登出系统</a>
+          <a href="#" id="book-link-mobile" data-key="book_link">預訂行程</a>
+          <a href="#" id="search-link-mobile" data-key="search_link"
+            >訂單查詢</a
+          >
+          <a href="#" id="signin-link-mobile" data-key="signin_link"
+            >登入/註冊</a
+          >
+          <a href="#" id="signout-link-mobile" data-key="signout_link"
+            >登出系统</a
+          >
         </div>
       </div>
     </nav>
     <div id="thankyou-container">
       <div class="thankyou-wrapper">
         <div class="thankyou-greet success">
-          <div class="greet-title">感謝您的預訂！</div>
-          <div class="greet-subtitle">已經完成付款，訂單編號如下：</div>
-          <div id="success-order-number"></div>
-          <p>請記住此訂單編號以確認查核</p>
+          <div class="greet-title" data-key="thankyou_success_title">
+            感謝您的預訂！
+          </div>
+          <div class="greet-subtitle" data-key="thankyou_success_subtitle">
+            已經完成付款，訂單編號如下：
+          </div>
+          <div id="success-order-number" onclick="copyOrderNumber()"></div>
+          <p data-key="thankyou_success_note">請記住此訂單編號以確認查核</p>
         </div>
         <div class="thankyou-greet failure">
-          <div class="greet-title">感謝您的預訂！</div>
-          <div class="greet-subtitle">尚未完成付款，訂單編號如下：</div>
-          <div id="failure-order-number"></div>
-          <p>請點擊下方前往付款，或重新訂購行程</p>
-          <button id="pay-unpaid-order">立即前往付款</button>
+          <div class="greet-title" data-key="thankyou_failure_title">
+            感謝您的預訂！
+          </div>
+          <div class="greet-subtitle" data-key="thankyou_failure_subtitle">
+            尚未完成付款，訂單編號如下：
+          </div>
+          <div id="failure-order-number" onclick="copyOrderNumber()"></div>
+          <p data-key="thankyou_failure_note">
+            請點擊下方前往付款，或重新訂購行程
+          </p>
+          <button id="pay-unpaid-order" data-key="thankyou_failure_button">
+            立即前往付款
+          </button>
         </div>
         <div class="separator"><hr /></div>
         <div id="order-details-container">
-          <div class="order-detail-title">訂單詳情</div>
+          <div class="order-detail-title" data-key="order_details_title">
+            訂單詳情
+          </div>
           <div class="order-total-container">
-            <span class="order-total-title">行程總數：</span>
+            <span class="order-total-title" data-key="total_trips_label"
+              >行程總數：</span
+            >
             <div id="total-count"></div>
           </div>
           <div class="order-total-container">
-            <span class="order-total-title">總金額：</span>
+            <span class="order-total-title" data-key="total_amount_label"
+              >總金額：</span
+            >
             <div id="total-price"></div>
           </div>
         </div>
         <div id="order-items-group"></div>
       </div>
     </div>
-    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <footer data-key="footer">COPYRIGHT © 2021 台北一日遊</footer>
     <!-- Signin Modal -->
     <div id="signin-modal" class="modal">
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">登入會員帳號</div>
+      <div class="modal-title" data-key="signin_modal_title">登入會員帳號</div>
       <div class="form">
         <input
           type="email"
           id="signin-email"
           placeholder="輸入電子信箱"
+          data-key="signin_email_placeholder"
           value="test@gmail.com"
           required
         />
@@ -90,14 +115,20 @@
           type="password"
           id="signin-password"
           placeholder="輸入密碼"
+          data-key="signin_password_placeholder"
           value="123456"
           required
         />
-        <button id="signin-button">登入帳戶</button>
+        <button id="signin-button" data-key="signin_button">登入帳戶</button>
         <div id="signin-message-container" class="message"></div>
         <div class="prompt">
-          <span>還沒有帳戶？</span
-          ><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+          <span data-key="signup_prompt">還沒有帳戶？</span
+          ><span
+            id="switch-to-signup"
+            class="shadow-animation"
+            data-key="signup_link"
+            >點此註冊</span
+          >
         </div>
       </div>
     </div>
@@ -106,26 +137,39 @@
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">註冊會員帳號</div>
+      <div class="modal-title" data-key="signup_modal_title">註冊會員帳號</div>
       <div class="form">
-        <input type="text" id="signup-name" placeholder="輸入姓名" required />
+        <input
+          type="text"
+          id="signup-name"
+          placeholder="輸入姓名"
+          data-key="signup_name_placeholder"
+          required
+        />
         <input
           type="email"
           id="signup-email"
           placeholder="輸入電子信箱"
+          data-key="signup_email_placeholder"
           required
         />
         <input
           type="password"
           id="signup-password"
           placeholder="輸入密碼"
+          data-key="signup_password_placeholder"
           required
         />
-        <button id="signup-button">註冊新帳戶</button>
+        <button id="signup-button" data-key="signup_button">註冊新帳戶</button>
         <div id="signup-message-container" class="message"></div>
         <div class="prompt">
-          <span>已經有帳戶了？</span
-          ><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+          <span data-key="signin_prompt">已經有帳戶了？</span
+          ><span
+            id="switch-to-signin"
+            class="shadow-animation"
+            data-key="signin_link"
+            >點此登入</span
+          >
         </div>
       </div>
     </div>

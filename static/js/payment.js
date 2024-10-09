@@ -1,3 +1,4 @@
+let translations = {};
 TPDirect.setupSDK();
 const currentUrl = window.location.href;
 const url = new URL(currentUrl);
@@ -65,6 +66,8 @@ TPDirect.card.onUpdate(function (update) {
   }
 });
 
+const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
 function handleConfirmOrder() {
   const confirmButton = document.getElementById('confirm-cost');
   confirmButton.addEventListener('click', async function (event) {
@@ -81,14 +84,14 @@ function handleConfirmOrder() {
     });
 
     if (!allFilled) {
-      alert('聯絡資訊皆不可空白');
+      alert(translations[preferredLanguage]['contact_info_required']);
       return;
     }
 
     const tappayStatus = TPDirect.card.getTappayFieldsStatus();
 
     if (tappayStatus.canGetPrime === false) {
-      alert('信用卡資訊輸入錯誤');
+      alert(translations[preferredLanguage]['credit_card_error']);
       return;
     }
 
@@ -97,7 +100,7 @@ function handleConfirmOrder() {
       !totalPriceElement.textContent.trim() ||
       parseInt(totalPriceElement.textContent.trim()) === 0
     ) {
-      alert('尚未選擇任何行程');
+      alert(translations[preferredLanguage]['no_booking_selected']);
       return;
     }
 
@@ -129,9 +132,14 @@ function handleConfirmOrder() {
         phone: document.getElementById('contact-phone').value.trim(),
       };
 
-      const totalCostElement = document.getElementById('total-cost');
+      const totalPriceElement = document.getElementById('total-cost');
+      const currency = translations[preferredLanguage]['currency'];
+      const currencySuffix = translations[preferredLanguage]['currency_suffix'];
       const totalCost = parseFloat(
-        totalCostElement.textContent.replace(/新台幣\s|元/g, '').trim(),
+        totalPriceElement.textContent
+          .replace(`${currency}`, '')
+          .replace(`${currencySuffix}`, '')
+          .trim(),
       );
 
       const token = localStorage.getItem('token');
@@ -156,7 +164,11 @@ function handleConfirmOrder() {
           });
 
           if (!response.ok) {
-            throw new Error(`訂單提交失敗! status: ${response.status}`);
+            throw new Error(
+              translations[preferredLanguage][
+                'order_submission_failed'
+              ].replace('{status}', response.status),
+            );
           }
 
           responseData = await response.json();
@@ -164,7 +176,7 @@ function handleConfirmOrder() {
           window.location.href = url;
         } catch (error) {
           console.error('提交訂單錯誤:', error);
-          alert('訂單建立失敗，請確認填寫的資訊或稍後再試');
+          alert(translations[preferredLanguage]['order_creation_failed']);
         }
       } else {
         const putRequestData = {
@@ -177,12 +189,17 @@ function handleConfirmOrder() {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
+              'Accept-Language': preferredLanguage,
             },
             body: JSON.stringify(putRequestData),
           });
 
           if (!response.ok) {
-            throw new Error(`訂單更新失敗! status: ${response.status}`);
+            throw new Error(
+              translations[preferredLanguage][
+                'order_submission_failed'
+              ].replace('{status}', response.status),
+            );
           }
 
           responseData = await response.json();
@@ -190,15 +207,59 @@ function handleConfirmOrder() {
           window.location.href = url;
         } catch (error) {
           console.error('更新訂單錯誤:', error);
-          alert('訂單更新失敗，請確認填寫的資訊或稍後再試');
+          alert(translations[preferredLanguage]['order_update_failed']);
         }
       }
     });
   });
 }
 
+async function loadTranslations() {
+  try {
+    const response = await fetch('/static/languages.json');
+    translations = await response.json();
+
+    applyTranslations(translations);
+  } catch (error) {
+    console.error('無法加載翻譯文件:', error);
+  }
+}
+
+function applyTranslations(translations) {
+  const elements = document.querySelectorAll('[data-key]');
+
+  elements.forEach((element) => {
+    const key = element.getAttribute('data-key');
+
+    if (key === 'greeting_message') {
+      if (userData && userData.data) {
+        const userName = userData.data.name;
+
+        if (
+          translations[preferredLanguage] &&
+          translations[preferredLanguage][key]
+        ) {
+          const message = translations[preferredLanguage][key].replace(
+            '{name}',
+            `<span id="user-name">${userName}</span>`,
+          );
+          element.innerHTML = message;
+        }
+      }
+    } else if (
+      translations[preferredLanguage] &&
+      translations[preferredLanguage][key]
+    ) {
+      element.innerHTML = translations[preferredLanguage][key];
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
   await auth();
-  checkUrlAndFetchDetails(), setupBookingEventListeners();
+  await loadTranslations();
+
+  checkUrlAndFetchDetails();
+  setupBookingEventListeners();
   handleConfirmOrder();
 });

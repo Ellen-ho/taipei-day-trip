@@ -1,12 +1,16 @@
 let nextPage = 0;
 let isLoading = false;
-let currentKeyword = '';
 
 async function fetchAttractions(keyword = '') {
   isLoading = true;
 
   try {
-    const url = new URL('/api/attractions', window.location.origin);
+    const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+    const apiPath =
+      preferredLanguage === 'en' ? '/api/attractions_en' : '/api/attractions';
+
+    const url = new URL(apiPath, window.location.origin);
     url.searchParams.append('page', nextPage);
     if (keyword) {
       url.searchParams.append('keyword', keyword);
@@ -23,6 +27,7 @@ async function fetchAttractions(keyword = '') {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const result = await response.json();
+    console.log(result);
     if (nextPage === 0) {
       document.getElementById('attraction-list').innerHTML = '';
     }
@@ -36,6 +41,17 @@ async function fetchAttractions(keyword = '') {
 }
 
 function displayAttractions(attractions) {
+  const language = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = {
+    zh: {
+      no_data_message: '找不到相符合資料!',
+      no_data_link: '點擊 👉 到首頁繼續探索吧！',
+    },
+    en: {
+      no_data_message: 'No matching data found!',
+      no_data_link: 'Click 👉 to go back to the homepage and explore!',
+    },
+  };
   const attractionsList = document.getElementById('attraction-list');
 
   if (attractions.length === 0) {
@@ -43,12 +59,12 @@ function displayAttractions(attractions) {
     noDataDiv.className = 'no-data';
 
     const messageSpan = document.createElement('span');
-    messageSpan.textContent = '找不到相符合資料!';
+    messageSpan.textContent = translations[language].no_data_message;
     noDataDiv.appendChild(messageSpan);
 
     const linkSpan = document.createElement('span');
     linkSpan.className = 'no-data-link';
-    linkSpan.textContent = '點擊 👉 到首頁繼續探索吧！';
+    linkSpan.textContent = translations[language].no_data_link;
     linkSpan.onclick = () => {
       window.location.href = '/';
     };
@@ -126,6 +142,7 @@ async function fetchMRTData() {
       method: 'GET',
       headers: {
         Accept: 'application/json',
+        'Accept-Language': currentLanguage,
       },
     });
     if (!response.ok) {
@@ -185,6 +202,7 @@ function addLoadMrtsEventListener() {
 
 document.addEventListener('DOMContentLoaded', async function () {
   await auth();
+  await initLanguageToggle();
   setupInfiniteScroll();
   addLoadMrtsEventListener();
   addSearchInputListener();

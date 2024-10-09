@@ -1,109 +1,109 @@
 #thankyou-container {
-    display: flex;
-    justify-content: center;
-    padding: 40px 0;
-    min-height: 786px;
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  min-height: 786px;
 }
 
 .thankyou-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    min-height: calc(100vh - 238px);
+  width: 100%;
+  max-width: 1200px;
+  min-height: calc(100vh - 238px);
 }
 
 .thankyou-wrapper .thankyou-greet {
-  text-align: center; 
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
-.thankyou-wrapper .thankyou-greet .greet-title{
-    font-weight: 700;
-    font-size: 28px;
-    color: #666666;
-    margin-bottom: 10px;
+.thankyou-wrapper .thankyou-greet .greet-title {
+  font-weight: 700;
+  font-size: 28px;
+  color: #666666;
+  margin-bottom: 10px;
 }
 
-.thankyou-wrapper .thankyou-greet .greet-subtitle{
+.thankyou-wrapper .thankyou-greet .greet-subtitle {
   font-weight: 700;
   font-size: 24px;
   color: #666666;
 }
 
-  .thankyou-wrapper p {
-    color: #666666;
-    font-size: 16px;
-    font-weight: 400;
-  }
-
-  .separator {
-    margin-top: 30px;  
-    margin-bottom: 30px; 
-    text-align: center;  
-  }
-
-  #order-details-container {
-    display: flex;
-    flex-direction: column;
-    padding: 0 60px; 
-    margin-bottom: 20px;
-    gap:10px
-  }
-
-  #order-details-container .order-total-container{
-    display: flex;
-    flex-direction: row;
-    font-size: 18px;
-    color:#666666
-  }
-
-  #order-details-container .order-detail-title{
-    font-size: 24px;
-    font-weight: 700;
-    color:#666666
-  }
-
-  #order-details-container .order-total-container .order-total-title{
-    font-weight: 700;
-  }
-
-
-  #total-count,
-  #total-price{
-    font-weight: 400;
-  }
-  
-  .separator hr {
-    border: 1px solid #E8E8E8;
-  }
-
-  #order-items-group{
-    display: flex;
-    flex-direction: column;
-    gap:30px;
+.thankyou-wrapper p {
+  color: #666666;
+  font-size: 16px;
+  font-weight: 400;
 }
 
-.order-item-container{
-  padding: 0 60px; 
+.separator {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+#order-details-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 60px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+#order-details-container .order-total-container {
   display: flex;
   flex-direction: row;
-  gap:30px;
-  transition: background-color 0.3s ease; 
-  background-color: #fff; 
+  font-size: 18px;
+  color: #666666;
+  gap: 5px;
+}
+
+#order-details-container .order-detail-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #666666;
+}
+
+#order-details-container .order-total-container .order-total-title {
+  font-weight: 700;
+}
+
+#total-count,
+#total-price {
+  font-weight: 400;
+}
+
+.separator hr {
+  border: 1px solid #e8e8e8;
+}
+
+#order-items-group {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.order-item-container {
+  padding: 0 60px;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  transition: background-color 0.3s ease;
+  background-color: #fff;
 }
 
 .order-item-container .order-attraction-image {
-  flex: 2;  
+  flex: 2;
   display: flex;
   height: 250px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .order-item-container .order-attraction-image img {
   width: 100%;
   min-height: 250px;
-  object-fit: cover;  
+  object-fit: cover;
 }
 
 .order-item-container .order-info {
@@ -113,21 +113,21 @@
   line-height: 13.3px;
 }
 
-.order-item-container .name-container{
-  display: flex; 
+.order-item-container .name-container {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   height: 45px;
   gap: 8px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
   margin-top: 5px;
 }
 
 .order-item-container .name-container .order-attraction-name {
   font-size: 18px;
   font-weight: 700;
-  color:#448899;
+  color: #448899;
 }
 
 .order-item-container .name-container .order-attraction-address {
@@ -139,53 +139,71 @@
 .order-item-container .order-list-container {
   display: flex;
   flex-direction: column;
-  gap: 6px
+  gap: 6px;
 }
 
 .order-item-container .order-list-container .order-row {
-display: flex;
-align-items: center;
-width: 100%;
-height: 24px;
-color:#666666;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 24px;
+  color: #666666;
+  gap: 6px;
 }
 
 .info-bold-content {
-font-size: 16px;
-font-weight: 700;
-color: #666666;
-line-height: 13.3px;
-align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #666666;
+  line-height: 13.3px;
+  align-items: center;
 }
 
 .order-item-container .order-row .selected-items {
-font-weight: 400
+  font-weight: 400;
 }
 
 #success-order-number,
 #failure-order-number {
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: inline-block;
-    margin: 15px 0;
-    letter-spacing: 1px;
+  background-color: #f0f0f0;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  margin: 15px 0;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+#success-order-number:hover::after,
+#failure-order-number:hover::after {
+  content: 'Copy'; /* 顯示提示框內容 */
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 #success-order-number {
-    border-left: 5px solid #4CAF50;
+  border-left: 5px solid #4caf50;
 }
 
 #failure-order-number {
-    border-left: 5px solid #E75480; 
+  border-left: 5px solid #e75480;
 }
 
 #pay-unpaid-order {
-  background-color: #E75480; 
+  background-color: #e75480;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -196,30 +214,32 @@ font-weight: 400
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 #pay-unpaid-order:hover {
-  background-color: #D94E7F; 
+  background-color: #d94e7f;
   transform: scale(1.05);
 }
 
-@media (max-width: 768px){
+@media (max-width: 768px) {
   #order-details-container {
-    padding: 0 15px; 
-    gap:10px
+    padding: 0 15px;
+    gap: 10px;
   }
 
-  .order-item-container{
-    padding: 0 10px; 
+  .order-item-container {
+    padding: 0 10px;
     flex-direction: column;
-    gap:10px;
+    gap: 10px;
   }
 
   .order-item-container .order-attraction-image,
   .order-item-container .order-info {
-      flex: none; 
-      height: 250px;
+    flex: none;
+    height: 250px;
   }
 
   .order-item-container .order-info {
@@ -228,5 +248,5 @@ font-weight: 400
 
   .separator {
     padding: 0 10px;
-}
+  }
 }
