@@ -40,6 +40,23 @@ def create_tables():
             );
         """)
         cursor.execute("""
+            CREATE TABLE IF NOT EXISTS attractions_en (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                category VARCHAR(255),
+                rate VARCHAR(50),
+                description TEXT,
+                memo_time TEXT,
+                address VARCHAR(255) NOT NULL,
+                latitude FLOAT,
+                longitude FLOAT,
+                mrt VARCHAR(255),
+                date DATE,
+                transport TEXT,
+                images JSON
+            );
+        """)
+        cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
@@ -74,14 +91,16 @@ def create_tables():
             CREATE TABLE IF NOT EXISTS bookings (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
-                attraction_id INT NOT NULL,
+                attraction_id INT DEFAULT NULL,  
+                attraction_en_id INT DEFAULT NULL, 
                 order_id INT DEFAULT NULL,
                 date DATE NOT NULL,
                 time ENUM('morning', 'afternoon') NOT NULL,
                 price INT NOT NULL CHECK(price IN (2000, 2500)),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                is_deleted TINYINT(1) NOT NULL DEFAULT 0,         
+                is_deleted TINYINT(1) NOT NULL DEFAULT 0,
                 FOREIGN KEY (attraction_id) REFERENCES attractions(id),
+                FOREIGN KEY (attraction_en_id) REFERENCES attractions_en(id),
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (order_id) REFERENCES orders(id)
             );
@@ -121,7 +140,7 @@ def filter_images(file_str):
             valid_images.append(url)
     return valid_images
 
-def load_attractions_data():
+def load_attractions_data(table_name, file_name):
     db = None
     cursor = None
     try:
@@ -132,7 +151,7 @@ def load_attractions_data():
             database=DB_NAME
         )
         cursor = db.cursor()
-        file_path = os.path.join('data', 'taipei-attractions.json')
+        file_path = os.path.join('data', file_name)
 
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
@@ -143,8 +162,8 @@ def load_attractions_data():
                 images = filter_images(attraction['file'])
                 images_json = json.dumps(images)
 
-                cursor.execute("""
-                INSERT INTO attractions (
+                cursor.execute(f"""
+                INSERT INTO {table_name} (
                     name, category, rate, description, memo_time, address,
                     latitude, longitude, mrt, date, transport, images
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -170,12 +189,18 @@ def load_attractions_data():
 def main():
     parser = argparse.ArgumentParser(description="Load data into the database.")
     parser.add_argument('--init-db', action='store_true', help='Initialize database tables')
-    parser.add_argument('--load-data', action='store_true', help='Load attractions data into the database')
+    parser.add_argument('--load-data-cn', action='store_true', help='Load attractions data into the Chinese table')
+    parser.add_argument('--load-data-en', action='store_true', help='Load attractions data into the English table')
     args = parser.parse_args()
+    
     if args.init_db:
         create_tables()
-    if args.load_data:
-        load_attractions_data()
+    
+    if args.load_data_cn:
+        load_attractions_data('attractions', 'taipei-attractions.json')
+    
+    if args.load_data_en:
+        load_attractions_data('attractions_en', 'taipei-attractions-en.json')
 
 if __name__ == '__main__':
     main()

@@ -1,4 +1,3 @@
-from sqlite3 import Date
 from pydantic import BaseModel, Field, HttpUrl, EmailStr, field_validator
 from typing import List, Optional
 from datetime import date
@@ -63,9 +62,10 @@ class MRTListResponse(BaseModel):
     data: List[str]
 
 class Booking(BaseModel):
-    attraction_id: int = Field(..., alias='attractionId')
+    attraction_id: Optional[int] = Field(None, alias='attractionId')  
+    attraction_en_id: Optional[int] = Field(None, alias='attractionEnId') 
     date: date
-    time: str 
+    time: str  
     price: int
 
 class AttractionBooking(BaseModel):
