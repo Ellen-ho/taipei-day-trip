@@ -27,22 +27,28 @@
     <div id="backdrop"></div>
     <nav id="fixed-top-navbar">
       <div class="nav-container common-wrapper">
-        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="logo"><a href="/" data-key="title">台北一日遊</a></div>
         <div id="hamburger-menu">
           <i class="fa-solid fa-bars"></i>
         </div>
         <div id="menu-items">
           <div id="menu-items">
-            <a href="#" id="book-link">預訂行程</a>
-            <a href="#" id="search-link">訂單查詢</a>
-            <a href="#" id="signin-link">登入/註冊</a>
-            <a href="#" id="signout-link">登出系统</a>
+            <a href="#" id="book-link" data-key="book_link">預訂行程</a>
+            <a href="#" id="search-link" data-key="search_link">訂單查詢</a>
+            <a href="#" id="signin-link" data-key="signin_link">登入/註冊</a>
+            <a href="#" id="signout-link" data-key="signout_link">登出系统</a>
           </div>
           <div id="menu-dropdown">
-            <a href="#" id="book-link-mobile">預訂行程</a>
-            <a href="#" id="search-link-mobile">訂單查詢</a>
-            <a href="#" id="signin-link-mobile">登入/註冊</a>
-            <a href="#" id="signout-link-mobile">登出系统</a>
+            <a href="#" id="book-link-mobile" data-key="book_link">預訂行程</a>
+            <a href="#" id="search-link-mobile" data-key="search_link"
+              >訂單查詢</a
+            >
+            <a href="#" id="signin-link-mobile" data-key="signin_link"
+              >登入/註冊</a
+            >
+            <a href="#" id="signout-link-mobile" data-key="signout_link"
+              >登出系统</a
+            >
           </div>
         </div>
       </div>
@@ -66,14 +72,22 @@
             <div class="attraction-detail-title"></div>
             <div class="attraction-detail-subtitle"></div>
             <div id="book-tour-card">
-              <div class="tour-title card-bold-content">訂購導覽行程</div>
-              <div class="tour-subtitle">以此景點為中心的一日行程</div>
+              <div class="tour-title card-bold-content" data-key="tour-title">
+                訂購導覽行程
+              </div>
+              <div class="tour-subtitle" data-key="tour-subtitle">
+                以此景點為中心的一日行程
+              </div>
               <div class="tour-row">
-                <span class="card-bold-content">選擇日期：</span>
+                <span class="card-bold-content" data-key="select-date"
+                  >選擇日期：</span
+                >
                 <input type="date" id="tour-date" name="tour-date" />
               </div>
               <div class="tour-row time-row">
-                <span class="card-bold-content">選擇時間：</span>
+                <span class="card-bold-content" data-key="select-time"
+                  >選擇時間：</span
+                >
                 <div class="radio-option">
                   <div class="radio-input-container">
                     <input
@@ -83,7 +97,7 @@
                       value="morning"
                     />
                   </div>
-                  <span>上半天</span>
+                  <span data-key="morning">上半天</span>
                 </div>
                 <div class="radio-option">
                   <div class="radio-input-container">
@@ -94,14 +108,18 @@
                       value="afternoon"
                     />
                   </div>
-                  <span>下半天</span>
+                  <span data-key="afternoon">下半天</span>
                 </div>
               </div>
               <div class="tour-row cost-row">
-                <span class="card-bold-content">導覽費用：</span>
+                <span class="card-bold-content" data-key="tour-cost"
+                  >導覽費用：</span
+                >
                 <span id="tour-cost"></span>
               </div>
-              <button id="book-button">開始預約行程</button>
+              <button id="book-button" data-key="book-button">
+                開始預約行程
+              </button>
             </div>
           </div>
         </div>
@@ -109,24 +127,24 @@
         <div id="attraction-text-detail">
           <div class="attraction-description"></div>
           <div class="attraction-address">
-            <div class="text-title">景點地址：</div>
+            <div class="text-title" data-key="address-title">景點地址：</div>
             <div class="address-content text-content"></div>
           </div>
           <div class="attraction-transport">
-            <div class="text-title">交通方式：</div>
+            <div class="text-title" data-key="transport-title">交通方式：</div>
             <div class="transport-content text-content"></div>
           </div>
         </div>
       </div>
     </div>
-    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <footer data-key="footer">COPYRIGHT © 2021 台北一日遊</footer>
     <div id="conflict-modal" class="modal">
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
       <div class="text-container">
-        <h3>重複預訂</h3>
-        <p>您選擇的日期跟時間已有預訂</p>
+        <h3 data-key="conflict_title">重複預訂</h3>
+        <p data-key="conflict_message">您選擇的日期跟時間已有預訂</p>
       </div>
     </div>
     <!-- Signin Modal -->
@@ -134,12 +152,13 @@
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">登入會員帳號</div>
+      <div class="modal-title" data-key="signin_modal_title">登入會員帳號</div>
       <div class="form">
         <input
           type="email"
           id="signin-email"
           placeholder="輸入電子信箱"
+          data-key="signin_email_placeholder"
           value="test@gmail.com"
           required
         />
@@ -147,13 +166,20 @@
           type="password"
           id="signin-password"
           placeholder="輸入密碼"
+          data-key="signin_password_placeholder"
           value="123456"
           required
         />
-        <button id="signin-button">登入帳戶</button>
+        <button id="signin-button" data-key="signin_button">登入帳戶</button>
+        <div id="signin-message-container" class="message"></div>
         <div class="prompt">
-          <span>還沒有帳戶？</span
-          ><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+          <span data-key="signup_prompt">還沒有帳戶？</span
+          ><span
+            id="switch-to-signup"
+            class="shadow-animation"
+            data-key="signup_link"
+            >點此註冊</span
+          >
         </div>
       </div>
     </div>
@@ -162,29 +188,44 @@
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">註冊會員帳號</div>
+      <div class="modal-title" data-key="signup_modal_title">註冊會員帳號</div>
       <div class="form">
-        <input type="text" id="signup-name" placeholder="輸入姓名" required />
+        <input
+          type="text"
+          id="signup-name"
+          placeholder="輸入姓名"
+          data-key="signup_name_placeholder"
+          required
+        />
         <input
           type="email"
           id="signup-email"
           placeholder="輸入電子信箱"
+          data-key="signup_email_placeholder"
           required
         />
         <input
           type="password"
           id="signup-password"
           placeholder="輸入密碼"
+          data-key="signup_password_placeholder"
           required
         />
-        <button id="signup-button">註冊新帳戶</button>
+        <button id="signup-button" data-key="signup_button">註冊新帳戶</button>
+        <div id="signup-message-container" class="message"></div>
         <div class="prompt">
-          <span>已經有帳戶了？</span
-          ><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+          <span data-key="signin_prompt">已經有帳戶了？</span
+          ><span
+            id="switch-to-signin"
+            class="shadow-animation"
+            data-key="signin_link"
+            >點此登入</span
+          >
         </div>
       </div>
     </div>
     <script src="/static/js/auth.js"></script>
+    <script src="/static/js/prefer.js"></script>
     <script src="/static/js/attraction.js"></script>
   </body>
 </html>
