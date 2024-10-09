@@ -1,4 +1,13 @@
 let translations = {};
+let lastQuery = '';
+let debounceTimer;
+
+function debounce(func, delay) {
+  return function (...args) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(this, args), delay);
+  };
+}
 
 function checkSearchButtonListener() {
   const searchButton = document.getElementById('search-order-button');
@@ -9,9 +18,22 @@ function checkSearchButtonListener() {
   const separator = document.querySelector('.separator');
   const orderItemsGroup = document.getElementById('order-items-group');
 
-  searchButton.addEventListener('click', async function () {
+  async function handleSearch() {
     const orderNumber = orderNumberInput.value.trim();
 
+    if (orderNumber === lastQuery) {
+      // 如果和上一次查詢相同，應用去抖動
+      return debounce(async function () {
+        await performSearch(orderNumber);
+      }, 300)();
+    }
+
+    // 如果是不同的查詢，立即觸發
+    lastQuery = orderNumber;
+    await performSearch(orderNumber);
+  }
+
+  async function performSearch(orderNumber) {
     const previousMessage = document.getElementById('order-message');
     if (previousMessage) {
       previousMessage.remove();
@@ -71,7 +93,9 @@ function checkSearchButtonListener() {
       separator.style.display = 'none';
       orderItemsGroup.innerHTML = '';
     }
-  });
+  }
+
+  searchButton.addEventListener('click', handleSearch);
 }
 
 function displayOrderDetails(orderDetails) {
