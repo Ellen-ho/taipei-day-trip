@@ -12,21 +12,25 @@ async function checkUrlAndFetchDetails() {
 async function fetchBookingDetails() {
   const url = '/api/booking';
   const token = localStorage.getItem('token');
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'Accept-Language': preferredLanguage,
       },
     });
     if (!response.ok) {
       throw new Error('Failed to fetch booking details');
     }
     const result = await response.json();
+
     if (!result) {
-      if (userData && userData.data) {
-        document.getElementById('user-name').textContent = userData.data.name;
+      const userNameElement = document.getElementById('user-name');
+      if (userNameElement && userData && userData.data) {
+        userNameElement.textContent = userData.data.name;
       }
       hideBookingElements();
     } else {
@@ -39,6 +43,7 @@ async function fetchBookingDetails() {
 
 async function fetchOrderDetails(orderNumber) {
   const token = localStorage.getItem('token');
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
   const url = `/api/order/${encodeURIComponent(orderNumber)}`;
 
   try {
@@ -47,6 +52,7 @@ async function fetchOrderDetails(orderNumber) {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'Accept-Language': preferredLanguage,
       },
     });
     const result = await response.json();
@@ -60,8 +66,31 @@ function displayBookingDetails(bookings) {
   const bookingInfoContainer = document.getElementById(
     'booking-group-container',
   );
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+  const currency = preferredLanguage === 'en' ? 'TWD' : '新台幣';
   const noBookingMessage = document.getElementById('no-booking-message');
   noBookingMessage.style.display = 'none';
+
+  const translations = {
+    zh: {
+      title: '台北一日遊',
+      date: '日期：',
+      time: '時間：',
+      cost: '費用：',
+      location: '地點：',
+      costSuffix: '元',
+    },
+    en: {
+      title: 'Taipei Day Trip',
+      date: 'Date:',
+      time: 'Time:',
+      cost: 'Cost:',
+      location: 'Location:',
+      costSuffix: '',
+    },
+  };
+
+  const translation = translations[preferredLanguage];
 
   if (userData && userData.data) {
     document.getElementById('user-name').textContent = userData.data.name;
@@ -100,23 +129,23 @@ function displayBookingDetails(bookings) {
     infoDiv.innerHTML = `
           <img class="delete-button shadow-animation" src="/static/images/delete-button.png" alt="Delete">
           <div class="name-container">
-            <span>台北一日遊 : ${booking.attraction.name}</span>
+           <span>${translation.title} : ${booking.attraction.name}</span>
           </div>
           <div class="booking-list-container">
             <div class="booking-row">
-              <span class="info-bold-content">日期：</span>
+               <span class="info-bold-content">${translation.date}</span>
               <span class="selected-items">${booking.date}</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">時間：</span>
+              <span class="info-bold-content">${translation.time}</span>
               <span class="selected-items">${formattedTime}</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">費用：</span>
-              <span class="selected-items">新台幣 ${booking.price} 元</span>
+              <span class="info-bold-content">${translation.cost}</span>
+              <span>${currency} ${booking.price}</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">地點：</span>
+              <span class="info-bold-content">${translation.location}</span>
               <span class="selected-items">${booking.attraction.address}</span>
             </div>
           </div>
@@ -144,7 +173,38 @@ function displayBookingsWithOrderDetails(resultData) {
     '.booking-greet.booking-text-title',
   );
 
-  bookingGreetTitle.innerHTML = `您好，<span id="user-name"></span>，以下是您尚未付款的訂單行程：`;
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+  const translations = {
+    zh: {
+      title: '台北一日遊',
+      greetTitle: `您好，<span id="user-name"></span>，以下是您尚未付款的訂單行程：`,
+      date: '日期：',
+      time: '時間：',
+      cost: '費用：',
+      location: '地點：',
+      contactNotice:
+        '請確認您的聯絡資訊正確，並保持手機暢通，準時到達，導覽人員將用手機與您聯繫。',
+      currency: '新台幣',
+      costSuffix: '元',
+    },
+    en: {
+      title: 'Taipei Day Trip',
+      greetTitle: `Hello, <span id="user-name"></span>, here are your unpaid bookings:`,
+      date: 'Date:',
+      time: 'Time:',
+      cost: 'Cost:',
+      location: 'Location:',
+      contactNotice:
+        'Please make sure your contact information is correct and keep your phone accessible. The guide will contact you via phone.',
+      currency: 'TWD',
+      costSuffix: '',
+    },
+  };
+
+  const translation = translations[preferredLanguage];
+
+  bookingGreetTitle.innerHTML = translation.greetTitle;
 
   if (userData && userData.data) {
     document.getElementById('user-name').textContent = userData.data.name;
@@ -190,23 +250,23 @@ function displayBookingsWithOrderDetails(resultData) {
 
     infoDiv.innerHTML = `
           <div class="name-container">
-            <span>台北一日遊 : ${booking.attraction.name}</span>
+            <span>${translation.title} : ${booking.attraction.name}</span>
           </div>
           <div class="booking-list-container">
             <div class="booking-row">
-              <span class="info-bold-content">日期：</span>
+              <span class="info-bold-content">${translation.date}</span>
               <span class="selected-items">${booking.date}</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">時間：</span>
+              <span class="info-bold-content">${translation.time}</span>
               <span class="selected-items">${formattedTime}</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">費用：</span>
+              <span class="info-bold-content">${translation.cost}</span>
               <span class="selected-items">新台幣 ${booking.price} 元</span>
             </div>
             <div class="booking-row">
-              <span class="info-bold-content">地點：</span>
+              <span class="info-bold-content">${translation.location}</span>
               <span class="selected-items">${booking.attraction.address}</span>
             </div>
           </div>
@@ -216,7 +276,7 @@ function displayBookingsWithOrderDetails(resultData) {
     bookingInfoContainer.appendChild(bookingContainer);
   });
   document.getElementById('total-cost').textContent =
-    `新台幣 ${resultData.totalPrice} 元`;
+    `${translation.currency} ${resultData.totalPrice} ${translation.costSuffix}`;
 }
 
 function setupBookingEventListeners() {
@@ -248,19 +308,46 @@ function updateTotalCost() {
     totalCost += parseFloat(box.dataset.price);
   });
   const totalCostDisplay = document.getElementById('total-cost');
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+  const translations = {
+    zh: {
+      currency: '新台幣',
+      suffix: '元',
+    },
+    en: {
+      currency: 'TWD',
+      suffix: '',
+    },
+  };
+  const translation = translations[preferredLanguage];
   if (totalCost > 0) {
-    totalCostDisplay.textContent = `新台幣 ${totalCost} 元`;
+    totalCostDisplay.textContent = `${translation.currency} ${totalCost} ${translation.suffix}`;
   } else {
     totalCostDisplay.textContent = '';
   }
 }
 
 function formatTime(timeText) {
+  const preferredLanguage = localStorage.getItem('preferredLanguage') || 'zh';
+
+  const translations = {
+    zh: {
+      morning: '早上 9 點到下午 4 點',
+      afternoon: '下午 2 點到晚上 9 點',
+    },
+    en: {
+      morning: '9:00 AM to 4:00 PM',
+      afternoon: '2:00 PM to 9:00 PM',
+    },
+  };
+
+  const translation = translations[preferredLanguage];
+
   switch (timeText) {
     case 'morning':
-      return '早上 9 點到下午 4 點';
+      return translation.morning;
     case 'afternoon':
-      return '下午 2 點到晚上 9 點';
+      return translation.afternoon;
     default:
       return timeText;
   }

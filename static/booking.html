@@ -27,36 +27,53 @@
     <div id="backdrop"></div>
     <nav id="fixed-top-navbar">
       <div class="nav-container common-wrapper">
-        <div id="logo"><a href="/">台北一日遊</a></div>
+        <div id="logo"><a href="/" data-key="title">台北一日遊</a></div>
         <div id="hamburger-menu">
           <i class="fa-solid fa-bars"></i>
         </div>
         <div id="menu-items">
-          <a href="#" id="book-link">預訂行程</a>
-          <a href="#" id="search-link">訂單查詢</a>
-          <a href="#" id="signin-link">登入/註冊</a>
-          <a href="#" id="signout-link">登出系统</a>
+          <a href="#" id="book-link" data-key="book_link">預訂行程</a>
+          <a href="#" id="search-link" data-key="search_link">訂單查詢</a>
+          <a href="#" id="signin-link" data-key="signin_link">登入/註冊</a>
+          <a href="#" id="signout-link" data-key="signout_link">登出系统</a>
         </div>
         <div id="menu-dropdown">
-          <a href="#" id="book-link-mobile">預訂行程</a>
-          <a href="#" id="search-link-mobile">訂單查詢</a>
-          <a href="#" id="signin-link-mobile">登入/註冊</a>
-          <a href="#" id="signout-link-mobile">登出系统</a>
+          <a href="#" id="book-link-mobile" data-key="book_link">預訂行程</a>
+          <a href="#" id="search-link-mobile" data-key="search_link"
+            >訂單查詢</a
+          >
+          <a href="#" id="signin-link-mobile" data-key="signin_link"
+            >登入/註冊</a
+          >
+          <a href="#" id="signout-link-mobile" data-key="signout_link"
+            >登出系统</a
+          >
         </div>
       </div>
     </nav>
     <div id="content">
       <div class="wrapper common-wrapper">
-        <div class="booking-greet booking-text-title">
-          您好，<span id="user-name"></span>，待預訂的行程如下：
+        <div
+          class="booking-greet booking-text-title"
+          data-key="greeting_message"
+        >
+          <span id="user-name"></span>，待預訂的行程如下：
         </div>
         <div id="booking-group-container"></div>
         <div class="separator"><hr /></div>
         <div id="contact-container">
-          <div class="other-info booking-text-title">您的聯絡資訊</div>
+          <div
+            class="other-info booking-text-title"
+            data-key="contact_info_title"
+          >
+            您的聯絡資訊
+          </div>
           <div class="contact-detail">
             <div class="input-row">
-              <label for="contact-name" class="booking-text-subtitle"
+              <label
+                for="contact-name"
+                class="booking-text-subtitle"
+                data-key="contact_name_label"
                 >聯絡姓名：</label
               >
               <input
@@ -72,7 +89,10 @@
               ></span>
             </div>
             <div class="input-row">
-              <label for="contact-email" class="booking-text-subtitle"
+              <label
+                for="contact-email"
+                class="booking-text-subtitle"
+                data-key="contact_email_label"
                 >聯絡信箱：</label
               >
               <input
@@ -88,7 +108,10 @@
               ></span>
             </div>
             <div class="input-row">
-              <label for="contact-phone" class="booking-text-subtitle"
+              <label
+                for="contact-phone"
+                class="booking-text-subtitle"
+                data-key="contact_phone_label"
                 >手機號碼：</label
               >
               <input
@@ -103,25 +126,38 @@
                 style="display: none"
               ></span>
             </div>
-            <div class="notice info-bold-content">
+            <div class="notice info-bold-content" data-key="contact_notice">
               請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。
             </div>
           </div>
         </div>
         <div class="separator"><hr /></div>
         <div id="payment-container">
-          <div class="other-info booking-text-title">信用卡付款資訊</div>
+          <div
+            class="other-info booking-text-title"
+            data-key="payment_info_title"
+          >
+            信用卡付款資訊
+          </div>
           <div class="payment-detail">
             <div class="input-row">
-              <span class="booking-text-subtitle">卡片號碼：</span>
+              <span class="booking-text-subtitle" data-key="card_number_label"
+                >卡片號碼：</span
+              >
               <div class="tpfield" id="card-number"></div>
             </div>
             <div class="input-row">
-              <span class="booking-text-subtitle">過期時間：</span>
+              <span
+                class="booking-text-subtitle"
+                data-key="card_expiration_date_label"
+                >過期時間：</span
+              >
               <div class="tpfield" id="card-expiration-date"></div>
             </div>
             <div class="input-row">
-              <span class="booking-text-subtitle">驗證密碼：</span>
+              <span class="booking-text-subtitle" data-key="card_ccv_label"
+                >驗證密碼：</span
+              >
               <div class="tpfield" id="card-ccv"></div>
             </div>
           </div>
@@ -129,28 +165,33 @@
         <div class="separator"><hr /></div>
         <div id="total-cost-container">
           <div class="price-row">
-            <span class="info-bold-content">總價：</span>
+            <span class="info-bold-content" data-key="total_cost_label"
+              >總價：</span
+            >
             <span id="total-cost" class="info-bold-content"></span>
           </div>
-          <button id="confirm-cost">確認訂購並付款</button>
+          <button id="confirm-cost" data-key="confirm_cost_button">
+            確認訂購並付款
+          </button>
         </div>
-        <div id="no-booking-message">
+        <div id="no-booking-message" data-key="no_booking_message">
           <span>目前沒有任何待預訂的行程</span>
         </div>
       </div>
     </div>
-    <footer>COPYRIGHT © 2021 台北一日遊</footer>
+    <footer data-key="footer">COPYRIGHT © 2021 台北一日遊</footer>
     <!-- Signin Modal -->
     <div id="signin-modal" class="modal">
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">登入會員帳號</div>
+      <div class="modal-title" data-key="signin_modal_title">登入會員帳號</div>
       <div class="form">
         <input
           type="email"
           id="signin-email"
           placeholder="輸入電子信箱"
+          data-key="signin_email_placeholder"
           value="test@gmail.com"
           required
         />
@@ -158,14 +199,20 @@
           type="password"
           id="signin-password"
           placeholder="輸入密碼"
+          data-key="signin_password_placeholder"
           value="123456"
           required
         />
-        <button id="signin-button">登入帳戶</button>
+        <button id="signin-button" data-key="signin_button">登入帳戶</button>
         <div id="signin-message-container" class="message"></div>
         <div class="prompt">
-          <span>還沒有帳戶？</span
-          ><span id="switch-to-signup" class="shadow-animation">點此註冊</span>
+          <span data-key="signup_prompt">還沒有帳戶？</span
+          ><span
+            id="switch-to-signup"
+            class="shadow-animation"
+            data-key="signup_link"
+            >點此註冊</span
+          >
         </div>
       </div>
     </div>
@@ -174,26 +221,39 @@
       <div class="close-button shadow-animation">
         <img src="/static/images/close-button.png" />
       </div>
-      <div class="modal-title">註冊會員帳號</div>
+      <div class="modal-title" data-key="signup_modal_title">註冊會員帳號</div>
       <div class="form">
-        <input type="text" id="signup-name" placeholder="輸入姓名" required />
+        <input
+          type="text"
+          id="signup-name"
+          placeholder="輸入姓名"
+          data-key="signup_name_placeholder"
+          required
+        />
         <input
           type="email"
           id="signup-email"
           placeholder="輸入電子信箱"
+          data-key="signup_email_placeholder"
           required
         />
         <input
           type="password"
           id="signup-password"
           placeholder="輸入密碼"
+          data-key="signup_password_placeholder"
           required
         />
-        <button id="signup-button">註冊新帳戶</button>
+        <button id="signup-button" data-key="signup_button">註冊新帳戶</button>
         <div id="signup-message-container" class="message"></div>
         <div class="prompt">
-          <span>已經有帳戶了？</span
-          ><span id="switch-to-signin" class="shadow-animation">點此登入</span>
+          <span data-key="signin_prompt">已經有帳戶了？</span
+          ><span
+            id="switch-to-signin"
+            class="shadow-animation"
+            data-key="signin_link"
+            >點此登入</span
+          >
         </div>
       </div>
     </div>
