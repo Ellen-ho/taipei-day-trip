@@ -3,7 +3,7 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 <div align="center">
-  <img width="100%" align="center" src="/static/images/demo_pic.png">
+  <img width="100%" align="center" src="/static/images/trip_demo.png">
 </div>
 
 ## About Taipei-Day-Trip
@@ -21,6 +21,14 @@ Taipei-Day-Trip is an e-commerce travel platform that makes it easy to explore T
 | Email          | Password |
 | -------------- | -------- |
 | test@gmail.com | 123456   |
+
+<br>
+
+## Switch to the English Version
+
+<div align="center">
+  <img width="80%" align="center" src="/static/images/trip_en.png">
+</div>
 
 <br>
 
